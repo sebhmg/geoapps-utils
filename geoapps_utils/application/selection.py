@@ -92,6 +92,9 @@ class ObjectDataSelection(BaseApplication):
 
     @property
     def data_panel(self) -> VBox:
+        """
+        Panel to hold objects and data.
+        """
         if getattr(self, "_data_panel", None) is None:
             self._data_panel = VBox([self.objects, self.data])
 
@@ -102,7 +105,6 @@ class ObjectDataSelection(BaseApplication):
         """
         :obj:`ipywidgets.VBox`: A box containing all widgets forming the application.
         """
-        # self.__populate__(**self.defaults)
         if self._main is None:
             self._main = self.data_panel
             self.update_data_list(None)
@@ -179,9 +181,6 @@ class ObjectDataSelection(BaseApplication):
 
     @find_label.setter
     def find_label(self, values):
-        """
-        Object selector
-        """
         if not isinstance(values, list):
             values = [values]
 
@@ -194,7 +193,7 @@ class ObjectDataSelection(BaseApplication):
     @property
     def select_multiple(self):
         """
-        bool: ALlow to select multiple data
+        bool: Allow to select multiple data
         """
         if getattr(self, "_select_multiple", None) is None:
             self._select_multiple = False
@@ -269,6 +268,11 @@ class ObjectDataSelection(BaseApplication):
         return None, None
 
     def update_data_list(self, val: str | None):
+        """
+        Update dropdown data options.
+
+        :param val: object uuid.
+        """
         refresh = self.refresh.value
         self.refresh.value = False
         if self._workspace is not None:
@@ -317,6 +321,9 @@ class ObjectDataSelection(BaseApplication):
         self.refresh.value = refresh
 
     def update_objects_list(self):
+        """
+        Update dropdown objects options.
+        """
         if getattr(self, "_workspace", None) is not None:
             value = self.objects.value
             data = self.data.value
@@ -382,6 +389,11 @@ class LineOptions(ObjectDataSelection):
         self.data.description = "Lines field"
 
     def update_data_list(self, val: str | None):
+        """
+        Update dropdown data options.
+
+        :param val: object uuid.
+        """
         refresh = self.refresh.value
         self.refresh.value = False
         if self._workspace is not None:
@@ -416,6 +428,9 @@ class LineOptions(ObjectDataSelection):
 
     @property
     def main(self):
+        """
+        VBox containing data and lines.
+        """
         if self._main is None:
             self._main = VBox([self._data, self.lines])
 
@@ -440,6 +455,9 @@ class LineOptions(ObjectDataSelection):
 
     @property
     def multiple_lines(self):
+        """
+        Whether multiple lines can be selected.
+        """
         if getattr(self, "_multiple_lines", None) is None:
             self._multiple_lines = True
 
@@ -453,6 +471,9 @@ class LineOptions(ObjectDataSelection):
         self._multiple_lines = value
 
     def update_line_list(self, _):
+        """
+        Update dropdown lines options.
+        """
         _, data = self.get_selected_entities()
         if data and getattr(data[0], "values", None) is not None:
             if isinstance(data[0], ReferencedData):
@@ -469,12 +490,17 @@ class LineOptions(ObjectDataSelection):
 
 class TopographyOptions(ObjectDataSelection):
     """
-    Define the topography used by the inversion
+    Define the topography used by the inversion.
     """
 
     def __init__(
         self, option_list=("None", "Object", "Relative to Sensor", "Constant"), **kwargs
     ):
+        """
+        Initialize the class.
+
+        :param option_list: List of topography options.
+        """
         self.defaults.update(**kwargs)
         self.find_label = ["topo", "dem", "dtm", "elevation", "Z"]
         self._offset = FloatText(description="Vertical offset (+ve up)")
@@ -502,10 +528,16 @@ class TopographyOptions(ObjectDataSelection):
 
     @property
     def constant(self):
+        """
+        Constant value to define topography.
+        """
         return self._constant
 
     @property
     def main(self):
+        """
+        Topography VBox.
+        """
         if self._main is None:
             self._main = VBox([self.options, self.option_list[self.options.value]])
 
@@ -513,13 +545,22 @@ class TopographyOptions(ObjectDataSelection):
 
     @property
     def offset(self):
+        """
+        Vertical offset.
+        """
         return self._offset
 
     @property
     def options(self):
+        """
+        Options for how to define topography.
+        """
         return self._options
 
     def update_options(self, _):
+        """
+        Update topography options dropdown.
+        """
         self.main.children = [
             self.options,
             self.option_list[self.options.value],

@@ -12,7 +12,8 @@ from contextlib import contextmanager
 
 @contextmanager
 def warn_module_not_found():
-    """Context manager to suppress ModuleNotFoundError exceptions, and warn instead.
+    """
+    Context manager to suppress ModuleNotFoundError exceptions, and warn instead.
 
     After the exception is suppressed, execution proceeds with the next
     statement following the with statement.

@@ -116,6 +116,9 @@ class BaseApplication:  # pylint: disable=R0902, R0904
         return self.main
 
     def __populate__(self, **kwargs):
+        """
+        Initialize widgets.
+        """
         mappers = [entity2uuid, str2uuid]
         workspace = getattr(getattr(self, "params", None), "geoh5", None)
 
@@ -165,7 +168,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
 
     def file_browser_change(self, _):
         """
-        Change the target h5file
+        Change the target h5file.
         """
         if not self.file_browser._select.disabled:  # pylint: disable="protected-access"
             extension = Path(self.file_browser.selected).suffix
@@ -187,7 +190,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
 
     def export_browser_change(self, _):
         """
-        Change the target h5file
+        Change the target h5file.
         """
         if (
             not self.export_directory._select.disabled  # pylint: disable="protected-access"
@@ -207,7 +210,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
 
     def live_link_choice(self, _):
         """
-        Enable the monitoring folder
+        Enable the monitoring folder.
         """
         if self.live_link.value:
             if (self.h5file is not None) and (self.monitoring_directory is None):
@@ -234,7 +237,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
     @property
     def monitoring_directory(self):
         """
-        Set the monitoring directory for live link
+        Set the monitoring directory for live link.
         """
 
         if getattr(self, "_monitoring_directory", None) is None:
@@ -272,7 +275,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
     @property
     def ga_group_name(self) -> Text:
         """
-        Widget to assign a group name to export to
+        Widget to assign a group name to export to.
         """
         if getattr(self, "_ga_group_name", None) is None:
             self._ga_group_name = Text(
@@ -286,7 +289,7 @@ class BaseApplication:  # pylint: disable=R0902, R0904
     @property
     def geoh5(self) -> Workspace | str:
         """
-        Alias for workspace or h5file property
+        Alias for workspace or h5file property.
         """
         return self.workspace if self.workspace is not None else self.h5file
 
@@ -306,7 +309,13 @@ class BaseApplication:  # pylint: disable=R0902, R0904
         live_link, workpath: str | Path = Path(), name: str = "Temp.geoh5"
     ):
         """
-        Create an active workspace with check for GA monitoring directory
+        Create an active workspace with check for GA monitoring directory.
+
+        :param live_link: Application live link status.
+        :param workpath: Path to output workspace.
+        :param name: Name of output workspace.
+
+        :return: Updated live link value.
         """
         if Path(name).suffix != ".geoh5":
             name += ".geoh5"
@@ -462,6 +471,9 @@ class BaseApplication:  # pylint: disable=R0902, R0904
             self.h5file = value
 
     def trigger_click(self, _):
+        """
+        Write input file and run driver.
+        """
         for key in self.__dict__:
             try:
                 if isinstance(getattr(self, key), Widget):
@@ -479,6 +491,11 @@ class BaseApplication:  # pylint: disable=R0902, R0904
         """
 
     def base_workspace_changes(self, workspace: Workspace):
+        """
+        Change workspace.
+
+        :param workspace: New workspace.
+        """
         self._workspace = workspace
         self._h5file = workspace.h5file
         h5_file_path = Path(self._h5file).resolve()
@@ -497,6 +514,11 @@ class BaseApplication:  # pylint: disable=R0902, R0904
         self.export_directory._apply_selection()  # pylint: disable=protected-access
 
     def get_param_dict(self):
+        """
+        Get param_dict from widgets and self.params.
+
+        :return: Dictionary of parameters.
+        """
         param_dict = {}
         for key in self.__dict__:
             try:
@@ -522,6 +544,10 @@ def working_copy(h5file):
     """
     Create a copy of the geoh5 project and remove "working_copy" from list
     of arguments for future use
+
+    :param h5file: Path to geoh5 file.
+
+    :return: Path to copy of geoh5 file.
     """
     h5file = copyfile(h5file, h5file[:-6] + "_work.geoh5")
     return h5file

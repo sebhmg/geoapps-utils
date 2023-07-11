@@ -8,9 +8,11 @@
 from __future__ import annotations
 
 
-def parameters():
+def parameters() -> dict:
     """
-    Dictionary of parameters defining geophysical acquisition systems
+    Dictionary of parameters defining geophysical acquisition systems.
+
+    :return: Dictionary of parameters defining geophysical acquisition systems.
     """
     return {
         "Airborne TEM Survey": {

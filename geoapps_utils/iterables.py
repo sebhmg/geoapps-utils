@@ -81,6 +81,7 @@ def sorted_children_dict(
 
     :param entity: geoh5py entity containing children IntegerData, FloatData
         entities
+    :param workspace: geoh5py workspace containing entity
 
     :return : sorted name/uid dictionary of children entities of entity.
 

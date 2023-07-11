@@ -12,7 +12,7 @@ def string_name(value: str, characters: str = ".") -> str:
     Find and replace characters in a string with underscores '_'.
 
     :param value: String to be validated
-    :param char: Characters to be replaced
+    :param characters: Characters to be replaced
 
     :return value: Re-formatted string
     """

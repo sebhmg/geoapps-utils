@@ -17,10 +17,17 @@ from geoapps_utils.driver.params import BaseParams
 
 
 class BaseDriver(ABC):
+    """
+    Base driver class.
+    """
+
     _params: BaseParams
     _params_class = BaseParams
 
     def __init__(self, params: BaseParams):
+        """
+        :param params: Application parameters.
+        """
         self._workspace: Workspace | None = None
         self._out_group: str | None = None
         self._validations: dict | None = None
@@ -80,6 +87,7 @@ class BaseDriver(ABC):
         Run application specified by 'filepath' ui.json file.
 
         :param filepath: Path to valid ui.json file for the application driver.
+        :param driver_class: Application driver class.
         """
 
         if driver_class is None:

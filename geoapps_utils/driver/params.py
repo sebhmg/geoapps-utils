@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID
 
+from geoh5py.shared import Entity
 from geoh5py.shared.utils import fetch_active_workspace, str2uuid, uuid2entity
 from geoh5py.ui_json import InputFile, InputValidation, utils
 from geoh5py.workspace import Workspace
@@ -52,6 +53,14 @@ class BaseParams:  # pylint: disable=R0902, R0904
         workpath: str | Path | None = None,
         **kwargs,
     ):
+        """
+        Initialize class.
+
+        :param input_file: Input file.
+        :param validate: Whether to validate params.
+        :param validation_options: Optional validation directives.
+        :param workpath: Working directory.
+        """
         self._monitoring_directory: str | None = None
         self._workspace_geoh5: str | None = None
         self._geoh5: str | None = None
@@ -70,8 +79,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
         self._initialize(**kwargs)
 
     def _initialize(self, **kwargs):
-        """Custom actions to initialize the class and deal with input values."""
-        # Set data on inputfile
+        """
+        Custom actions to initialize the class and deal with input values.
+        """
         original_validate_state = self.validate
         self.validate = False
 
@@ -98,14 +108,20 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def ui_json(self):
-        """The default ui_json structure stored on InputFile."""
+        """
+        The default ui_json structure stored on InputFile.
+        """
         if getattr(self, "_ui_json", None) is None and self.input_file is not None:
             self._ui_json = self.input_file.ui_json
 
         return self._ui_json
 
     def update(self, params_dict: dict[str, Any]):
-        """Update parameters with dictionary contents."""
+        """
+        Update parameters with dictionary contents.
+
+        :param params_dict: Dictionary of parameters.
+        """
         if self.input_file is not None:
             params_dict = self.input_file.numify(params_dict)
             if (
@@ -156,7 +172,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def validation_options(self):
-        """Optional validation directives."""
+        """
+        Optional validation directives.
+        """
         if self._validation_options is None:
             return {}
 
@@ -173,12 +191,16 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def validate(self):
-        """Return True if validation is enabled."""
+        """
+        Return True if validation is enabled.
+        """
         return self._validate
 
     @validate.setter
     def validate(self, value: bool):
-        """Set validation state."""
+        """
+        Set validation state.
+        """
         if not isinstance(value, bool):
             raise UserWarning("Input 'validate' must be a boolean.")
 
@@ -188,7 +210,11 @@ class BaseParams:  # pylint: disable=R0902, R0904
             self.input_file.validate = value
 
     def to_dict(self, ui_json_format=False):
-        """Return params and values dictionary."""
+        """
+        Return params and values dictionary.
+
+        :param ui_json_format: Return dictionary in ui_json format.
+        """
 
         if ui_json_format:
             return self.input_file.stringify(
@@ -198,11 +224,19 @@ class BaseParams:  # pylint: disable=R0902, R0904
         return {k: getattr(self, k) for k in self.param_names if hasattr(self, k)}
 
     def active_set(self):
-        """Return list of parameters with non-null entries."""
+        """
+        Return list of parameters with non-null entries.
+        """
         return [k for k, v in self.to_dict().items() if v is not None]
 
     def is_uuid(self, param: str) -> bool:
-        """Return true if string contains valid UUID."""
+        """
+        Check if string is a valid UUID.
+
+        :param param: String to check.
+
+        :return: Whether string contains valid UUID.
+        """
         if isinstance(param, str):
             private_attr = getattr(self, "_" + param)
             return isinstance(private_attr, UUID)
@@ -213,6 +247,8 @@ class BaseParams:  # pylint: disable=R0902, R0904
         """
         Extract groups of free parameters from the ui_json dictionary that match
         the 'free_parameter_identifier' and 'free_parameter_keys'.
+
+        :return: Dictionary of free parameters.
         """
         free_parameter_dict = {}
         if (
@@ -254,7 +290,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def validations(self) -> dict[str, Any] | None:
-        """Encoded parameter validator type and associated validations."""
+        """
+        Encoded parameter validator type and associated validations.
+        """
         if getattr(self, "_validations", None) is None and self.input_file is not None:
             self._validations = self.input_file.validations
         return self._validations
@@ -268,6 +306,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def geoh5(self):
+        """
+        Workspace.
+        """
         return self._geoh5
 
     @geoh5.setter
@@ -283,6 +324,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def run_command(self):
+        """
+        Command to run the application through GA.
+        """
         return self._run_command
 
     @run_command.setter
@@ -291,6 +335,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def monitoring_directory(self):
+        """
+        Path to monitoring directory.
+        """
         return self._monitoring_directory
 
     @monitoring_directory.setter
@@ -299,6 +346,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def conda_environment(self):
+        """
+        Conda environment.
+        """
         return self._conda_environment
 
     @conda_environment.setter
@@ -307,6 +357,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def conda_environment_boolean(self):
+        """
+        Boolean to determine if conda environment is used.
+        """
         return self._conda_environment_boolean
 
     @conda_environment_boolean.setter
@@ -315,6 +368,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def title(self):
+        """
+        Application title.
+        """
         return self._title
 
     @title.setter
@@ -323,7 +379,9 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
     @property
     def workspace_geoh5(self):
-        """Source geoh5 file."""
+        """
+        Source geoh5 file.
+        """
         return self._workspace_geoh5
 
     @workspace_geoh5.setter
@@ -351,7 +409,14 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
         self._input_file = ifile
 
-    def _uuid_promoter(self, uid):
+    def _uuid_promoter(self, uid: str | UUID) -> str | UUID | Entity:
+        """
+        Promote a string to a UUID or entity if possible.
+
+        :param uid: String or UUID to promote
+
+        :return: Promoted UUID or entity
+        """
         if self.geoh5 is None:
             return uid
 
@@ -362,6 +427,13 @@ class BaseParams:  # pylint: disable=R0902, R0904
         return uid
 
     def setter_validator(self, key: str, value, fun=lambda x: x):
+        """
+        Validate param and set value.
+
+        :param key: Parameter name.
+        :param value: Parameter value.
+        :param fun: Function to apply to value before setting.
+        """
         if value is None:
             setattr(self, f"_{key}", value)
             return
@@ -380,7 +452,15 @@ class BaseParams:  # pylint: disable=R0902, R0904
         path: str | Path | None = None,
         validate: bool = True,
     ) -> str:
-        """Write out a ui.json with the current state of parameters"""
+        """
+        Write out a ui.json with the current state of parameters.
+
+        :param name: Name of the ui.json file.
+        :param path: Path to write the ui.json file.
+        :param validate: Validate the ui.json file before writing.
+
+        :return: Path to the ui.json file.
+        """
         if self.input_file is None:
             raise ValueError("No input file has been set.")
         original_validate_state = self.input_file.validate

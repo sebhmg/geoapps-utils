@@ -4,12 +4,11 @@ version = "0.1.0-alpha.1"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
 packages = [
-     { include = "geoapps_utils" },
-     { include = "geoapps_utils-assets" },
+     { include = "geoapps_utils" }
 ]
 
 [tool.poetry.scripts]
-geoapps_utils_hello = 'geoapps_utils.commands.hello'
+
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
@@ -17,13 +16,9 @@ python = "^3.9, <3.11"
 ## dependencies for a minimal environment
 numpy = "~1.23.5"
 geoh5py = {version = "~0.8.0a3", source = "pypi", allow-prereleases = true}
-#param-sweeps = {version = "~0.1.6a1", source = "pypi", allow-prereleases = true}
-param-sweeps = {url = "https://github.com/MiraGeoscience/param-sweeps/archive/refs/heads/develop.zip#sha256=300447c10b0748e0b902dbd4d2666e39d1facbb3047c21d9e03d6544712c2ef9"}
 
-dask = {version = "2022.10.0", extras = ["distributed"], optional = true}
-matplotlib = {version = "~3.7.1", optional = true }
-scipy = {version = "~1.10.1", optional = true }
-tqdm = {version = "^4.64.0", optional = true }
+ipyfilechooser = {version = "~0.6.0"}
+ipywidgets = {version = "^7.6.5"}
 
 [tool.poetry.dev-dependencies]
 pylint = "*"
