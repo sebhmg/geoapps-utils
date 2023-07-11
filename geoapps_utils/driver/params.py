@@ -14,8 +14,6 @@ from geoh5py.shared.utils import fetch_active_workspace, str2uuid, uuid2entity
 from geoh5py.ui_json import InputFile, InputValidation, utils
 from geoh5py.workspace import Workspace
 
-import geoapps_utils
-
 
 class BaseParams:  # pylint: disable=R0902, R0904
     """
@@ -45,7 +43,6 @@ class BaseParams:  # pylint: disable=R0902, R0904
     _validations: dict | None = None
     _validation_options: dict | None = None
     _validator: InputValidation | None = None
-    _version = base.__version__
 
     def __init__(
         self,
@@ -91,14 +88,6 @@ class BaseParams:  # pylint: disable=R0902, R0904
         # Apply user input
         if any(kwargs):
             self.update(kwargs)
-
-    @property
-    def version(self):
-        return self._version
-
-    @version.setter
-    def version(self, val):
-        self._version = val
 
     @property
     def defaults(self):

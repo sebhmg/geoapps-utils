@@ -12,10 +12,8 @@ from pathlib import Path
 from geoh5py import Workspace
 from geoh5py.objects import ObjectBase
 from geoh5py.ui_json import InputFile, monitored_directory_copy
-from param_sweeps.driver import SweepParams
-from param_sweeps.generate import generate
 
-from geoapps_utils.driver_base.params import BaseParams
+from geoapps_utils.driver.params import BaseParams
 
 
 class BaseDriver(ABC):
@@ -43,7 +41,7 @@ class BaseDriver(ABC):
 
     @params.setter
     def params(self, val):
-        if not isinstance(val, (BaseParams, SweepParams)):
+        if not isinstance(val, BaseParams):
             raise TypeError("Parameters must be of type BaseParams.")
         self._params = val
 
@@ -93,26 +91,15 @@ class BaseDriver(ABC):
             filepath, validations=driver_class._validations  # pylint: disable=W0212
         )
 
-        generate_sweep = ifile.data.get("generate_sweep", None)
-        if generate_sweep:  # pylint: disable=R1705
-            ifile.data["generate_sweep"] = False
-            name = filepath.name
-            path = filepath.parent
-            ifile.write_ui_json(name=name, path=path)
-            generate(  # pylint: disable=E1123
-                str(filepath), update_values={"conda_environment": "geoapps"}
-            )
-            return None
-        else:
-            params = driver_class._params_class(ifile)  # pylint: disable=W0212
-            print("Initializing application . . .")
-            driver = driver_class(params)
+        params = driver_class._params_class(ifile)  # pylint: disable=W0212
+        print("Initializing application . . .")
+        driver = driver_class(params)
 
-            print("Running application . . .")
-            driver.run()
-            print(f"Results saved to {params.geoh5.h5file}")
+        print("Running application . . .")
+        driver.run()
+        print(f"Results saved to {params.geoh5.h5file}")
 
-            return driver
+        return driver
 
     def add_ui_json(self, entity: ObjectBase):
         """

@@ -25,8 +25,8 @@ from geoh5py.ui_json.utils import list2str, monitored_directory_copy
 from geoh5py.workspace import Workspace
 from traitlets import TraitError
 
-from geoapps_utils.driver_base.params import BaseParams
-from geoapps_utils.utils import warn_module_not_found
+from geoapps_utils.driver.params import BaseParams
+from geoapps_utils.importing import warn_module_not_found
 
 with warn_module_not_found():
     from ipyfilechooser import FileChooser

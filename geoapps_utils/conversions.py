@@ -9,11 +9,12 @@ from __future__ import annotations
 import numpy as np
 
 
-def string_2_list(string):
+def hex_to_rgb(hex_color):
     """
-    Convert a list of numbers separated by comma to a list of floats
+    Convert hex color code to RGB
     """
-    return [float(val) for val in string.split(",") if len(val) > 0]
+    code = hex_color.lstrip("#")
+    return [int(code[i : i + 2], 16) for i in (0, 2, 4)]
 
 
 def string_to_numeric(text: str) -> int | float | str:

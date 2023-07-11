@@ -7,9 +7,6 @@
 from __future__ import annotations
 
 import numpy as np
-from geoh5py.objects import DrapeModel, Octree
-from scipy.interpolate import LinearNDInterpolator, NearestNDInterpolator
-from scipy.spatial import Delaunay, cKDTree
 
 
 def running_mean(
@@ -51,4 +48,3 @@ def running_mean(
         mean /= 2.0
 
     return mean
-

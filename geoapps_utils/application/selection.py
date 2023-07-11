@@ -8,14 +8,13 @@ from __future__ import annotations
 
 from uuid import UUID
 
-from geoh5py.data import ReferencedData
+from geoh5py.data import Data, ReferencedData
 from geoh5py.objects.object_base import ObjectBase
 from geoh5py.workspace import Workspace
 
-from geoapps_utils.base.application import BaseApplication
-from geoapps_utils.utils import warn_module_not_found
-from geoapps_utils.utils.list import find_value
-from geoapps_utils.utils.workspace import sorted_children_dict
+from geoapps_utils.application.application import BaseApplication
+from geoapps_utils.importing import warn_module_not_found
+from geoapps_utils.iterables import find_value, sorted_children_dict
 
 with warn_module_not_found():
     import ipywidgets as widgets
