@@ -19,6 +19,10 @@ geoh5py = {version = "~0.8.0a3", source = "pypi", allow-prereleases = true}
 
 ipyfilechooser = {version = "~0.6.0"}
 ipywidgets = {version = "^7.6.5"}
+plotly = {version = "~5.13.1"}
+pyqtwebengine = {version = "~5.15"}
+pyside2 = {version = "~5.15"}
+dash = {version = "~2.12"}
 
 [tool.poetry.dev-dependencies]
 pylint = "*"
