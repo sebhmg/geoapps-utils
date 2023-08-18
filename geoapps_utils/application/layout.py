@@ -61,12 +61,21 @@ object_selection_layout = html.Div([workspace_layout, launch_qt_layout])
 
 export_layout = html.Div(
     [
-        dcc.Markdown("Save As"),
-        dcc.Input(id="ga_group"),
         html.Div(
             [
                 dcc.Markdown(
-                    children="Output path:",
+                    "Save as", style={"width": "25%", "display": "inline-block"}
+                ),
+                dcc.Input(
+                    id="ga_group_name",
+                    style={"width": "25%", "display": "inline-block"},
+                ),
+            ]
+        ),
+        html.Div(
+            [
+                dcc.Markdown(
+                    children="Output path",
                     style={"width": "25%", "display": "inline-block"},
                 ),
                 dcc.Input(

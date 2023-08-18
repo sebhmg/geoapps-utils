@@ -20,18 +20,20 @@ from pathlib import Path
 from time import time
 
 import numpy as np
-from dash import Dash, callback_context, no_update
+from dash import Dash, callback_context, dcc, no_update
 from dash.dependencies import Input, Output, State
 from flask import Flask
-from geoapps.base.layout import object_selection_layout
-from geoapps.driver_base.params import BaseParams
 from geoh5py.data import Data
+from geoh5py.groups import PropertyGroup
 from geoh5py.objects import ObjectBase
 from geoh5py.shared import Entity
 from geoh5py.shared.utils import fetch_active_workspace, is_uuid
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
 from PySide2 import QtCore, QtWebEngineWidgets, QtWidgets  # pylint: disable=E0401
+
+from geoapps_utils.application.layout import object_selection_layout
+from geoapps_utils.driver.params import BaseParams
 
 
 class BaseDashApplication:
@@ -103,6 +105,9 @@ class BaseDashApplication:
 
         :return output_dict: Dict of current params.
         """
+        if self.params is None:
+            return {}
+
         output_dict = {}
         # Get validations to know expected type for keys in self.params.
         validations = self.params.validations
@@ -110,8 +115,10 @@ class BaseDashApplication:
         # Loop through self.params and update self.params with locals_dict.
         for key in self.params.to_dict():
             if key in update_dict:
-                if bool in validations[key]["types"] and isinstance(
-                    update_dict[key], list
+                if (
+                    validations is not None
+                    and bool in validations[key]["types"]
+                    and isinstance(update_dict[key], list)
                 ):
                     # Convert from dash component checklist to bool
                     if not update_dict[key]:
@@ -119,8 +126,8 @@ class BaseDashApplication:
                     else:
                         output_dict[key] = True
                 elif (
-                    float in validations[key]["types"]
-                    and int not in validations[key]["types"]
+                    float in validations[key]["types"]  # type: ignore
+                    and int not in validations[key]["types"]  # type: ignore
                     and isinstance(update_dict[key], int)
                 ):
                     # Checking for values that Dash has given as int when they should be floats.
@@ -133,64 +140,30 @@ class BaseDashApplication:
                     output_dict[key] = update_dict[key]
         return output_dict
 
-    def update_remainder_from_ui_json(  # pylint: disable=R0912, R0914
-        self,
-        ui_json_data: dict,
-        output_ids: list | None = None,
-        trigger: str | None = None,
-    ) -> tuple:
-        """
-        Update parameters from uploaded ui_json that aren't involved in another callback.
-
-        :param ui_json_data: Uploaded ui_json data.
-        :param output_ids: List of parameters to update. Used by tests.
-        :param trigger: Callback trigger.
-
-        :return outputs: List of outputs corresponding to the callback expected outputs.
-        """
-        # Get list of needed outputs from the callback.
-        if output_ids is None:
-            output_ids = [item["id"] for item in callback_context.outputs_list]
-
-        # Get update_dict from ui_json data.
-        update_dict = {}
-        if ui_json_data is not None:
-            # Loop through ui_json_data, and add items that are also in param_list
-            for key, value in ui_json_data.items():
-                if key in output_ids:
-                    if isinstance(value, bool):
-                        if value:
-                            update_dict[key] = [True]
-                        else:
-                            update_dict[key] = []
-                    else:
-                        update_dict[key] = value
-
-        if trigger is None:
-            trigger = callback_context.triggered[0]["prop_id"].split(".")[0]
-        if trigger == "ui_json_data":
-            # If the monitoring directory is empty, use path from workspace.
-            if "monitoring_directory" in update_dict and (
-                update_dict["monitoring_directory"] == ""
-                or update_dict["monitoring_directory"] is None
-            ):
-                if self.workspace is not None:
-                    update_dict["monitoring_directory_value"] = str(  # type: ignore
-                        Path(self.workspace.h5file).parent.resolve()
-                    )
-
-        # Format updated params to return to the callback
-        outputs = []
-        for param in output_ids:
-            if param in update_dict:
-                outputs.append(update_dict[param])
+    @staticmethod
+    def init_vals(layout, ui_json_data):
+        for comp in layout:  # pylint: disable=R1702
+            if hasattr(comp, "children") and not isinstance(comp, dcc.Markdown):
+                BaseDashApplication.init_vals(comp.children, ui_json_data)
             else:
-                outputs.append(None)  # type: ignore
-
-        return tuple(outputs)
+                if hasattr(comp, "id") and comp.id in ui_json_data:
+                    if isinstance(comp, dcc.Store):
+                        comp.data = ui_json_data[comp.id]
+                    else:
+                        if isinstance(comp, dcc.Dropdown):
+                            if not hasattr(comp, "options"):
+                                comp.options = [ui_json_data[comp.id]]
+                            comp.value = ui_json_data[comp.id]
+                        elif isinstance(comp, dcc.Checklist):
+                            if ui_json_data[comp.id]:
+                                comp.value = [True]
+                            else:
+                                comp.value = []
+                        else:
+                            comp.value = ui_json_data[comp.id]
 
     @property
-    def params(self) -> BaseParams:
+    def params(self) -> BaseParams | None:
         """
         Application parameters
         """
@@ -234,7 +207,7 @@ class ObjectSelection:
         app_name: str,
         app_initializer: dict,
         app_class: type[BaseDashApplication],
-        param_class: BaseParams,
+        param_class: type[BaseParams],
         **kwargs,
     ):
         self._app_name = None
@@ -407,8 +380,7 @@ class ObjectSelection:
         :param params: Current params to pass to new app.
         """
         app = app_class(ui_json=ui_json, ui_json_data=ui_json_data, params=params)  # type: ignore
-        if port is not None:
-            app.app.run(host="127.0.0.1", port=port)
+        app.app.run(jupyter_mode="external", host="127.0.0.1", port=port)
 
     @staticmethod
     def make_qt_window(app_name: str | None, port: int):
@@ -418,13 +390,15 @@ class ObjectSelection:
         :param app_name: App name to display as Qt window title.
         :param port: Port where the dash app has been launched.
         """
-        app = QtWidgets.QApplication(sys.argv)
-        browser = QtWebEngineWidgets.QWebEngineView()
+        app = QtWidgets.QApplication(sys.argv)  # pylint: disable=I1101
+        browser = QtWebEngineWidgets.QWebEngineView()  # pylint: disable=I1101
 
         browser.setWindowTitle(app_name)
-        browser.load(QtCore.QUrl("http://127.0.0.1:" + str(port)))
+        browser.load(
+            QtCore.QUrl("http://127.0.0.1:" + str(port))  # pylint: disable=I1101
+        )
         # Brings Qt window to the front
-        browser.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        browser.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)  # pylint: disable=I1101
         # Setting window size
         browser.resize(1200, 800)
         browser.show()
@@ -432,7 +406,9 @@ class ObjectSelection:
         app.exec_()  # running the Qt app
         os.kill(os.getpid(), signal.SIGTERM)  # shut down dash server and notebook
 
-    def launch_qt(self, objects: str, n_clicks: int) -> str:  # pylint: disable=W0613
+    def launch_qt(  # pylint: disable=W0613, R0914
+        self, objects: str, n_clicks: int
+    ) -> str:
         """
         Launch the Qt app when launch app button is clicked.
 
@@ -465,6 +441,20 @@ class ObjectSelection:
                     param_dict["objects"] = obj.copy(
                         parent=temp_workspace, copy_children=True
                     )
+
+                    # Copy any property groups over to temp_workspace
+                    prop_groups = obj.property_groups
+                    temp_prop_groups = param_dict["objects"].property_groups
+                    for group in prop_groups:  # pylint: disable=R1702
+                        if isinstance(group, PropertyGroup):
+                            for temp_group in temp_prop_groups:
+                                if temp_group.name == group.name:
+                                    for key, value in param_dict.items():
+                                        if (
+                                            hasattr(value, "uid")
+                                            and value.uid == group.uid
+                                        ):
+                                            param_dict[key] = temp_group.uid
 
             new_params = self.param_class(**param_dict)
 
@@ -534,7 +524,7 @@ class ObjectSelection:
         if not issubclass(val, BaseDashApplication):
             raise TypeError(
                 "Value for attribute `app_class` should be a subclass of "
-                ":obj:`geoapps.base.BaseDashApplication`"
+                ":obj:`geoapps_utils.application.BaseDashApplication`"
             )
         self._app_class = val
 
@@ -550,7 +540,7 @@ class ObjectSelection:
         if not issubclass(val, BaseParams):
             raise TypeError(
                 "Value for attribute `param_class` should be a subclass of "
-                ":obj:`geoapps.driver_base.BaseParams`"
+                ":obj:`geoapps_utils.driver.params.BaseParams`"
             )
         self._param_class = val
 
