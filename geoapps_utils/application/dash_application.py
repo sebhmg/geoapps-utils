@@ -46,8 +46,22 @@ class BaseDashApplication:
     _driver_class = None
     _workspace = None
     _app_initializer: dict | None = None
+    _ui_json_data: dict | None = None
 
-    def __init__(self):
+    def __init__(self, ui_json=None, ui_json_data=None, params=None):
+        if params is not None:
+            # Launched from notebook
+            # Params for initialization are coming from params
+            # ui_json_data is provided
+            self.params = params
+        elif ui_json is not None and Path(ui_json.path).exists():
+            # Launched from terminal
+            # Params for initialization are coming from ui_json
+            # ui_json_data starts as None
+            self.params = self._param_class(ui_json)
+            ui_json_data = self.params.input_file.demote(self.params.to_dict())
+        self._ui_json_data = ui_json_data
+
         self.workspace = self.params.geoh5
         self.workspace.open()
         if self._driver_class is not None:
@@ -161,6 +175,12 @@ class BaseDashApplication:
                                 comp.value = []
                         else:
                             comp.value = ui_json_data[comp.id]
+
+    @staticmethod
+    def update_visibility_from_checklist(checklist_val):
+        if checklist_val:
+            return {"display": "block"}
+        return {"display": "none"}
 
     @property
     def params(self) -> BaseParams | None:
