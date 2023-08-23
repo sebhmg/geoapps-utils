@@ -48,7 +48,15 @@ class BaseDashApplication:
     _app_initializer: dict | None = None
     _ui_json_data: dict | None = None
 
-    def __init__(self, ui_json=None, ui_json_data=None, params=None):
+    def __init__(
+        self,
+        ui_json: InputFile | None = None,
+        ui_json_data: dict | None = None,
+        params: BaseParams | None = None,
+    ):
+        """
+        Set initial ui_json_data from input file and open workspace.
+        """
         if params is not None:
             # Launched from notebook
             # Params for initialization are coming from params
@@ -59,10 +67,10 @@ class BaseDashApplication:
             # Params for initialization are coming from ui_json
             # ui_json_data starts as None
             self.params = self._param_class(ui_json)
-            ui_json_data = self.params.input_file.demote(self.params.to_dict())
+            ui_json_data = self.params.input_file.demote(self.params.to_dict())  # type: ignore
         self._ui_json_data = ui_json_data
 
-        self.workspace = self.params.geoh5
+        self.workspace = self.params.geoh5  # type: ignore
         self.workspace.open()
         if self._driver_class is not None:
             self.driver = self._driver_class(self.params)  # pylint: disable=E1102
@@ -155,7 +163,13 @@ class BaseDashApplication:
         return output_dict
 
     @staticmethod
-    def init_vals(layout, ui_json_data):
+    def init_vals(layout: list, ui_json_data: dict):
+        """
+        Initialize dash components in layout from ui_json_data.
+
+        :param layout: Dash layout.
+        :param ui_json_data: Uploaded ui.json data.
+        """
         for comp in layout:  # pylint: disable=R1702
             if hasattr(comp, "children") and not isinstance(comp, dcc.Markdown):
                 BaseDashApplication.init_vals(comp.children, ui_json_data)
@@ -177,7 +191,14 @@ class BaseDashApplication:
                             comp.value = ui_json_data[comp.id]
 
     @staticmethod
-    def update_visibility_from_checklist(checklist_val):
+    def update_visibility_from_checklist(checklist_val: list[bool]) -> dict:
+        """
+        Update visibility of a component from a checklist value.
+
+        :param checklist_val: Checklist value.
+
+        :return visibility: Component style.
+        """
         if checklist_val:
             return {"display": "block"}
         return {"display": "none"}
@@ -400,7 +421,7 @@ class ObjectSelection:
         :param params: Current params to pass to new app.
         """
         app = app_class(ui_json=ui_json, ui_json_data=ui_json_data, params=params)  # type: ignore
-        app.app.run(jupyter_mode="external", host="127.0.0.1", port=port)
+        app.app.run(jupyter_mode="external", host="127.0.0.1", port=port)  # type: ignore
 
     @staticmethod
     def make_qt_window(app_name: str | None, port: int):
