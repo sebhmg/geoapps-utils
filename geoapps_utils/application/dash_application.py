@@ -163,7 +163,7 @@ class BaseDashApplication:
         return output_dict
 
     @staticmethod
-    def init_vals(layout: list, ui_json_data: dict):
+    def init_vals(layout: list, ui_json_data: dict):  # pylint: disable=R0912
         """
         Initialize dash components in layout from ui_json_data.
 
@@ -180,8 +180,14 @@ class BaseDashApplication:
                     else:
                         if isinstance(comp, dcc.Dropdown):
                             if not hasattr(comp, "options"):
-                                comp.options = [ui_json_data[comp.id]]
-                            comp.value = ui_json_data[comp.id]
+                                if ui_json_data[comp.id] is None:
+                                    comp.options = ["None"]
+                                else:
+                                    comp.options = [ui_json_data[comp.id]]
+                            if ui_json_data[comp.id] is None:
+                                comp.value = "None"
+                            else:
+                                comp.value = ui_json_data[comp.id]
                         elif isinstance(comp, dcc.Checklist):
                             if ui_json_data[comp.id]:
                                 comp.value = [True]
