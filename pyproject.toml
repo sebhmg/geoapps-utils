@@ -1,14 +1,10 @@
 [tool.poetry]
-name = "geoapps_utils"
+name = "geoapps-utils"
 version = "0.1.0"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
-packages = [
-     { include = "geoapps_utils" }
-]
 
 [tool.poetry.scripts]
-
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
@@ -26,11 +22,14 @@ dash = {version = "~2.12"}
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
-toml = "*"
+tomli = "*"
 
 [tool.conda-lock]
 platforms = ['win-64', 'linux-64']
 channels = ['conda-forge']
+
+[tool.conda-lock.dependencies]
+libblas = "*=*mkl"
 
 [tool.isort]
 # settings for compatibility between ``isort`` and ``black`` formatting
