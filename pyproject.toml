@@ -9,14 +9,17 @@ authors = ["Mira Geoscience <support@mirageoscience.com>"]
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
 
-## dependencies for a minimal environment
-numpy = "~1.23.5"
+numpy = "~1.23.5"  # also in geoh5py
 geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
 
+dash = {version = "~2.12"}
 plotly = {version = "~5.13.1"}
 pyqtwebengine = {version = "~5.15"}
 pyside2 = {version = "~5.15"}
-dash = {version = "~2.12"}
+
+## indirect dependencies, forcing them here for installation through Conda not pip
+Pillow = "~9.4.0"  # from geoh5py
+h5py = "~3.8.0"  # from geoh5py
 
 [tool.poetry.dev-dependencies]
 pylint = "*"
