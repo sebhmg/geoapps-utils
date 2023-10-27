@@ -34,7 +34,7 @@ jobs:
       PYTHONUTF8: 1
       CONDA_LOCK_ENV_FILE: environments/conda-py-3.9-linux-64-dev.lock.yml
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup conda env
         uses: mamba-org/provision-with-micromamba@main
         with:
