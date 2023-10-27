@@ -8,6 +8,8 @@
 #     conda-lock install -n YOURENV --file conda-py-3.9-lock.yml
 # This lock contains optional development dependencies. Include them in the installed environment with:
 #     conda-lock install --dev-dependencies -n YOURENV --file conda-py-3.9-lock.yml
+# This lock contains optional dependency categories dash. Include them in the installed environment with:
+#     conda-lock install -e dash -n YOURENV --file conda-py-3.9-lock.yml
 # To update a single package to the latest version compatible with the version constraints in the source:
 #     conda-lock lock  --lockfile conda-py-3.9-lock.yml --update PACKAGE
 # To re-solve the entire environment, e.g. after changing a version constraint in the source file:
@@ -15,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: 7f522757b12cd38f9d8d254eae5629dfb90cf24a36e20e33bfa654da0ab6cf2d
-    linux-64: 78113e1f51afaa9e920c39ab5d0098d900ad20fc8bd9882031fb845ce9b48878
+    win-64: ece91a0c778bca82d057cebaa0209ff3e6f164b687125f68539bf074fe25b3e1
+    linux-64: 90f9a2ff2fb7f5017bb6004ff697866c0a6d3946165baab2b0777649adca4992
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -58,8 +60,8 @@ package:
   hash:
     md5: 0c96522c6bdaed4b1566d11387caaf45
     sha256: 58d7f40d2940dd0a8aa28651239adbf5613254df0f75789919c4e6762054403b
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: font-ttf-inconsolata
   version: '3.000'
   manager: conda
@@ -69,8 +71,8 @@ package:
   hash:
     md5: 34893075a5c9e55cdafac56607368fc6
     sha256: c52a29fdac682c20d252facc50f01e7c2e7ceac52aa9817aaf0bb83f7559ec5c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: font-ttf-source-code-pro
   version: '2.038'
   manager: conda
@@ -80,8 +82,8 @@ package:
   hash:
     md5: 4d59c254e01d9cde7957100457e2d5fb
     sha256: 00925c8c055a2275614b4d983e1df637245e19058d79fc7dd1a93b8d9fb4b139
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: font-ttf-ubuntu
   version: '0.83'
   manager: conda
@@ -91,8 +93,8 @@ package:
   hash:
     md5: 19410c3df09dfb12d1206132a1d357c5
     sha256: 470d5db54102bd51dbb0c5990324a2f4a0bc976faa493b22193338adb9882e2e
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: ld_impl_linux-64
   version: '2.40'
   manager: conda
@@ -150,8 +152,8 @@ package:
   hash:
     md5: f766549260d6815b0c52253f1fb1bb29
     sha256: 53f23a3319466053818540bcdf2091f253cbdbab1e0e9ae7b9e509dcaa2a5e38
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: fonts-conda-ecosystem
   version: '1'
   manager: conda
@@ -162,8 +164,8 @@ package:
   hash:
     md5: fee5683a3f04bd15cbd8318b096a27ab
     sha256: a997f2f1921bb9c9d76e6fa2f6b408b7fa549edd349a77639c9fe7a23ea93e61
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: _openmp_mutex
   version: '4.5'
   manager: conda
@@ -200,8 +202,8 @@ package:
   hash:
     md5: be733e69048951df1e4b4b7bb8c7666f
     sha256: 2c0a618d0fa695e4e01a30e7ff31094be540c52e9085cbd724edb132c65cf9cd
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: attr
   version: 2.5.1
   manager: conda
@@ -212,8 +214,8 @@ package:
   hash:
     md5: d9c69a24ad678ffce24c6543a0176b00
     sha256: 82c13b1772c21fc4a17441734de471d3aabf82b61db9b11f4a1bd04a9c4ac324
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: bzip2
   version: 1.0.8
   manager: conda
@@ -248,8 +250,8 @@ package:
   hash:
     md5: 14947d8770185e5153fdd04d4673ed37
     sha256: 4fcfedc44e4c9a053f0416f9fc6ab6ed50644fca3a761126dbd00d09db1f546a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: giflib
   version: 5.2.1
   manager: conda
@@ -260,8 +262,8 @@ package:
   hash:
     md5: 96f3b11872ef6fad973eac856cd2624f
     sha256: 41ec165704ccce2faa0437f4f53c03c06261a2cc9ff7614828e51427d9261f4b
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: graphite2
   version: 1.3.13
   manager: conda
@@ -273,8 +275,8 @@ package:
   hash:
     md5: 8c54672728e8ec6aa6db90cf2806d220
     sha256: 65da967f3101b737b08222de6a6a14e20e480e7d523a5d1e19ace7b960b5d6b1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: icu
   version: '72.1'
   manager: conda
@@ -310,8 +312,8 @@ package:
   hash:
     md5: a8832b479f93521a9e7b5b743803be51
     sha256: aad2a703b9d7b038c0f745b853c6bb5f122988fe1a7a096e0e606d9cbec4eaab
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: lerc
   version: 4.0.0
   manager: conda
@@ -372,8 +374,8 @@ package:
   hash:
     md5: 6305a3dd2752c76335295da4e581f2fd
     sha256: 74c98a563777ae2ad71f1f74d458a8ab043cee4a513467c159ccf159d0e461f3
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libffi
   version: 3.4.2
   manager: conda
@@ -444,8 +446,8 @@ package:
   hash:
     md5: 6e8cc2173440d77708196c5b93771680
     sha256: b88afeb30620b11bed54dac4295aa57252321446ba4e6babd7dce4b9ffde9b25
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libopus
   version: 1.3.1
   manager: conda
@@ -456,8 +458,8 @@ package:
   hash:
     md5: 15345e56d527b330e1cacbdf58676e8f
     sha256: 0e1c2740ebd1c93226dc5387461bbcf8142c518f2092f3ea7551f77755decc8f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libuuid
   version: 2.38.1
   manager: conda
@@ -505,8 +507,8 @@ package:
   hash:
     md5: 318b08df404f9c9be5712aaa5a6f0bb0
     sha256: 1b4c105a887f9b2041219d57036f72c4739ab9e9fe5a1486f094e58c76b31f5f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: mpg123
   version: 1.32.3
   manager: conda
@@ -518,8 +520,8 @@ package:
   hash:
     md5: bdadff838d5437aea83607ced8b37f75
     sha256: f02b8ed16b3a488938b5f9453d19ea315ce6ed0d46cc389ecfaa28f2a4c3cb16
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: ncurses
   version: '6.4'
   manager: conda
@@ -543,8 +545,8 @@ package:
   hash:
     md5: da0ec11a6454ae19bff5b02ed881a2b1
     sha256: 8fadeebb2b7369a4f3b2c039a980d419f65c7b18267ba0c62588f9f894396d0c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: openssl
   version: 3.1.4
   manager: conda
@@ -569,8 +571,8 @@ package:
   hash:
     md5: 700edd63ccd5fc66b70b1c028cea9a68
     sha256: ae917851474eb3b08812b02c9e945d040808523ec53f828aa74a90b0cdf15f57
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pthread-stubs
   version: '0.4'
   manager: conda
@@ -593,8 +595,8 @@ package:
   hash:
     md5: 9ac34337e5101a87e5d91da05d84aa48
     sha256: 0518e65929deded6afc5f91f31febb15e8c93f7ee599a18b787f9fab3f79cfd6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-compositeproto
   version: 0.4.2
   manager: conda
@@ -605,8 +607,8 @@ package:
   hash:
     md5: 8bf27eeb636d3acce5c6cb570ba63487
     sha256: 8127541fb7ee4ba81cabd3ac464953ec928489bf01d647e5819cd7cd9428730c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-damageproto
   version: 1.2.1
   manager: conda
@@ -617,8 +619,8 @@ package:
   hash:
     md5: 58c9bb067637c5a13a045a7124eeb027
     sha256: b0a62b8eedc3e1b47fbbe3bbe6011542d36867b90f9b4bf251b78109ee1f0d9b
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-inputproto
   version: 2.3.2
   manager: conda
@@ -629,8 +631,8 @@ package:
   hash:
     md5: bcd1b3396ec6960cbc1d2855a9e60b2b
     sha256: 6c8c2803de0f643f8bad16ece3f9a7259e4a49247543239c182d66d5e3a129a7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-kbproto
   version: 1.0.7
   manager: conda
@@ -641,8 +643,8 @@ package:
   hash:
     md5: 4b230e8381279d76131116660f5a241a
     sha256: e90b0a6a5d41776f11add74aa030f789faf4efd3875c31964d6f9cfa63a10dd1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libice
   version: 1.1.1
   manager: conda
@@ -653,8 +655,8 @@ package:
   hash:
     md5: b462a33c0be1421532f28bfe8f4a7514
     sha256: 5aa9b3682285bb2bf1a8adc064cb63aff76ef9178769740d855abb42b0d24236
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxau
   version: 1.0.11
   manager: conda
@@ -689,8 +691,8 @@ package:
   hash:
     md5: 68cce654461713977dac6f9ac1bce89a
     sha256: f5c7c2de3655a95153e900118959df6a50b6c104a3d7afaee3eadbf86b85fa2e
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-recordproto
   version: 1.14.2
   manager: conda
@@ -701,8 +703,8 @@ package:
   hash:
     md5: 2f835e6c386e73c6faaddfe9eda67e98
     sha256: 4b91d48fed368c83eafd03891ebfd5bae0a03adc087ebea8a680ae22da99a85f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-renderproto
   version: 0.11.1
   manager: conda
@@ -713,8 +715,8 @@ package:
   hash:
     md5: 06feff3d2634e3097ce2fe681474b534
     sha256: 38942930f233d1898594dd9edf4b0c0786f3dbc12065a0c308634c37fd936034
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-util-macros
   version: 1.19.3
   manager: conda
@@ -725,8 +727,8 @@ package:
   hash:
     md5: b1780cc89cf3949f670d6ca2aa6a7e42
     sha256: 128591045b700d375de98be76f215a0b67c9d6939523b743edc0dca389cdb4be
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-xextproto
   version: 7.3.0
   manager: conda
@@ -737,8 +739,8 @@ package:
   hash:
     md5: bce9f945da8ad2ae9b1d7165a64d0f87
     sha256: b8dda3b560e8a7830fe23be1c58cc41f407b2e20ae2f3b6901eb5842ba62b743
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-xf86vidmodeproto
   version: 2.3.1
   manager: conda
@@ -749,8 +751,8 @@ package:
   hash:
     md5: 3ceea9668625c18f19530de98b15d5b0
     sha256: 43398aeacad5b8753b7a1c12cb6bca36124e0c842330372635879c350c430791
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-xproto
   version: 7.0.31
   manager: conda
@@ -761,8 +763,8 @@ package:
   hash:
     md5: b4a4381d54784606820704f7b5f05a15
     sha256: f197bb742a17c78234c24605ad1fe2d88b1d25f332b75d73e5ba8cf8fbc2a10d
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xz
   version: 5.2.6
   manager: conda
@@ -786,8 +788,8 @@ package:
   hash:
     md5: 8b9b5aca60558d02ddaa09d599e55920
     sha256: 36dfeb4375059b3bba75ce9b38c29c69fd257342a79e6cf20e9f25c1523f785f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcap
   version: '2.69'
   manager: conda
@@ -799,8 +801,8 @@ package:
   hash:
     md5: 25cb5999faa414e5ccb2c1388f62d3d5
     sha256: 942f9564b4228609f017b6617425d29a74c43b8a030e12239fa4458e5cb6323c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libedit
   version: 3.1.20191231
   manager: conda
@@ -825,8 +827,8 @@ package:
   hash:
     md5: a1cfcc585f0c42bf8d5546bb1dfb668d
     sha256: 2e14399d81fb348e9d231a82ca4d816bf855206923759b69ad006ba482764131
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libflac
   version: 1.4.3
   manager: conda
@@ -840,8 +842,8 @@ package:
   hash:
     md5: ee48bf17cc83a00f59ca1494d5646869
     sha256: 65908b75fa7003167b8a8f0001e11e58ed5b1ef5e98b96ab2ba66d7c1b822c7d
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libgfortran-ng
   version: 13.2.0
   manager: conda
@@ -866,8 +868,8 @@ package:
   hash:
     md5: c2097d0b46367996f09b4e8e4920384a
     sha256: 0306b3c2d65863048983a50bd8b86f6f26e457ef55d1da745a5796af25093f5a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libnghttp2
   version: 1.52.0
   manager: conda
@@ -937,8 +939,8 @@ package:
   hash:
     md5: 309dec04b70a3cc0f1e84a4013683bc0
     sha256: 53080d72388a57b3c31ad5805c93a7328e46ff22fab7c44ad2a86d712740af33
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libxcb
   version: '1.13'
   manager: conda
@@ -982,8 +984,8 @@ package:
   hash:
     md5: 1e8ef4090ca4f0d66404a7441e1dbf3c
     sha256: 1b5114244f28e416d42e9ac0c61dfdabdfd7255b9fe752a07ca157a3e3893d2a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pcre2
   version: '10.40'
   manager: conda
@@ -996,8 +998,8 @@ package:
   hash:
     md5: 69e2c796349cd9b273890bee0febfe1b
     sha256: 7a29ec847556eed4faa1646010baae371ced69059a4ade43851367a076d6108a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: readline
   version: '8.2'
   manager: conda
@@ -1035,8 +1037,8 @@ package:
   hash:
     md5: 65ad6e1eb4aed2b0611855aff05e04f6
     sha256: 5d2af1b40f82128221bace9466565eca87c97726bb80bbfcd03871813f3e1876
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libsm
   version: 1.2.4
   manager: conda
@@ -1049,8 +1051,8 @@ package:
   hash:
     md5: 93ee23f12bc2e684548181256edd2cf6
     sha256: 089ad5f0453c604e18985480218a84b27009e9e6de9a0fa5f4a20b8778ede1f1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: zlib
   version: 1.2.13
   manager: conda
@@ -1062,8 +1064,8 @@ package:
   hash:
     md5: 68c34ec6149623be41a1933ab996a209
     sha256: 9887a04d7e7cb14bd2b52fa01858f05a6d7f002c890f618d9fcd864adbfecb1b
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: zstd
   version: 1.5.5
   manager: conda
@@ -1119,8 +1121,8 @@ package:
   hash:
     md5: f967fc95089cd247ceed56eda31de3a9
     sha256: 8fd7e6db1021cd9298d9896233454de204116840eb66a06fcb712e1015ff132a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libglib
   version: 2.78.0
   manager: conda
@@ -1137,8 +1139,8 @@ package:
   hash:
     md5: e618003da3547216310088478e475945
     sha256: 96ec4dc5e38f434aa5862cb46d74923cce1445de3cd0b9d61e3e63102b163af6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libhwloc
   version: 2.9.1
   manager: conda
@@ -1167,8 +1169,8 @@ package:
   hash:
     md5: 3d942f062d7656168bb42b3439bdfede
     sha256: c52c239b583a1b2d03bdc641afd8cbab0499b0a46ea55b40e1dbed112283a772
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libsndfile
   version: 1.2.2
   manager: conda
@@ -1186,8 +1188,8 @@ package:
   hash:
     md5: ef1910918dd895516a769ed36b5b3a4e
     sha256: f709cbede3d4f3aee4e2f8d60bd9e256057f410bd60b8964cb8cf82ec1457573
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libtiff
   version: 4.5.1
   manager: conda
@@ -1222,8 +1224,8 @@ package:
   hash:
     md5: 04a39cdd663f295653fc143851830563
     sha256: f57aa3eeeb4abbeeafb6e61fbffa6f89fa2434e914c1eb65551e6e0905b363aa
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libxslt
   version: 1.1.37
   manager: conda
@@ -1235,8 +1237,8 @@ package:
   hash:
     md5: ed0d77d947ddeb974892de8df7224d12
     sha256: b2e1396c98fe1b3eb30a1f6d592a3275dc4260f6173270ab8a0ff9d7bf0025e7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: llvm-openmp
   version: 17.0.3
   manager: conda
@@ -1265,8 +1267,8 @@ package:
   hash:
     md5: b72f016c910ff9295b1377d3e17da3f2
     sha256: 90a5c105e35990cac53f45366c256d88f4c8f66a360afd37dcae1357e370ade6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: nss
   version: '3.94'
   manager: conda
@@ -1282,8 +1284,8 @@ package:
   hash:
     md5: 7caef74bbfa730e014b20f0852068509
     sha256: c9b7910fc554c6550905b9150f4c8230e973ca63f41b42f2c18a49e8aa458e78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: python
   version: 3.9.18
   manager: conda
@@ -1321,8 +1323,8 @@ package:
   hash:
     md5: a88ab22508ba067b689dc12696157cee
     sha256: d797cecb10d9d20970656db803186b2d87e51f58202a87a359b18bae6f0b0d1e
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xcb-util-keysyms
   version: 0.4.0
   manager: conda
@@ -1334,8 +1336,8 @@ package:
   hash:
     md5: d04a6285315c4f03ebaf37355be272f9
     sha256: cdb8ed921d076daed3c3d485370ea821c45eb95b858a587ff2a53d9271f1287c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xcb-util-renderutil
   version: 0.3.9
   manager: conda
@@ -1347,8 +1349,8 @@ package:
   hash:
     md5: 732e22f1741bccea861f5668cf7342a7
     sha256: 19d27b7af8fb8047e044de2b87244337343c51fe7caa0fbaa9c53c2215787188
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xcb-util-wm
   version: 0.4.1
   manager: conda
@@ -1360,8 +1362,8 @@ package:
   hash:
     md5: 847df113dba16f0079758cacf9024409
     sha256: 1ab62607ded0815b9a570e66a2af859cf4d9c79a3bfdd8b06f5d773fc1211ea5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libx11
   version: 1.8.4
   manager: conda
@@ -1376,8 +1378,8 @@ package:
   hash:
     md5: ea8fbfeb976ac49cbeb594e985393514
     sha256: 3c6862a01a39cdea3870b132706ad7256824299947a3a94ae361d863d402d704
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: blinker
   version: 1.6.3
   manager: conda
@@ -1388,8 +1390,8 @@ package:
   hash:
     md5: d33cf7357de636cec64320f0c4fb7b6f
     sha256: b9e264f0acb369040da1c3cbeb032b0ca54e017ffe166cd9d946dab78dad0d44
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: brotli-python
   version: 1.1.0
   manager: conda
@@ -1403,8 +1405,8 @@ package:
   hash:
     md5: c48418c8b35f1d59ae9ae1174812b40a
     sha256: e22afb19527a93da24c1108c3e91532811f9c3df64a9473989faf332c98af082
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: cached_property
   version: 1.5.2
   manager: conda
@@ -1427,8 +1429,8 @@ package:
   hash:
     md5: 7f3dbc9179b4dde7da98dfb151d0ad22
     sha256: db66e31866ff4250c190788769e3a8a1709237c3e9c38d7143aae95ab75fcb31
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: charset-normalizer
   version: 3.3.1
   manager: conda
@@ -1439,8 +1441,8 @@ package:
   hash:
     md5: 985378f74689fccce52f158027bd9acd
     sha256: a31739c49c4b1c8e0cbdec965ba152683d36ce6e23bdaefcfee99937524dabd1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: click
   version: 8.1.7
   manager: conda
@@ -1452,8 +1454,8 @@ package:
   hash:
     md5: f3ad426304898027fc619827ff428eca
     sha256: f0016cbab6ac4138a429e28dbcb904a90305b34b3fe41a9b89d697c90401caec
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: colorama
   version: 0.4.6
   manager: conda
@@ -1478,8 +1480,8 @@ package:
   hash:
     md5: ecfff944ba3960ecb334b9a2663d708d
     sha256: 8f5f995699a2d9dbdd62c61385bfeeb57c82a681a7c8c5313c395aa0ccab68a5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: dill
   version: 0.3.7
   manager: conda
@@ -1518,8 +1520,8 @@ package:
   hash:
     md5: 0f69b688f52ff6da70bccb7ff7001d1d
     sha256: 155d534c9037347ea7439a2c6da7c24ffec8e5dd278889b4c57274a1d91e0a83
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: glib-tools
   version: 2.78.0
   manager: conda
@@ -1533,8 +1535,8 @@ package:
   hash:
     md5: e10134de3558dd95abda6987b5548f4f
     sha256: 991803ca90e6ba54568ff1bcb8a02f69a9beb8a09988d257fc21e1bbb3557d8c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: idna
   version: '3.4'
   manager: conda
@@ -1545,8 +1547,8 @@ package:
   hash:
     md5: 34272b248891bddccc64479f9a7fffed
     sha256: 9887c35c374ec1847f167292d3fde023cb4c994a4ceeec283072b95440131f09
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: iniconfig
   version: 2.0.0
   manager: conda
@@ -1569,8 +1571,8 @@ package:
   hash:
     md5: 3c3de74912f11d2b590184f03c7cd09b
     sha256: 31e3492686b4e92b53db9b48bc0eb03873b1caaf28629fee7d2d47627a2c56d3
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: lcms2
   version: '2.15'
   manager: conda
@@ -1597,8 +1599,8 @@ package:
   hash:
     md5: 2dd726d3664b57ff32e4ef1965774c02
     sha256: b79181e5d1e3cd80ce5cbc0d0098621413e24c37437e8906b5bca1c398a5ce34
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcups
   version: 2.3.3
   manager: conda
@@ -1612,8 +1614,8 @@ package:
   hash:
     md5: c9f4416a34bc91e0eb029f912c68f81f
     sha256: 0ccd610207807f53328f137b2adc99c413f8e1dcd1302f0325412796a94eaaf7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcurl
   version: 8.1.2
   manager: conda
@@ -1645,8 +1647,8 @@ package:
   hash:
     md5: 8afb2a97d256ffde95b91a6283bc598c
     sha256: 96031c853d1a8b32c50c04b791aa199508ab1f0fa879ab7fcce175ee24620f78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libsystemd0
   version: '254'
   manager: conda
@@ -1663,8 +1665,8 @@ package:
   hash:
     md5: df4b1cd0c91b4234fb02b5701a4cdddc
     sha256: e4732b9bc6acbdd3308cd0abd0860c9ea44e37127cd78acb797c996c20e4f42f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libwebp
   version: 1.3.1
   manager: conda
@@ -1680,8 +1682,8 @@ package:
   hash:
     md5: 4963f3f12db45a576f2b8fbe9a0b8569
     sha256: b0428f43bb3bc4544b997fcd9dfeb5593ee10701e8895cef22212105a8d8aa8d
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: markupsafe
   version: 2.1.3
   manager: conda
@@ -1694,8 +1696,8 @@ package:
   hash:
     md5: ee2b4665b852ec6ff2758f3c1b91233d
     sha256: 0fb7a5340855c0b3c7c9259eb57ff00abedf36530ba1daae3434016301b0fa36
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: mccabe
   version: 0.7.0
   manager: conda
@@ -1718,8 +1720,8 @@ package:
   hash:
     md5: a4f0e4519bc50eee4f53f689be9607f7
     sha256: d7b795b4e754136841c6da3f9fa1a0f7ec37bc7167e7dd68c5b45e657133e008
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: openjpeg
   version: 2.5.0
   manager: conda
@@ -1746,8 +1748,8 @@ package:
   hash:
     md5: 79002079284aa895f883c6b7f3f88fd6
     sha256: 69b3ace6cca2dab9047b2c24926077d81d236bef45329d264b394001e3c3e52f
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: pluggy
   version: 1.3.0
   manager: conda
@@ -1770,8 +1772,8 @@ package:
   hash:
     md5: 7205635cd71531943440fbfe3b6b5727
     sha256: 2cd6fae8f9cbc806b7f828f006ae4a83c23fac917cacfd73c37ce322d4324e53
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pysocks
   version: 1.7.1
   manager: conda
@@ -1783,8 +1785,8 @@ package:
   hash:
     md5: 2a7de29fb590ca14b5243c4c812c8025
     sha256: a42f826e958a8d22e65b3394f437af7332610e43ee313393d1cf143f0a2d274b
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: setuptools
   version: 68.2.2
   manager: conda
@@ -1807,8 +1809,8 @@ package:
   hash:
     md5: e5f25f8dbc060e9a8d912e432202afc2
     sha256: a85c38227b446f42c5b90d9b642f2c0567880c15d72492d8da074a59c8f91dd6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: tbb
   version: 2021.9.0
   manager: conda
@@ -1845,8 +1847,8 @@ package:
   hash:
     md5: f832c45a477c78bebd107098db465095
     sha256: f0f3d697349d6580e4c2f35ba9ce05c65dc34f9f049e85e45da03800b46139c1
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: tomli
   version: 2.0.1
   manager: conda
@@ -1881,8 +1883,8 @@ package:
   hash:
     md5: 5b1be40a26d10a06f6d4f1f9e19fa0c7
     sha256: 38d16b5c53ec1af845d37d22e7bb0e6c934c7f19499123507c5a470f6f8b7dde
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: wheel
   version: 0.41.2
   manager: conda
@@ -1907,8 +1909,8 @@ package:
   hash:
     md5: c9b568bd804cb2903c6be6f5f68182e4
     sha256: 6db358d4afa0eb1225e24871f6c64c1b6c433f203babdd43508b0d61252467d1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxext
   version: 1.3.4
   manager: conda
@@ -1921,8 +1923,8 @@ package:
   hash:
     md5: 82b6df12252e6f32402b96dacc656fec
     sha256: 73e5cfbdff41ef8a844441f884412aa5a585a0f0632ec901da035a03e1fe1249
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxfixes
   version: 5.0.3
   manager: conda
@@ -1935,8 +1937,8 @@ package:
   hash:
     md5: e9a21aa4d5e3e5f1aed71e8cefd46b6a
     sha256: 1e426a1abb774ef1dcf741945ed5c42ad12ea2dc7aeed7682d293879c3e1e4c3
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxrender
   version: 0.9.10
   manager: conda
@@ -1949,8 +1951,8 @@ package:
   hash:
     md5: f59c1242cc1dd93e72c2ee2b360979eb
     sha256: 7d907ed9e2ec5af5d7498fb3ab744accc298914ae31497ab6dcc6ef8bd134d00
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: zipp
   version: 3.17.0
   manager: conda
@@ -1961,8 +1963,8 @@ package:
   hash:
     md5: 2e4d6bc0b14e10f895fc6791a7d9b26a
     sha256: bced1423fdbf77bca0a735187d05d9b9812d2163f60ab426fc10f11f92ecbe26
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: ansi2html
   version: 1.8.0
   manager: conda
@@ -1976,8 +1978,8 @@ package:
   hash:
     md5: 2acefd9045cbaf5c6b8ce1d4de807ed6
     sha256: 4d90d4daaf85aa617a7671d43385398075bf99fd6439124ad8f29cfe61e80cd5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: cached-property
   version: 1.5.2
   manager: conda
@@ -2015,8 +2017,8 @@ package:
   hash:
     md5: 0c944213e40c9e4aa32292776b9c6903
     sha256: 0be3064cb30e3e69a47370abae85b2780cd81fbca00cbd17076d40c0f6302fdb
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: coverage
   version: 7.3.2
   manager: conda
@@ -2048,8 +2050,8 @@ package:
   hash:
     md5: 2f55a36b549f51a7e0c2b1e3c3f0ccd4
     sha256: b7fd5ef9aee4205e14105dc9f79b3de326af091c0253e1e52d3e4ee0d960851d
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: hdf5
   version: 1.14.0
   manager: conda
@@ -2080,8 +2082,8 @@ package:
   hash:
     md5: 4e9f59a060c3be52bc4ddc46ee9b6946
     sha256: 2797ed927d65324309b6c630190d917b9f2111e0c217b721f80429aeb57f9fcf
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: isort
   version: 5.12.0
   manager: conda
@@ -2106,8 +2108,8 @@ package:
   hash:
     md5: c8490ed5c70966d232fdd389d0dbed37
     sha256: b045faba7130ab263db6a8fdc96b1a3de5fcf85c4a607c5f11a49e76851500b5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libclang
   version: 16.0.3
   manager: conda
@@ -2121,8 +2123,8 @@ package:
   hash:
     md5: 45957369e3e6613b30571eb11cb304a9
     sha256: 50f7a670c82df9ae35c1c18087edfdf72d726f69c76de5f989a0ff338ba266e6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: mkl
   version: 2023.2.0
   manager: conda
@@ -2201,8 +2203,8 @@ package:
   hash:
     md5: ac902ff3c1c6d750dd0dfc93a974ab74
     sha256: 9981c70893d95c8cac02e7edd1a9af87f2c8745b772d529f08b7f9dafbe98606
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pytest
   version: 7.4.3
   manager: conda
@@ -2232,8 +2234,8 @@ package:
   hash:
     md5: a11f356d6f93b74b4a84e9501afd48b4
     sha256: ef407b88c45171f41eadcbbcfd41243cb137fe7438fc18f4cd08181c522664cf
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: sip
   version: 6.7.12
   manager: conda
@@ -2250,8 +2252,8 @@ package:
   hash:
     md5: e667a3ab0df62c54e60e1843d2e6defb
     sha256: fd50c71dc05daf9d28663d448d17f150b3eb79ae629198c73e2186b5b1e990dc
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: typing-extensions
   version: 4.8.0
   manager: conda
@@ -2262,8 +2264,8 @@ package:
   hash:
     md5: 384462e63262a527bda564fa2d9126c0
     sha256: d6e1dddd0c372218ef15912383d351ac8c73465cbf16238017f0269813cafe2d
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: urllib3
   version: 2.0.7
   manager: conda
@@ -2276,8 +2278,8 @@ package:
   hash:
     md5: 270e71c14d37074b1d066ee21cf0c4a6
     sha256: 9fe14735dde74278c6f1710cbe883d5710fc98501a96031dec6849a8d8a1bb11
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: werkzeug
   version: 3.0.1
   manager: conda
@@ -2289,8 +2291,8 @@ package:
   hash:
     md5: af8d825d93dbe6331ee6d61c69869ca0
     sha256: b7ac49549d370a411b1d6150d24243a15adcce07f1c61ec2ea1b536346e47aa0
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxcomposite
   version: 0.4.6
   manager: conda
@@ -2305,8 +2307,8 @@ package:
   hash:
     md5: ada6777364a0ea2407a1894e54779cc4
     sha256: 7c5806a8de1ce0d4e0c7aae8d29565f11fba6c6da4a787c3e09f1fcc428725a4
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxdamage
   version: 1.1.5
   manager: conda
@@ -2323,8 +2325,8 @@ package:
   hash:
     md5: bebd3814ec2355fab6a474b07ed73093
     sha256: 4cab878855e48669b64dd7522a518433ac83bb56fa79743d12db316326e2e39e
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxi
   version: 1.7.10
   manager: conda
@@ -2339,8 +2341,8 @@ package:
   hash:
     md5: e77615e5141cad5a2acaa043d1cf0ca5
     sha256: 745c1284a96b4282fe6fe122b2643e1e8c26a7ff40b733a8f4b61357238c4e68
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxrandr
   version: 1.5.2
   manager: conda
@@ -2357,8 +2359,8 @@ package:
   hash:
     md5: 5b0f7da25a4556c9619c3e4b4a98ab07
     sha256: ffd075a463896ed86d9519e26dc36f754b695b9c1e1b6115d34fe138b36d8200
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: astroid
   version: 3.0.1
   manager: conda
@@ -2389,8 +2391,8 @@ package:
   hash:
     md5: d26105227a24c82fdf160f20ed379400
     sha256: 73dafd8c1ae9ee9e42e5fa78275c8dc3b456879d83dc6d6ed82d92bd498c9184
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: gstreamer
   version: 1.22.0
   manager: conda
@@ -2406,8 +2408,8 @@ package:
   hash:
     md5: 461541cb1b387c2a28ab6217f3d38502
     sha256: b60bf8f5cae60d276e26f9de0f03faddc6dd341c910924ffe0f3c1aa7e0852c7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: harfbuzz
   version: 7.3.0
   manager: conda
@@ -2424,8 +2426,8 @@ package:
   hash:
     md5: 765bc76c0dfaf24ff9d8a2935b2510df
     sha256: 9d99416e9d4a01ea0915f65ea7fac71dee11916de115fbd0325c0cb82e0b63f8
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libblas
   version: 3.9.0
   manager: conda
@@ -2467,8 +2469,8 @@ package:
   hash:
     md5: 93aff412f3e49fdb43361c0215cbd72d
     sha256: 86efec5e57111794e039bb14dfce23d9df6ed8df139ab1404086140eba6d4d7c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pytest-cov
   version: 4.1.0
   manager: conda
@@ -2498,8 +2500,8 @@ package:
   hash:
     md5: a30144e4156cdbb236f99ebb49828f8b
     sha256: 9f629d6fd3c8ac5f2a198639fe7af87c4db2ac9235279164bfe0fcb49d8c4bad
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxtst
   version: 1.2.3
   manager: conda
@@ -2515,8 +2517,8 @@ package:
   hash:
     md5: a220b1a513e19d5cb56c1311d44f12e6
     sha256: 9a51ae2869b9a47735539dada9d85534418a765d1461c9f91fe7564f3ee75e87
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: dash
   version: 2.12.1
   manager: conda
@@ -2536,8 +2538,8 @@ package:
   hash:
     md5: ef8cbf64af2a8f94ab967b6f16fa7f82
     sha256: c4be071de643d7ae26a0c129570d4a0521aa8278a04a4b9f58cc9cd75019b743
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: gst-plugins-base
   version: 1.22.0
   manager: conda
@@ -2559,8 +2561,8 @@ package:
   hash:
     md5: 0d0c6604c8ac4ad5e51efa7bb58da05c
     sha256: e0f3e53f179440a8cdfd38c0b47d175aa560ff1600d43e15e6a6cbdaa7a01da3
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcblas
   version: 3.9.0
   manager: conda
@@ -2676,8 +2678,8 @@ package:
   hash:
     md5: f56e791ed1c9ad90f49db3beb400aa2b
     sha256: 94ef4ab8629bc805973a7c07e580df10a7e002262017090b7db479affb211b91
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: h5py
   version: 3.8.0
   manager: conda
@@ -2711,8 +2713,8 @@ package:
   hash:
     md5: e1f148e57d071b09187719df86f513c1
     sha256: a0d0662c73b343931dbd66d9c25ec74f40115512568a87bf4d01af8d1a8ddf1c
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pyside2
   version: 5.15.8
   manager: conda
@@ -2731,8 +2733,8 @@ package:
   hash:
     md5: dcce7105fa5cf517f82be2d0fbd1c761
     sha256: d7ea0d2e4670b3b837018add9870a68ea25d5754ddf0eb1a07b48b0bddc90354
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: qt-webengine
   version: 5.15.8
   manager: conda
@@ -2780,8 +2782,8 @@ package:
   hash:
     md5: fc1d28f9f37efcb1c7ac9af514988f82
     sha256: 4c4df2c1fe40fd29abd6c84a905c059a09882f47107afd5b6390a690f3879fc6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pyqtwebengine
   version: 5.15.9
   manager: conda
@@ -2799,8 +2801,8 @@ package:
   hash:
     md5: a23ce377b264d72a813900e6fb91cb38
     sha256: 0029f43f1e24cc196d5b0b06cd8ceab007ff0a4aa18aea9d06a8431f25ac923f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: geoh5py
   version: 0.8.0rc1
   manager: pip
@@ -2979,8 +2981,8 @@ package:
   hash:
     md5: a108731562663d787066bd17c9595114
     sha256: 06ceff1f021f4a540a6b5c8a037b79b3d98757b1f9659a4b08ad352912b8ef2e
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: lerc
   version: 4.0.0
   manager: conda
@@ -3073,8 +3075,8 @@ package:
   hash:
     md5: 04286d905a0dcb7f7d4a12bdfe02516d
     sha256: ef20f04ad2121a07e074b34bfc211587df18180e680963f5c02c54d1951b9ee6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libsqlite
   version: 3.43.2
   manager: conda
@@ -3194,8 +3196,8 @@ package:
   hash:
     md5: 299d4fd6798a45337042ff5a48219e5f
     sha256: 71c75b0a4dc2cf95d2860ea0076edf9f5558baeb4dacaeecb32643b199074616
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: krb5
   version: 1.20.1
   manager: conda
@@ -3254,8 +3256,8 @@ package:
   hash:
     md5: e1a22282de0169c93e4ffe6ce6acc212
     sha256: 6cdc018a024908270205d8512d92f92cf0adaaa5401c2b403757189b138bf56a
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libwebp
   version: 1.3.2
   manager: conda
@@ -3269,8 +3271,8 @@ package:
   hash:
     md5: 6202a1ba6be2713084cf0452d4e8c10c
     sha256: 7b4f95d1e9756fe81186309113188195fbac164687b96ad443a243a0ca59ec8f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libxml2
   version: 2.11.5
   manager: conda
@@ -3317,8 +3319,8 @@ package:
   hash:
     md5: 2519de0d9620dc2bc7e19caf6867136d
     sha256: 5833c63548e4fae91da6d77739eab7dc9bf6542e43f105826b23c01bfdd9cb57
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: python
   version: 3.9.18
   manager: conda
@@ -3366,8 +3368,8 @@ package:
   hash:
     md5: d33cf7357de636cec64320f0c4fb7b6f
     sha256: b9e264f0acb369040da1c3cbeb032b0ca54e017ffe166cd9d946dab78dad0d44
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: brotli-python
   version: 1.1.0
   manager: conda
@@ -3382,8 +3384,8 @@ package:
   hash:
     md5: f24ba3942ece1e5d3dcde934f0532998
     sha256: 076f6ac7dc00cfca25e11fd42bfd3cc3395307d9a3aa3958a13d14bc8ea610ec
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: cached_property
   version: 1.5.2
   manager: conda
@@ -3406,8 +3408,8 @@ package:
   hash:
     md5: 7f3dbc9179b4dde7da98dfb151d0ad22
     sha256: db66e31866ff4250c190788769e3a8a1709237c3e9c38d7143aae95ab75fcb31
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: charset-normalizer
   version: 3.3.1
   manager: conda
@@ -3418,8 +3420,8 @@ package:
   hash:
     md5: 985378f74689fccce52f158027bd9acd
     sha256: a31739c49c4b1c8e0cbdec965ba152683d36ce6e23bdaefcfee99937524dabd1
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: colorama
   version: 0.4.6
   manager: conda
@@ -3430,8 +3432,8 @@ package:
   hash:
     md5: 3faab06a954c2a04039983f2c4a50d99
     sha256: 2c1b2e9755ce3102bca8d69e8f26e4f087ece73f50418186aee7c74bef8e1698
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: dill
   version: 0.3.7
   manager: conda
@@ -3482,8 +3484,8 @@ package:
   hash:
     md5: 34272b248891bddccc64479f9a7fffed
     sha256: 9887c35c374ec1847f167292d3fde023cb4c994a4ceeec283072b95440131f09
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: iniconfig
   version: 2.0.0
   manager: conda
@@ -3506,8 +3508,8 @@ package:
   hash:
     md5: 3c3de74912f11d2b590184f03c7cd09b
     sha256: 31e3492686b4e92b53db9b48bc0eb03873b1caaf28629fee7d2d47627a2c56d3
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libclang13
   version: 16.0.6
   manager: conda
@@ -3522,8 +3524,8 @@ package:
   hash:
     md5: 08f43b2b0cc18cb32d106a6e6a0ca128
     sha256: 5485eec3668ffb3a5319c8244ada215152f0e80293059019314cdb0d4a7e6c07
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcurl
   version: 8.1.2
   manager: conda
@@ -3558,8 +3560,8 @@ package:
   hash:
     md5: 25f5b3502a82ac425c72c3bc0efbecb5
     sha256: 1417a309e40a2fae41e18170a74bface2ab67fb0d6905caeb34f91c6840edacc
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libhwloc
   version: 2.9.3
   manager: conda
@@ -3609,8 +3611,8 @@ package:
   hash:
     md5: b9ed82b82e2f292f75f1af56f35f8c9f
     sha256: 491c40fd21aae219cbdaaf8f2b2963ef3ebd73217d9007b15e2e65b0255925aa
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: markupsafe
   version: 2.1.3
   manager: conda
@@ -3625,8 +3627,8 @@ package:
   hash:
     md5: 6644dec6cc4460a6b8ad6bcd3f142c53
     sha256: 8ffabfc3134cbdda5cb848507ac752528a288afb051ba3b74ecfbba3ec828804
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: mccabe
   version: 0.7.0
   manager: conda
@@ -3649,8 +3651,8 @@ package:
   hash:
     md5: a4f0e4519bc50eee4f53f689be9607f7
     sha256: d7b795b4e754136841c6da3f9fa1a0f7ec37bc7167e7dd68c5b45e657133e008
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: packaging
   version: '23.2'
   manager: conda
@@ -3661,8 +3663,8 @@ package:
   hash:
     md5: 79002079284aa895f883c6b7f3f88fd6
     sha256: 69b3ace6cca2dab9047b2c24926077d81d236bef45329d264b394001e3c3e52f
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: pluggy
   version: 1.3.0
   manager: conda
@@ -3685,8 +3687,8 @@ package:
   hash:
     md5: 7205635cd71531943440fbfe3b6b5727
     sha256: 2cd6fae8f9cbc806b7f828f006ae4a83c23fac917cacfd73c37ce322d4324e53
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pthread-stubs
   version: '0.4'
   manager: conda
@@ -3721,8 +3723,8 @@ package:
   hash:
     md5: e5f25f8dbc060e9a8d912e432202afc2
     sha256: a85c38227b446f42c5b90d9b642f2c0567880c15d72492d8da074a59c8f91dd6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: tenacity
   version: 8.2.3
   manager: conda
@@ -3745,8 +3747,8 @@ package:
   hash:
     md5: f832c45a477c78bebd107098db465095
     sha256: f0f3d697349d6580e4c2f35ba9ce05c65dc34f9f049e85e45da03800b46139c1
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: tomli
   version: 2.0.1
   manager: conda
@@ -3781,8 +3783,8 @@ package:
   hash:
     md5: 5b1be40a26d10a06f6d4f1f9e19fa0c7
     sha256: 38d16b5c53ec1af845d37d22e7bb0e6c934c7f19499123507c5a470f6f8b7dde
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: wheel
   version: 0.41.2
   manager: conda
@@ -3806,8 +3808,8 @@ package:
   hash:
     md5: 30878ecc4bd36e8deeea1e3c151b2e0b
     sha256: a11ae693a0645bf6c7b8a47bac030be9c0967d0b1924537b9ff7458e832c0511
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: xorg-libxau
   version: 1.0.11
   manager: conda
@@ -3843,8 +3845,8 @@ package:
   hash:
     md5: 2e4d6bc0b14e10f895fc6791a7d9b26a
     sha256: bced1423fdbf77bca0a735187d05d9b9812d2163f60ab426fc10f11f92ecbe26
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: ansi2html
   version: 1.8.0
   manager: conda
@@ -3858,8 +3860,8 @@ package:
   hash:
     md5: 643087398155763d52f3406d525a27f7
     sha256: 5f924ea51af19deb8c4fb563f6d8a6bf5172fbe81621a8df7627d9f3845a53e6
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: cached-property
   version: 1.5.2
   manager: conda
@@ -3884,8 +3886,8 @@ package:
   hash:
     md5: 3549ecbceb6cd77b91a105511b7d0786
     sha256: 90236b113b9a20041736e80b80ee965167f9aac0468315c55e2bad902d673fb0
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: coverage
   version: 7.3.2
   manager: conda
@@ -3917,8 +3919,8 @@ package:
   hash:
     md5: 466538fb59949a3c015b55671dc7e52c
     sha256: 0781647629fdb9c88a2b1dc22bb845645d3365693f104374c7d9139bc59bd0ce
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: hdf5
   version: 1.14.0
   manager: conda
@@ -3948,8 +3950,8 @@ package:
   hash:
     md5: 4e9f59a060c3be52bc4ddc46ee9b6946
     sha256: 2797ed927d65324309b6c630190d917b9f2111e0c217b721f80429aeb57f9fcf
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: isort
   version: 5.12.0
   manager: conda
@@ -3974,8 +3976,8 @@ package:
   hash:
     md5: c8490ed5c70966d232fdd389d0dbed37
     sha256: b045faba7130ab263db6a8fdc96b1a3de5fcf85c4a607c5f11a49e76851500b5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: lcms2
   version: '2.15'
   manager: conda
@@ -4008,8 +4010,8 @@ package:
   hash:
     md5: d73d862f5654709b23cf782fff51ce30
     sha256: d546fcc53068f608bdcf9391c03c559eae9b1ae8b107c99840c93144ef88dea8
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libxcb
   version: '1.13'
   manager: conda
@@ -4081,8 +4083,8 @@ package:
   hash:
     md5: 56cd9fe388baac0e90c7149cfac95b60
     sha256: b3a612bc887f3dd0fb7c4199ad8e342bd148cf69a9b74fd9468a18cf2bef07b7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pytest
   version: 7.4.3
   manager: conda
@@ -4112,8 +4114,8 @@ package:
   hash:
     md5: a11f356d6f93b74b4a84e9501afd48b4
     sha256: ef407b88c45171f41eadcbbcfd41243cb137fe7438fc18f4cd08181c522664cf
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: sip
   version: 6.7.12
   manager: conda
@@ -4131,8 +4133,8 @@ package:
   hash:
     md5: 0cc5774390ada632ed7975203057c91c
     sha256: 541840bcd849c6c745f537987d0009695ef14c8fd9ad4721333a30bf3c49e018
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: tbb
   version: 2021.10.0
   manager: conda
@@ -4158,8 +4160,8 @@ package:
   hash:
     md5: 384462e63262a527bda564fa2d9126c0
     sha256: d6e1dddd0c372218ef15912383d351ac8c73465cbf16238017f0269813cafe2d
-  category: main
-  optional: false
+  category: dev
+  optional: true
 - name: werkzeug
   version: 3.0.1
   manager: conda
@@ -4171,8 +4173,8 @@ package:
   hash:
     md5: af8d825d93dbe6331ee6d61c69869ca0
     sha256: b7ac49549d370a411b1d6150d24243a15adcce07f1c61ec2ea1b536346e47aa0
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: astroid
   version: 3.0.1
   manager: conda
@@ -4203,8 +4205,8 @@ package:
   hash:
     md5: d26105227a24c82fdf160f20ed379400
     sha256: 73dafd8c1ae9ee9e42e5fa78275c8dc3b456879d83dc6d6ed82d92bd498c9184
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: glib
   version: 2.78.0
   manager: conda
@@ -4222,8 +4224,8 @@ package:
   hash:
     md5: 1ed98e4da48693079f2fe83298c5b0ac
     sha256: a9860e833d1ac9e2e87e5a0ae6863c819d893dac90aa1f6df9c06ab312d80170
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: mkl
   version: 2023.2.0
   manager: conda
@@ -4292,8 +4294,8 @@ package:
   hash:
     md5: dffbcea794c524c471772a5f697c2aea
     sha256: c352489404b993ee0de4a068fd766229dd759a8d7fbc825bf8820073c2ff12d7
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pytest-cov
   version: 4.1.0
   manager: conda
@@ -4321,8 +4323,8 @@ package:
   hash:
     md5: 270e71c14d37074b1d066ee21cf0c4a6
     sha256: 9fe14735dde74278c6f1710cbe883d5710fc98501a96031dec6849a8d8a1bb11
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: gstreamer
   version: 1.22.6
   manager: conda
@@ -4339,8 +4341,8 @@ package:
   hash:
     md5: e6d2009457a1e5d9653fd06873a7a367
     sha256: 08600f04d220a43f0ef5c383bb586cdd05ec482aceadb397fcd43a233b946144
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libblas
   version: 3.9.0
   manager: conda
@@ -4388,8 +4390,8 @@ package:
   hash:
     md5: a30144e4156cdbb236f99ebb49828f8b
     sha256: 9f629d6fd3c8ac5f2a198639fe7af87c4db2ac9235279164bfe0fcb49d8c4bad
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: dash
   version: 2.12.1
   manager: conda
@@ -4409,8 +4411,8 @@ package:
   hash:
     md5: ef8cbf64af2a8f94ab967b6f16fa7f82
     sha256: c4be071de643d7ae26a0c129570d4a0521aa8278a04a4b9f58cc9cd75019b743
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: gst-plugins-base
   version: 1.22.6
   manager: conda
@@ -4429,8 +4431,8 @@ package:
   hash:
     md5: 20e57b894392cb792cdf5c501b35a8f6
     sha256: 34816d0335e796ea3610022756b3b0832f5699007adc2819a08e068120dd3a8f
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: libcblas
   version: 3.9.0
   manager: conda
@@ -4499,8 +4501,8 @@ package:
   hash:
     md5: 6305901f3a783f64087998c012b76589
     sha256: 9ecf32271bbbb89ec21c401151af2c20389040d380efcca615c616cd762e1d66
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: h5py
   version: 3.8.0
   manager: conda
@@ -4537,8 +4539,8 @@ package:
   hash:
     md5: 5ed899124a51958336371ff01482b8fd
     sha256: 9aee5ab6f2c5a71f2eb399e5fec175f79498648ff8e4be6f815cf0ca803201c4
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pyside2
   version: 5.15.8
   manager: conda
@@ -4557,8 +4559,8 @@ package:
   hash:
     md5: 2a58c4c0f81cb7e798b5d70e80c47118
     sha256: 99f2aa19cd29808a2a14e6585f4ebc83facaf60c3d1c84a85738b4fc98dc17a5
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: qt-webengine
   version: 5.15.8
   manager: conda
@@ -4580,8 +4582,8 @@ package:
   hash:
     md5: df6e5e96e08d7934169367b27c2f4eee
     sha256: cf1e81025f75c46754649c823754cedd47689df281807ffbbfc6e4bdf5582de8
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pyqtwebengine
   version: 5.15.9
   manager: conda
@@ -4600,8 +4602,8 @@ package:
   hash:
     md5: 7ebc8bbd58dbdc1fbe9803d2237d0239
     sha256: fe8999bbc2141a9703100db5b200df874b96241085b54e9f76f2f029a2863412
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: geoh5py
   version: 0.8.0rc1
   manager: pip

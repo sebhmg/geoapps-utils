@@ -12,10 +12,11 @@ python = "^3.9, <3.11"
 numpy = "~1.23.5"  # also in geoh5py
 geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
 
-dash = {version = "~2.12"}
+dash = {version = "~2.12", optional = true}
 plotly = {version = "~5.13.1"}
-pyqtwebengine = {version = "~5.15"}
-pyside2 = {version = "~5.15"}
+
+pyqtwebengine = {version = "~5.15", optional = true}
+pyside2 = {version = "~5.15", optional = true}
 
 ## indirect dependencies, forcing them here for installation through Conda not pip
 Pillow = "~9.4.0"  # from geoh5py
@@ -26,6 +27,13 @@ pylint = "*"
 pytest = "*"
 pytest-cov = "*"
 tomli = "*"
+
+[tool.poetry.extras]
+dash = [
+    "dash",
+    "pyqtwebengine",
+    "pyside2",
+]
 
 [tool.conda-lock]
 platforms = ['win-64', 'linux-64']
