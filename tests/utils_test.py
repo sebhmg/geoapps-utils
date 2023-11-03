@@ -13,7 +13,7 @@ import geoh5py
 import numpy as np
 import pytest
 from geoh5py import Workspace
-from geoh5py.objects import Grid2D
+from geoh5py.objects import Grid2D, Points
 
 from geoapps_utils.conversions import string_to_numeric
 from geoapps_utils.formatters import string_name
@@ -23,8 +23,83 @@ from geoapps_utils.iterables import (
     sorted_alphanumeric_list,
     sorted_children_dict,
 )
-from geoapps_utils.numerical import running_mean
+from geoapps_utils.numerical import find_curves, running_mean
 from geoapps_utils.plotting import inv_symlog, symlog
+
+
+def test_find_curves(tmp_path: Path):
+    # Create test data
+    # Survey lines
+    x = np.linspace(0, 100, 100)
+    y = np.linspace(0, 100, 20)
+
+    # X, Y = np.meshgrid(x, y, indexing='ij')
+
+    # import matplotlib.pyplot as plt
+    # plt.plot(X, Y, 'k')
+
+    curve1 = 5 * np.sin(y) + 10  # curve
+    curve2 = 0.7 * y + 20  # crossing lines
+    curve3 = -0.4 * y + 50
+    curve4 = [80] * len(y)  # zig-zag
+    curve4[5:10] = [90, 80, 70, 80, 90]
+    curve5 = [None] * (len(y) - 1)  # short line
+    curve5[0:1] = [60, 62]
+
+    curves = [curve1, curve2, curve3, curve4, curve5]
+    points = []
+    line_ids = []
+    for curve in curves:
+        for x_coord, y_coord in zip(curve, y):
+            if x_coord is not None:
+                points.append([x_coord, y_coord])
+                line_ids.append(y_coord)
+        points.append(np.vstack((curve, y)).T)
+        # plt.scatter(curve, y)
+
+    # plt.show()
+
+    workspace = Workspace.create(tmp_path / "testFindCurves.geoh5")
+    with workspace.open(mode="r+"):
+        points = Points.create(workspace, vertices=points, name="Points")
+        points.add_data({"line_ids": {"values": line_ids}})
+
+    points = workspace.get_entity("Points")[0]
+
+    curves = find_curves(
+        survey,
+        points,
+        min_length=3,
+        max_distance=500,
+        min_angle=np.pi / 4,
+    )
+
+    import plotly.graph_objects as go
+
+    fig = go.Figure()
+    fig.add_trace(
+        go.Scatter(
+            x=points.vertices[:, 0],
+            y=points.vertices[:, 1],
+            mode="markers",
+        )
+    )
+
+    for curve in curves:
+        x_array = []
+        y_array = []
+        for point in curve:
+            x_array.append(point[0])
+            y_array.append(point[1])
+        fig.add_trace(
+            go.Scatter(
+                x=x_array,
+                y=y_array,
+                mode="lines",
+            )
+        )
+
+    # fig.show()
 
 
 def test_find_value():
