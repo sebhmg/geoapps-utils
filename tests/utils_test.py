@@ -27,79 +27,61 @@ from geoapps_utils.numerical import find_curves, running_mean
 from geoapps_utils.plotting import inv_symlog, symlog
 
 
-def test_find_curves(tmp_path: Path):
+def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
     # Create test data
     # Survey lines
-    x = np.linspace(0, 100, 100)
-    y = np.linspace(0, 100, 20)
+    y_array = np.linspace(0, 100, 20)
+    line_ids_array = np.arange(0, len(y_array))
 
-    # X, Y = np.meshgrid(x, y, indexing='ij')
-
-    # import matplotlib.pyplot as plt
-    # plt.plot(X, Y, 'k')
-
-    curve1 = 5 * np.sin(y) + 10  # curve
-    curve2 = 0.7 * y + 20  # crossing lines
-    curve3 = -0.4 * y + 50
-    curve4 = [80] * len(y)  # zig-zag
+    curve1 = 5 * np.sin(y_array) + 10  # curve
+    curve2 = 0.7 * y_array + 20  # crossing lines
+    curve3 = -0.4 * y_array + 50
+    curve4 = [80] * len(y_array)  # zig-zag
     curve4[5:10] = [90, 80, 70, 80, 90]
-    curve5 = [None] * (len(y) - 1)  # short line
-    curve5[0:1] = [60, 62]
+    curve5 = [None] * (len(y_array) - 1)  # short line
+    curve5[0:1] = [60, 62]  # type: ignore
 
     curves = [curve1, curve2, curve3, curve4, curve5]
-    points = []
-    line_ids = []
-    for curve in curves:
-        for x_coord, y_coord in zip(curve, y):
-            if x_coord is not None:
-                points.append([x_coord, y_coord])
-                line_ids.append(y_coord)
-        points.append(np.vstack((curve, y)).T)
-        # plt.scatter(curve, y)
 
-    # plt.show()
+    points_data = []
+    line_ids = []
+    channel_groups = []
+    for channel_group, curve in enumerate(curves):
+        for x_coord, y_coord, line_id in zip(curve, y_array, line_ids_array):
+            if x_coord is not None:
+                points_data.append([x_coord, y_coord, 0])
+                line_ids.append(line_id)
+                channel_groups.append(channel_group)
 
     workspace = Workspace.create(tmp_path / "testFindCurves.geoh5")
     with workspace.open(mode="r+"):
-        points = Points.create(workspace, vertices=points, name="Points")
-        points.add_data({"line_ids": {"values": line_ids}})
-
+        points = Points.create(workspace, vertices=np.array(points_data), name="Points")
+        points.add_data({"line_ids": {"values": np.array(line_ids)}})
+        points.add_data({"channel_group": {"values": np.array(channel_groups)}})
     points = workspace.get_entity("Points")[0]
 
-    curves = find_curves(
-        survey,
+    result_curves = find_curves(
         points,
         min_length=3,
         max_distance=500,
-        min_angle=np.pi / 4,
+        min_angle=0,
     )
+    assert len(result_curves) == 4
 
-    import plotly.graph_objects as go
+    ind = 0
+    for curve in result_curves:
+        curve_length = len(curve)
+        for i in range(curve_length):
+            assert curve[i][0] == points_data[ind + i][0:1]
+        ind += curve_length
 
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-            x=points.vertices[:, 0],
-            y=points.vertices[:, 1],
-            mode="markers",
-        )
+    result_curves = find_curves(
+        points,
+        min_length=3,
+        max_distance=500,
+        min_angle=3 * np.pi / 4,
     )
-
-    for curve in curves:
-        x_array = []
-        y_array = []
-        for point in curve:
-            x_array.append(point[0])
-            y_array.append(point[1])
-        fig.add_trace(
-            go.Scatter(
-                x=x_array,
-                y=y_array,
-                mode="lines",
-            )
-        )
-
-    # fig.show()
+    assert [len(curve) for curve in result_curves] == [20, 20, 12, 5, 4, 4, 3, 3, 10]
 
 
 def test_find_value():

@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import numpy as np
+from geoh5py.objects import Points
 from scipy.spatial.distance import cdist
 
 
@@ -74,8 +75,16 @@ def traveling_salesman(locs: np.ndarray) -> np.ndarray:
     return np.asarray(order)
 
 
-def filter_curves(curves, min_length, min_angle):
-    """ """
+def filter_curves(curves, min_length, min_angle) -> list[list[list[float]]]:
+    """
+    Filter curves based on length and angle.
+
+    :param curves: List of curves.
+    :param min_length: Minimum number of points in a curve.
+    :param min_angle: Minimum angle between points in a curve, in radians.
+
+    :return: List of filtered curves.
+    """
     filtered_curves = []
     sub_curves = []
     for curve in curves:
@@ -83,57 +92,55 @@ def filter_curves(curves, min_length, min_angle):
         if len(curve) >= min_length:
             # Check that the angles are not too sharp
             for i in range(len(curve) - 2):
-                # v1 = [curve[i + 1][0] - curve[i][0], curve[i + 1][1] - curve[i][1]]
-                v1 = [curve[i][0] - curve[i + 1][0], curve[i][1] - curve[i + 1][1]]
-                v2 = [
+                vec1 = [curve[i][0] - curve[i + 1][0], curve[i][1] - curve[i + 1][1]]
+                vec2 = [
                     curve[i + 2][0] - curve[i + 1][0],
                     curve[i + 2][1] - curve[i + 1][1],
                 ]
 
-                # angle = np.arccos((np.dot(v1, v2)) / (np.linalg.norm(v1) * np.linalg.norm(v2)))
-
                 angle = 2 * np.pi - (
-                    np.arctan2(v2[1], v2[0]) - np.arctan2(v1[1], v1[0])
+                    np.arctan2(vec2[1], vec2[0]) - np.arctan2(vec1[1], vec1[0])
                 )
 
                 left_bound = min_angle
                 right_bound = 2 * np.pi - min_angle
-                if left_bound <= angle <= right_bound:
-                    filtered_curves.append(curve)
-                else:
+
+                if not left_bound <= angle <= right_bound:
                     if i + 2 >= min_length:
-                        filtered_curves.append(curve[: i + 2])
+                        sub_curves.append(curve[: i + 2])
                     if len(curve) - (i + 2) >= min_length:
                         sub_curves.append(curve[i + 1 :])
+                    break
+
+                if i == (len(curve) - 3):
+                    filtered_curves.append(curve)
+
     if len(sub_curves) > 0:
         filtered_curves += filter_curves(sub_curves, min_length, min_angle)
     return filtered_curves
 
 
-def find_curves(survey, points, min_length, max_distance, min_angle):
-    """ """
-    # min length of chain
-    # max distance between anomalies
-    # 2 with same point as closest distance
-    # need to know end points from previous line
+def find_curves(  # pylint: disable=too-many-locals
+    points: Points, min_length: int, max_distance: float, min_angle: float
+) -> list[list[list[float]]]:
+    """
+    Find curves in a set of points.
 
-    survey_vertices = survey.vertices
-    survey_vertices = np.delete(survey_vertices, 2, axis=1)
-    survey_lines = survey.get_data("Line")[0].values
+    :param points: Points object to find curves in.
+    :param min_length: Minimum number of points in a curve.
+    :param max_distance: Maximum distance between points in a curve.
+    :param min_angle: Minimum angle between points in a curve, in radians.
 
+    :return: List of curves.
+    """
     point_vertices = points.vertices
     point_vertices = np.delete(point_vertices, 2, axis=1)
+    line_ids = points.get_data("line_ids")[0].values
     channels = points.get_data("channel_group")[0].values
-
-    dist_matrix = cdist(point_vertices, survey_vertices)
-    # Closest points
-    inds = np.argmin(dist_matrix, axis=1)
-    # Line ids
-    line_ids = survey_lines[inds]
 
     unique_line_ids = np.unique(line_ids)
 
-    curves = []
+    curves: list[list[list[float]]] = []
     for i, line_id in enumerate(unique_line_ids[:-1]):
         # Find adjacent lines
         current_line = point_vertices[line_ids == line_id]
