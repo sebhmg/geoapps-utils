@@ -57,7 +57,10 @@ def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
     with workspace.open(mode="r+"):
         points = Points.create(workspace, vertices=np.array(points_data), name="Points")
         points.add_data({"line_ids": {"values": np.asarray(line_ids, dtype=np.int32)}})
-        points.add_data({"channel_group": {"values": np.array(channel_groups)}})
+        points.add_data(
+            {"channel_group": {"values": np.asarray(channel_groups, dtype=np.int32)}}
+        )
+
     points = workspace.get_entity("Points")[0]
 
     result_curves = find_curves(
