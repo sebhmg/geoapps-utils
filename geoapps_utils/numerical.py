@@ -9,6 +9,7 @@ from __future__ import annotations
 import numpy as np
 from geoh5py.objects import Points
 from scipy.spatial.distance import cdist
+from scipy.spatial import Delaunay
 
 
 def running_mean(
@@ -120,56 +121,188 @@ def filter_curves(curves, min_length, min_angle) -> list[list[list[float]]]:
     return filtered_curves
 
 
+def filter_edges(vertices, edge, connected_edges, ids, points_used, min_angle):
+    possible_edges = []
+    all_points_used = []
+    for connected_edge in connected_edges:
+        #new_point = list(set(connected_edge) - set(points_used))
+        new_point = list(set(connected_edge) - set(edge))
+        if len(new_point) == 0:
+            continue
+        new_point = new_point[0]
+        # Filter edges by line_id
+        if ids[new_point] in ids[edge]:
+            continue
+        # Filter edges by angle
+        # Determine which edge connects to new point
+        connecting_point = connected_edge[connected_edge != new_point][0]
+
+        if edge[0] == connecting_point:
+            vec1 = [vertices[new_point][0] - vertices[connecting_point][0],
+                    vertices[new_point][1] - vertices[connecting_point][1]]
+            vec2 = [
+                vertices[edge[1]][0] - vertices[connecting_point][0],
+                vertices[edge[1]][1] - vertices[connecting_point][1],
+            ]
+            new_edge = np.concatenate(([new_point], edge))
+
+        elif edge[-1] == connecting_point:
+            vec1 = [vertices[edge[-2]][0] - vertices[connecting_point][0],
+                     vertices[edge[-2]][1] - vertices[connecting_point][1]]
+            vec2 = [
+                vertices[new_point][0] - vertices[connecting_point][0],
+                vertices[new_point][1] - vertices[connecting_point][1],
+            ]
+            new_edge = np.concatenate((edge, [new_point]))
+
+        angle = np.arccos(np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2)))
+
+        if angle < min_angle:
+            continue
+
+        #all_points_used.append(points_used + [new_point])
+        possible_edges.append(new_edge)
+
+    return possible_edges, all_points_used
+
+
+def combine_edges(current_edge, full_edges, vertices, ids, min_angle, points_used, min_length):
+    return_edges = []
+    #current_points_used = points_used.copy()
+    #current_points_used.extend(current_edge)
+    #points_used = current_edge
+
+    # Remove edges that have been used
+    #full_edges = np.array([edge for edge in full_edges if len(set(edge) & set(points_used)) == 0])
+
+    # Find all edges connected to this edge
+    edge_bounds = {current_edge[0], current_edge[-1]}
+    inds = np.array([len(edge_bounds & set(edg)) == 1 for edg in full_edges])
+    connected_edges = full_edges[inds]
+
+    # Remove edges with duplicate ids and with invalid angles
+    #possible_edges, possible_points_used = filter_edges(vertices, current_edge, connected_edges, ids, current_points_used, min_angle)
+    possible_edges, possible_points_used = filter_edges(vertices, current_edge, connected_edges, ids,
+                                                        points_used, min_angle)
+
+    if len(possible_edges) == 0 and len(current_edge) >= min_length:
+        #return_edges.append(current_edge)
+        return current_edge
+    for ind, possible_edge in enumerate(possible_edges):
+        #new_edges = combine_edges(possible_edge, full_edges, vertices, ids, min_angle, possible_points_used[ind], min_length)
+        new_edges = combine_edges(possible_edge, full_edges, vertices, ids, min_angle, points_used,
+                                  min_length)
+        if len(new_edges) > 0 and isinstance(new_edges[0], np.intc):
+            return_edges.append(possible_edge)
+        else:
+            return_edges += new_edges
+
+    return return_edges
+
+
 def find_curves(  # pylint: disable=too-many-locals
-    points: Points, min_length: int, max_distance: float, min_angle: float
+    vertices: np.ndarray,
+    ids: np.ndarray,
+    min_length: int,
+    max_distance: float,
+    min_angle: float
 ) -> list[list[list[float]]]:
     """
     Find curves in a set of points.
 
-    :param points: Points object to find curves in.
+    :param vertices: Vertices for points.
+    :param ids: Ids for points.
     :param min_length: Minimum number of points in a curve.
     :param max_distance: Maximum distance between points in a curve.
     :param min_angle: Minimum angle between points in a curve, in radians.
 
     :return: List of curves.
     """
-    point_vertices = points.vertices
-    point_vertices = np.delete(point_vertices, 2, axis=1)
-    line_ids = points.get_data("line_ids")[0].values
-    channels = points.get_data("channel_group")[0].values
+    tri = Delaunay(vertices)
 
-    unique_line_ids = np.unique(line_ids)
+    edges = np.vstack((tri.simplices[:, :2], tri.simplices[:, 1:], tri.simplices[:, ::2]))
+    edges = np.sort(edges, axis=1)
+    edges = np.unique(edges, axis=0)
 
-    curves: list[list[list[float]]] = []
-    for i, line_id in enumerate(unique_line_ids[:-1]):
-        # Find adjacent lines
-        current_line = point_vertices[line_ids == line_id]
-        current_channels = channels[line_ids == line_id]
+    distances = np.linalg.norm(vertices[edges[:, 0]] - vertices[edges[:, 1]], axis=1)
+    edges = edges[distances <= max_distance, :]
+    #distances = distances[distances <= max_distance]
 
-        adjacent_line = point_vertices[line_ids == unique_line_ids[i + 1]]
-        adjacent_channels = channels[line_ids == unique_line_ids[i + 1]]
+    # Check if both in columns have same id
+    edge_ids = ids[edges]
+    #distances = distances[edge_ids[:, 0] != edge_ids[:, 1]]
+    edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
 
-        end_points = [p[-1] for p in curves]
-        for j, point in enumerate(current_line):
-            compare_points = adjacent_line[adjacent_channels == current_channels[j]]
-            if len(compare_points) == 0:
-                continue
-            dists = cdist([point], compare_points)
+    # Find all valid paths connecting the segments
+    curves = []
+    points_used = []
+    for i, edge in enumerate(edges):
+        #print(edge, vertices[edge])
+        if i == 14:
+            print("here")
+        points_used = edge
+        new_curves = combine_edges(edge, edges, vertices, ids, min_angle, points_used=points_used, min_length=min_length)
+        curves += new_curves
+        #points_used = list(set(points_used + np.unique(new_curves)))
+        #points_used = list(np.unique(points_used.extend(new_curves)))
+        """
+        for curve in new_curves:
+            for point in curve:
+                if point not in points_used:
+                    points_used.append(point)
+        """
 
-            closest_ind = np.argmin(dists, axis=1)
+    # Remove duplicate curves
+    out_curves = []
+    for curve in curves:
+        add_curve = True
+        for out_curve in out_curves:
+            if len(set(curve) & set(out_curve)) == len(curve):
+                add_curve = False
+                break
+        if add_curve:
+            out_curves.append(curve)
 
-            # Filter points that are too far
-            if dists[:, closest_ind] >= max_distance:
-                continue
+    curves = out_curves
 
-            closest_point = list(compare_points[closest_ind][0])
-            point = list(point)
+    #"""
+    import matplotlib.pyplot as plt
 
-            if point in end_points:
-                ind = end_points.index(point)
-                curves[ind].append(closest_point)
-            else:
-                curves.append([point, closest_point])
+    plt.triplot(vertices[:, 0], vertices[:, 1], tri.simplices.copy())
+    plt.plot(vertices[:, 0], vertices[:, 1], 'o')
+    plt.show()
+    #"""
 
-    curves = filter_curves(curves, min_length, min_angle)
+    import plotly.graph_objects as go
+
+
+    fig = go.Figure()
+
+    fig.add_trace(
+        go.Scatter(
+            x=vertices[:, 0],
+            y=vertices[:, 1],
+            mode="markers",
+        ),
+    )
+    #plt.scatter(vertices[:, 0], vertices[:, 1])
+    for curve in curves:
+        x = [vertices[point][0] for point in curve]
+        y = [vertices[point][1] for point in curve]
+        fig.add_trace(
+            go.Scatter(
+                x=x,
+                y=y,
+                mode="lines",
+            ),
+        )
+        #plt.plot(x, y)
+        #plt.plot(vertices[edge, 0], vertices[edge, 1])
+    #plt.show()
+    fig.update_yaxes(
+        scaleanchor="x",
+        scaleratio=1,
+    )
+    fig.show()
+
     return curves

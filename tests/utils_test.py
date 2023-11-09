@@ -30,7 +30,7 @@ from geoapps_utils.plotting import inv_symlog, symlog
 def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
     # Create test data
     # Survey lines
-    y_array = np.linspace(0, 100, 20)
+    y_array = np.linspace(0, 100, 5)
     line_ids_array = np.arange(0, len(y_array))
 
     curve1 = 5 * np.sin(y_array) + 10  # curve
@@ -42,6 +42,7 @@ def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
     curve5[0:1] = [60, 62]  # type: ignore
 
     curves = [curve1, curve2, curve3, curve4, curve5]
+    curves = [curve2, curve3]
 
     points_data = []
     line_ids = []
@@ -63,11 +64,13 @@ def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
 
     points = workspace.get_entity("Points")[0]
 
+    points_data = np.delete(points_data, 2, axis=1)
     result_curves = find_curves(
-        points,
+        points_data,
+        np.array(line_ids),
         min_length=3,
         max_distance=500,
-        min_angle=0,
+        min_angle=3*np.pi/4,
     )
     assert len(result_curves) == 4
 
