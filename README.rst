@@ -1,4 +1,5 @@
-# geoapps-utils
+geoapps-utils
+^^^^^^^^^^^^^
 
 Package with util functions used by `geoapps <https://github.com/MiraGeoscience/geoapps>`_.
 

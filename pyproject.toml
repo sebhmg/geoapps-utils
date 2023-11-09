@@ -1,6 +1,7 @@
 [tool.poetry]
 name = "geoapps-utils"
 version = "0.1.0"
+license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
 
