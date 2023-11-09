@@ -2,7 +2,8 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 #
 
 import numpy as np

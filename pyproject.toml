@@ -4,6 +4,7 @@ version = "0.1.0"
 license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
+homepage = "https://mirageoscience.com"
 
 [tool.poetry.scripts]
 

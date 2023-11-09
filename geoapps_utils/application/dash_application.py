@@ -2,7 +2,8 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
@@ -62,7 +63,11 @@ class BaseDashApplication:
             # Params for initialization are coming from params
             # ui_json_data is provided
             self.params = params
-        elif ui_json is not None and Path(ui_json.path).exists():
+        elif (
+            ui_json is not None
+            and getattr(ui_json, "path", None) is not None
+            and Path(ui_json.path).exists()  # type: ignore
+        ):
             # Launched from terminal
             # Params for initialization are coming from ui_json
             # ui_json_data starts as None
@@ -352,14 +357,15 @@ class ObjectSelection:
                     ifile = InputFile(ui_json=ui_json)
                     self.params = self.param_class(ifile)
                     # Demote ifile data so it can be stored as a string
-                    ui_json_data = ifile.demote(ifile.data.copy())
-                    # Get new object value for dropdown from ui.json
-                    object_value = ui_json_data["objects"]
+                    if getattr(ifile, "data", None) is not None:
+                        ui_json_data = ifile.demote(ifile.data.copy())  # type: ignore
+                        # Get new object value for dropdown from ui.json
+                        object_value = ui_json_data["objects"]
                 elif filename.endswith(".geoh5"):
                     # Uploaded workspace
                     _, content_string = contents.split(",")
                     decoded = io.BytesIO(base64.b64decode(content_string))  # type: ignore
-                    self.workspace = Workspace(decoded, mode="r")
+                    self.workspace = Workspace(decoded, mode="r")  # type: ignore
                     # Update self.params with new workspace, but keep unaffected params the same.
                     new_params = self.params.to_dict()
                     for key, value in new_params.items():
@@ -473,6 +479,8 @@ class ObjectSelection:
         ):
             # Make new workspace with only the selected object
             obj = self.workspace.get_entity(uuid.UUID(objects))[0]
+            if not isinstance(obj, Entity):
+                return ""
 
             temp_geoh5 = self.workspace.name + "_" + f"{time():.0f}.geoh5"
             temp_dir = tempfile.TemporaryDirectory().name  # pylint: disable=R1732
@@ -490,18 +498,21 @@ class ObjectSelection:
                     )
 
                     # Copy any property groups over to temp_workspace
-                    prop_groups = obj.property_groups
-                    temp_prop_groups = param_dict["objects"].property_groups
-                    for group in prop_groups:  # pylint: disable=R1702
-                        if isinstance(group, PropertyGroup):
-                            for temp_group in temp_prop_groups:
-                                if temp_group.name == group.name:
-                                    for key, value in param_dict.items():
-                                        if (
-                                            hasattr(value, "uid")
-                                            and value.uid == group.uid
-                                        ):
-                                            param_dict[key] = temp_group.uid
+                    if hasattr(  # pylint: disable=too-many-nested-blocks
+                        obj, "property_groups"
+                    ):
+                        prop_groups = obj.property_groups
+                        temp_prop_groups = param_dict["objects"].property_groups
+                        for group in prop_groups:  # pylint: disable=R1702
+                            if isinstance(group, PropertyGroup):
+                                for temp_group in temp_prop_groups:
+                                    if temp_group.name == group.name:
+                                        for key, value in param_dict.items():
+                                            if (
+                                                hasattr(value, "uid")
+                                                and value.uid == group.uid
+                                            ):
+                                                param_dict[key] = temp_group.uid
 
             new_params = self.param_class(**param_dict)
 

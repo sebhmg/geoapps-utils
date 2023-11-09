@@ -2,7 +2,8 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
@@ -31,20 +32,24 @@ def get_output_workspace(
     new_live_link = False
     time.sleep(1)
     # Check if GA digested the file already
-    if not Path(workspace.h5file).is_file():
-        workpath = Path(workpath) / ".working"
-        workpath.mkdir(parents=True, exist_ok=True)
-        workspace = Workspace.create(workpath / name)
-        workspace.close()
-        new_live_link = True
-        if not live_link:
+    try:
+        if not Path(workspace.h5file).is_file():  # type: ignore
+            workpath = Path(workpath) / ".working"
+            workpath.mkdir(parents=True, exist_ok=True)
+            workspace = Workspace.create(workpath / name)
+            workspace.close()
+            new_live_link = True
+            if not live_link:
+                print(
+                    "ANALYST Pro active live link found. Switching to monitoring directory..."
+                )
+        elif live_link:
             print(
-                "ANALYST Pro active live link found. Switching to monitoring directory..."
+                "ANALYST Pro 'monitoring directory' inactive. Reverting to standalone mode..."
             )
-    elif live_link:
-        print(
-            "ANALYST Pro 'monitoring directory' inactive. Reverting to standalone mode..."
-        )
+    except TypeError:
+        print("Invalid workspace path.")
+
     workspace.open()
     # return new live link
     return workspace, new_live_link
