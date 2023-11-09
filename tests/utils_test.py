@@ -13,7 +13,7 @@ import geoh5py
 import numpy as np
 import pytest
 from geoh5py import Workspace
-from geoh5py.objects import Grid2D, Points
+from geoh5py.objects import Grid2D
 
 from geoapps_utils.conversions import string_to_numeric
 from geoapps_utils.formatters import string_name
@@ -27,22 +27,22 @@ from geoapps_utils.numerical import find_curves, running_mean
 from geoapps_utils.plotting import inv_symlog, symlog
 
 
-def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
+def test_find_curves():  # pylint: disable=too-many-locals
     # Create test data
     # Survey lines
-    y_array = np.linspace(0, 100, 5)
+    y_array = np.linspace(0, 50, 10)
     line_ids_array = np.arange(0, len(y_array))
 
     curve1 = 5 * np.sin(y_array) + 10  # curve
     curve2 = 0.7 * y_array + 20  # crossing lines
     curve3 = -0.4 * y_array + 50
     curve4 = [80] * len(y_array)  # zig-zag
-    curve4[5:10] = [90, 80, 70, 80, 90]
+    curve4[3] = 90
     curve5 = [None] * (len(y_array) - 1)  # short line
     curve5[0:1] = [60, 62]  # type: ignore
+    curve5[-2:-1] = [2, 4]  # type: ignore
 
     curves = [curve1, curve2, curve3, curve4, curve5]
-    curves = [curve2, curve3]
 
     points_data = []
     line_ids = []
@@ -50,44 +50,44 @@ def test_find_curves(tmp_path: Path):  # pylint: disable=too-many-locals
     for channel_group, curve in enumerate(curves):
         for x_coord, y_coord, line_id in zip(curve, y_array, line_ids_array):
             if x_coord is not None:
-                points_data.append([x_coord, y_coord, 0])
+                points_data.append([x_coord, y_coord])
                 line_ids.append(line_id)
                 channel_groups.append(channel_group)
 
-    workspace = Workspace.create(tmp_path / "testFindCurves.geoh5")
-    with workspace.open(mode="r+"):
-        points = Points.create(workspace, vertices=np.array(points_data), name="Points")
-        points.add_data({"line_ids": {"values": np.asarray(line_ids, dtype=np.int32)}})
-        points.add_data(
-            {"channel_group": {"values": np.asarray(channel_groups, dtype=np.int32)}}
+    # Loop over channel groups
+    points_data = np.array(points_data)
+    result_curves = []
+    for channel_group in np.unique(channel_groups):
+        channel_inds = channel_groups == channel_group
+        result_curves += find_curves(
+            points_data[channel_inds],
+            np.array(line_ids)[channel_inds],
+            min_length=3,
+            max_distance=15,
+            min_angle=np.deg2rad(150),
         )
 
-    points = workspace.get_entity("Points")[0]
-
-    points_data = np.delete(points_data, 2, axis=1)
-    result_curves = find_curves(
-        points_data,
-        np.array(line_ids),
-        min_length=3,
-        max_distance=500,
-        min_angle=3*np.pi/4,
-    )
     assert len(result_curves) == 4
 
-    ind = 0
-    for curve in result_curves:
-        curve_length = len(curve)
-        for i in range(curve_length):
-            assert curve[i][0] == points_data[ind + i][0:1]
-        ind += curve_length
+    for ind, curve in enumerate([curve1, curve2, curve3]):
+        # in_results = [(list(zip(curve, y_array)) == r) for r in result_curves]
+        in_results = list(zip(curve, y_array)) == result_curves[ind]
+        assert (in_results).flatten().all()
+    assert (len(result_curves[3][:, 0]) == 9) and np.sum(np.array(curve4) == 80) == 9
 
-    result_curves = find_curves(
-        points,
-        min_length=3,
-        max_distance=500,
-        min_angle=3 * np.pi / 4,
-    )
-    assert [len(curve) for curve in result_curves] == [20, 20, 12, 5, 4, 4, 3, 3, 10]
+    # Test with different angle to get zig-zag line
+    result_curves = []
+    for channel_group in np.unique(channel_groups):
+        channel_inds = channel_groups == channel_group
+        result_curves += find_curves(
+            points_data[channel_inds],
+            np.array(line_ids)[channel_inds],
+            min_length=3,
+            max_distance=15,
+            min_angle=np.deg2rad(100),
+        )
+
+    assert [len(curve) for curve in result_curves] == [10, 10, 10, 4, 9, 7]
 
 
 def test_find_value():
