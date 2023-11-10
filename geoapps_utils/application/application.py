@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import time
+from io import BytesIO
 from pathlib import Path
 
 from geoh5py.workspace import Workspace
@@ -32,7 +33,11 @@ def get_output_workspace(
     new_live_link = False
     time.sleep(1)
     # Check if GA digested the file already
-    if not Path(workspace.h5file).is_file():  # type: ignore
+    if (
+        workspace.h5file is not None
+        and not isinstance(workspace.h5file, BytesIO)
+        and not Path(workspace.h5file).is_file()
+    ):
         workpath = Path(workpath) / ".working"
         workpath.mkdir(parents=True, exist_ok=True)
         workspace = Workspace.create(workpath / name)
