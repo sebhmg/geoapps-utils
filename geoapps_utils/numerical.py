@@ -79,7 +79,7 @@ def filter_edges(
     edge: np.ndarray,
     connected_edges: np.ndarray,
     ids: np.ndarray,
-    min_angle: float,
+    max_angle: float,
 ) -> list[np.ndarray]:
     """
     Filter edges by angle and line_id.
@@ -88,7 +88,7 @@ def filter_edges(
     :param edge: Edge to add to.
     :param connected_edges: Edges connected to starting edge.
     :param ids: Ids of points.
-    :param min_angle: Minimum angle between points in a curve, in radians.
+    :param max_angle: Maximum angle between points in a curve, in radians.
 
     :return: List of possible partial curves.
     """
@@ -133,7 +133,7 @@ def filter_edges(
             np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
         )
 
-        if angle < min_angle:
+        if angle < max_angle:
             continue
 
         possible_edges.append(new_edge)
@@ -141,66 +141,66 @@ def filter_edges(
     return possible_edges
 
 
-def combine_edges(
-    current_edge: np.ndarray,
-    full_edges: np.ndarray,
-    vertices: np.ndarray,
-    ids: np.ndarray,
-    min_angle: float,
-    min_length: int,
-) -> list[np.ndarray]:
-    """
-    Combine edges into a single curve.
-
-    :param current_edge: Starting curve to add an edge to.
-    :param full_edges: All possible edges to add to current edge. Length 2 array.
-    :param vertices: Vertices of points.
-    :param ids: Ids of points.
-    :param min_angle: Minimum angle between points in a curve, in radians.
-    :param min_length: Minimum number of points in a curve.
-
-    :return: List of complete possible curves.
-    """
-    return_edges = []
-    # Find all edges connected to this edge
-    edge_bounds = {current_edge[0], current_edge[-1]}
-    inds = np.array([len(edge_bounds & set(edg)) == 1 for edg in full_edges])
-    connected_edges = full_edges[inds]
-
-    # Remove edges with duplicate ids and with invalid angles
-    possible_edges = filter_edges(
-        vertices, current_edge, connected_edges, ids, min_angle
-    )
-
-    if len(possible_edges) == 0 and len(current_edge) >= min_length:
-        return current_edge
-    for possible_edge in possible_edges:
-        new_edges = combine_edges(
-            possible_edge, full_edges, vertices, ids, min_angle, min_length
-        )
-        if len(new_edges) > 0 and isinstance(new_edges[0], np.intc):
-            return_edges.append(possible_edge)
-        else:
-            return_edges += new_edges
-
-    return return_edges
+# def combine_edges(
+#     current_edge: np.ndarray,
+#     full_edges: np.ndarray,
+#     vertices: np.ndarray,
+#     ids: np.ndarray,
+#     max_angle: float,
+#     min_length: int,
+# ) -> list[np.ndarray]:
+#     """
+#     Combine edges into a single curve.
+#
+#     :param current_edge: Starting curve to add an edge to.
+#     :param full_edges: All possible edges to add to current edge. Length 2 array.
+#     :param vertices: Vertices of points.
+#     :param ids: Ids of points.
+#     :param max_angle: Maximum angle between points in a curve, in radians.
+#     :param min_length: Minimum number of points in a curve.
+#
+#     :return: List of complete possible curves.
+#     """
+#     return_edges = []
+#     # Find all edges connected to this edge
+#     edge_bounds = {current_edge[0], current_edge[-1]}
+#     inds = np.array([len(edge_bounds & set(edg)) == 1 for edg in full_edges])
+#     connected_edges = full_edges[inds]
+#
+#     # Remove edges with duplicate ids and with invalid angles
+#     possible_edges = filter_edges(
+#         vertices, current_edge, connected_edges, ids, max_angle
+#     )
+#
+#     if len(possible_edges) == 0 and len(current_edge) >= min_length:
+#         return current_edge
+#     for possible_edge in possible_edges:
+#         new_edges = combine_edges(
+#             possible_edge, full_edges, vertices, ids, max_angle, min_length
+#         )
+#         if len(new_edges) > 0 and isinstance(new_edges[0], np.intc):
+#             return_edges.append(possible_edge)
+#         else:
+#             return_edges += new_edges
+#
+#     return return_edges
 
 
 def find_curves(  # pylint: disable=too-many-locals
     vertices: np.ndarray,
     ids: np.ndarray,
-    min_length: int,
+    min_edges: int,
     max_distance: float,
-    min_angle: float,
+    max_angle: float,
 ) -> list[list[list[float]]]:
     """
     Find curves in a set of points.
 
     :param vertices: Vertices for points.
     :param ids: Ids for points.
-    :param min_length: Minimum number of points in a curve.
+    :param min_edges: Minimum number of points in a curve.
     :param max_distance: Maximum distance between points in a curve.
-    :param min_angle: Minimum angle between points in a curve, in radians.
+    :param max_angle: Maximum angle between points in a curve, in radians.
 
     :return: List of curves.
     """
@@ -225,23 +225,84 @@ def find_curves(  # pylint: disable=too-many-locals
     edge_ids = ids[edges]
     edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
 
-    # Find all valid paths connecting the segments
-    curves = []
-    for edge in edges:
-        new_curves = combine_edges(edge, edges, vertices, ids, min_angle, min_length)
-        curves += new_curves
+    # Compute vectors for each edge
+    vectors = vertices[edges[:, 1]] - vertices[edges[:, 0]]
 
-    # Remove duplicate curves
-    out_curves: list[np.ndarray] = []
-    for curve in curves:
-        add_curve = True
-        for out_curve in out_curves:
-            if len(set(curve) & set(out_curve)) == len(curve):
-                add_curve = False
-                break
-        if add_curve:
-            out_curves.append(curve)
+    mask = np.ones(vertices.shape[0], dtype=bool)
+    out_curves = []
+    for ind in range(edges.shape[0]):
+        if not np.any(mask[edges[ind]]):
+            continue
 
-    out_curves = [vertices[curve] for curve in out_curves]
+        mask[edges[ind]] = False
+        path = [edges[ind]]
+        path, actives = walk_edges(path, ind, edges, vectors, max_angle, mask=mask)
+        path, actives = walk_edges(
+            path, ind, edges, vectors, max_angle, direction="backward", mask=mask
+        )
+        if len(path) < min_edges:
+            continue
+
+        out_curves.append(path)
 
     return out_curves
+
+
+def walk_edges(path, ind, edges, vectors, max_angle, direction="forward", mask=None):
+    """
+    Find all edges connected to a point.
+
+    :param path: Current list of edges forming a path.
+    :param ind: Index of incoming edge.
+    :param edges: All edges.
+    :param vectors: Direction of the edges.
+    :param max_angle: Maximum angle between points in a curve, in radians.
+    :param direction: Direction to walk in.
+    :param mask: Mask for nodes that have already been visited.
+
+    :return: Edges connected to point.
+    """
+    node = 1 if direction == "forward" else 0
+
+    if mask is None:
+        mask = np.ones(edges.max() + 1, dtype=bool)
+        mask[np.hstack(path).flatten()] = False
+
+    neighbours = np.where(
+        np.any(edges == edges[ind][node], axis=1) & np.any(mask[edges], axis=1)
+    )[0]
+
+    if len(neighbours) == 0:
+        return path, mask
+
+    dot = np.dot(vectors[ind], vectors[neighbours].T)
+    vec_lengths = np.linalg.norm(vectors[neighbours], axis=1)
+    angle = np.arccos(dot / (np.linalg.norm(vectors[ind]) * vec_lengths))
+
+    # Filter large angles
+    keep = angle < max_angle
+
+    if not np.any(keep):
+        return path, mask
+
+    dot, neighbours, vec_lengths, angle = (
+        dot[keep],
+        neighbours[keep],
+        vec_lengths[keep],
+        angle[keep],
+    )
+
+    # Minimize the torque
+    sub_ind = np.argmin(angle * vec_lengths)
+
+    fork = neighbours[sub_ind]
+    mask[edges[fork]] = False
+
+    # Reverse the edge if necessary
+    if dot[sub_ind] < 0:
+        edges[fork] = edges[fork][::-1]
+
+    path.append(edges[fork].tolist())
+    path, mask = walk_edges(path, fork, edges, vectors, max_angle, mask=mask)
+
+    return path, mask

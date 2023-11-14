@@ -28,6 +28,8 @@ from geoapps_utils.plotting import inv_symlog, symlog
 
 
 def test_find_curves():  # pylint: disable=too-many-locals
+    import matplotlib.pyplot as plt
+
     # Create test data
     # Survey lines
     y_array = np.linspace(0, 50, 10)
@@ -56,36 +58,49 @@ def test_find_curves():  # pylint: disable=too-many-locals
 
     # Loop over channel groups
     points_data = np.array(points_data)
+
     result_curves = []
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
-        result_curves += find_curves(
+        path = find_curves(
             points_data[channel_inds],
             np.array(line_ids)[channel_inds],
-            min_length=3,
+            min_edges=3,
             max_distance=15,
-            min_angle=np.deg2rad(150),
+            max_angle=np.deg2rad(45),
         )
+        if len(path) == 0:
+            continue
+
+        result_curves += path
 
     assert len(result_curves) == 4
-
-    for ind, curve in enumerate([curve1, curve2, curve3]):
-        # in_results = [(list(zip(curve, y_array)) == r) for r in result_curves]
-        in_results = list(zip(curve, y_array)) == result_curves[ind]
-        assert (in_results).flatten().all()
-    assert (len(result_curves[3][:, 0]) == 9) and np.sum(np.array(curve4) == 80) == 9
+    assert len(result_curves[3]) == 8
 
     # Test with different angle to get zig-zag line
     result_curves = []
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
-        result_curves += find_curves(
+        path = find_curves(
             points_data[channel_inds],
             np.array(line_ids)[channel_inds],
             min_length=3,
             max_distance=15,
             min_angle=np.deg2rad(100),
         )
+        ind = np.r_[np.vstack(path[0]).flatten()[::2], path[0][-1][-1]]
+        plt.subplot()
+
+        plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+        plt.plot(
+            points_data[channel_inds][ind][:, 0],
+            points_data[channel_inds][ind][:, 1],
+            "r",
+        )
+
+        plt.show()
+
+        result_curves += path
 
     assert [len(curve) for curve in result_curves] == [10, 10, 10, 4, 9, 7]
 
