@@ -19,6 +19,7 @@ if !errorlevel! neq 0 (
 )
 
 set PYTHONUTF8=1
+set CONDA_CHANNEL_PRIORITY=strict
 
 :: all dependencies are installed from conda
 set PIP_NO_DEPS=1
