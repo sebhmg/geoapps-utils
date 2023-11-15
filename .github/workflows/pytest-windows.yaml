@@ -36,6 +36,8 @@ jobs:
     runs-on: windows-latest
     env:
       PYTHONUTF8: 1
+      CONDA_CHANNEL_PRIORITY: strict
+      PIP_NO_DEPS: 1 # all dependencies are installed from conda
       CONDA_LOCK_ENV_FILE: environments/conda-py-${{ matrix.python_ver }}-win-64-dev.lock.yml
     steps:
       - uses: actions/checkout@v4

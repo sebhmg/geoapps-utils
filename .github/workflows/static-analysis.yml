@@ -32,6 +32,8 @@ jobs:
         shell: bash -l {0}
     env:
       PYTHONUTF8: 1
+      CONDA_CHANNEL_PRIORITY: strict
+      PIP_NO_DEPS: 1 # all dependencies are installed from conda
       CONDA_LOCK_ENV_FILE: environments/conda-py-3.9-linux-64-dev.lock.yml
     steps:
       - uses: actions/checkout@v4
