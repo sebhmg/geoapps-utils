@@ -2,7 +2,8 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
@@ -440,8 +441,11 @@ class BaseParams:  # pylint: disable=R0902, R0904
 
         value = fun(value)
 
-        if self.input_file is not None:
-            if value != self.input_file.data[key]:
+        if (
+            self.input_file is not None
+            and getattr(self.input_file, "data", None) is not None
+        ):
+            if value != self.input_file.data[key]:  # type: ignore
                 self.input_file.set_data_value(key, value)
 
         setattr(self, f"_{key}", value)

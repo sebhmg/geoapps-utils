@@ -2,11 +2,13 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
 import time
+from io import BytesIO
 from pathlib import Path
 
 from geoh5py.workspace import Workspace
@@ -31,7 +33,11 @@ def get_output_workspace(
     new_live_link = False
     time.sleep(1)
     # Check if GA digested the file already
-    if not Path(workspace.h5file).is_file():
+    if (
+        workspace.h5file is not None
+        and not isinstance(workspace.h5file, BytesIO)
+        and not Path(workspace.h5file).is_file()
+    ):
         workpath = Path(workpath) / ".working"
         workpath.mkdir(parents=True, exist_ok=True)
         workspace = Workspace.create(workpath / name)
@@ -45,6 +51,7 @@ def get_output_workspace(
         print(
             "ANALYST Pro 'monitoring directory' inactive. Reverting to standalone mode..."
         )
+
     workspace.open()
     # return new live link
     return workspace, new_live_link
