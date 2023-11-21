@@ -16,7 +16,11 @@ geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
 
 dash = {version = "~2.12", optional = true}
 plotly = {version = "~5.13.1"}
+scipy = {version = "~1.10.1", optional = true }
+traitlets = {version = "~5.13", optional = true}
 
+ipyfilechooser = {version = "~0.6.0", optional = true}
+ipywidgets = {version = "^7.6.5", optional = true}
 pyqtwebengine = {version = "~5.15", optional = true}
 pyside2 = {version = "~5.15", optional = true}
 
@@ -33,6 +37,8 @@ tomli = "*"
 [tool.poetry.extras]
 dash = [
     "dash",
+    "ipyfilechooser",
+    "ipywidgets",
     "pyqtwebengine",
     "pyside2",
 ]
