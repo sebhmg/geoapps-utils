@@ -4,6 +4,7 @@
 #
 #  All rights reserved.
 #
+#  pylint: disable=duplicate-code
 from __future__ import annotations
 
 from uuid import UUID
@@ -256,12 +257,11 @@ class ObjectDataSelection(BaseApplication):
             if obj.property_groups is not None and any(
                 pg.uid == value for pg in obj.property_groups
             ):
-                properties = obj.find_or_create_property_group(name=self.data.uid_name_map[value]).properties
+                properties = obj.find_or_create_property_group(
+                    name=self.data.uid_name_map[value]
+                ).properties
                 if properties is not None:
-                    data += [
-                        self.workspace.get_entity(prop)[0]
-                        for prop in properties
-                    ]
+                    data += [self.workspace.get_entity(prop)[0] for prop in properties]
             elif self.workspace.get_entity(value):
                 data += self.workspace.get_entity(value)
 
