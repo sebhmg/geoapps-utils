@@ -107,7 +107,6 @@ class BaseApplication:  # pylint: disable=too-many-instance-attributes, too-many
             [VBox([self.trigger, self.ga_group_name]), self.live_link_panel]
         )
         self.trigger.on_click(self.trigger_click)
-
         self.__populate__(**self.defaults)
 
         for key in list(self.__dict__):
@@ -325,9 +324,10 @@ class BaseApplication:  # pylint: disable=too-many-instance-attributes, too-many
         time.sleep(1)
         # Check if GA digested the file already
         if (
-            isinstance(workspace.h5file, str | Path)
-            and not Path(workspace.h5file).is_file()
-        ):
+            isinstance(workspace.h5file, str) | isinstance(workspace.h5file, Path)
+        ) and not Path(
+            workspace.h5file  # type: ignore
+        ).is_file():
             workpath = Path(workpath) / ".working"
             workpath.mkdir(parents=True, exist_ok=True)
             workspace = Workspace.create(workpath / name)
@@ -493,8 +493,8 @@ class BaseApplication:  # pylint: disable=too-many-instance-attributes, too-many
     def base_workspace_changes(self, workspace: Workspace):
         self._workspace = workspace
         self._h5file = workspace.h5file
-        if isinstance(self._h5file, str | Path):
-            h5_file_path = Path(self._h5file).resolve()
+        if isinstance(self._h5file, str) | isinstance(self._h5file, Path):
+            h5_file_path = Path(self._h5file).resolve()  # type: ignore
             self._file_browser.reset(
                 path=self.working_directory,
                 filename=h5_file_path.name,

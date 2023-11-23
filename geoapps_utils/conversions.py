@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 import numpy as np
-from geoh5py.objects import Octree
 
 
 def hex_to_rgb(hex_color: str) -> list[int]:
@@ -37,28 +36,3 @@ def string_to_numeric(text: str) -> int | float | str:
         return text_as_int if text_as_int == text_as_float else text_as_float
     except ValueError:
         return np.nan if text == "nan" else text
-
-
-def treemesh_2_octree(workspace, treemesh, **kwargs):
-    index_array, levels = getattr(treemesh, "_ubc_indArr")
-    ubc_order = getattr(treemesh, "_ubc_order")
-
-    index_array = index_array[ubc_order] - 1
-    levels = levels[ubc_order]
-
-    origin = treemesh.x0.copy()
-    origin[2] += treemesh.h[2].size * treemesh.h[2][0]
-    mesh_object = Octree.create(
-        workspace,
-        origin=origin,
-        u_count=treemesh.h[0].size,
-        v_count=treemesh.h[1].size,
-        w_count=treemesh.h[2].size,
-        u_cell_size=treemesh.h[0][0],
-        v_cell_size=treemesh.h[1][0],
-        w_cell_size=-treemesh.h[2][0],
-        octree_cells=np.c_[index_array, levels],
-        **kwargs,
-    )
-
-    return mesh_object
