@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: 5a3d9f604bfc54a41cd745659bd652b6a59fc4810e6ef915ea277afd38417975
-    linux-64: 976f052c550df2571e380aac26349a1097dfeb75692e151ebe4eb1faa37e00d3
+    win-64: f896baf48c9759cad588ba39d0e30afde282ec72c2d11a1981505827034247da
+    linux-64: 6321bffc48cf3365eecc3c19fc42f56d152a619380c05b9b014652245574191f
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -913,16 +913,16 @@ package:
   category: main
   optional: false
 - name: libsqlite
-  version: 3.44.0
+  version: 3.44.1
   manager: conda
   platform: linux-64
   dependencies:
     libgcc-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.44.0-h2797004_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.44.1-h2797004_0.conda
   hash:
-    md5: b58e6816d137f3aabf77d341dd5d732b
-    sha256: 74ef5dcb900c38bec53140036e5e2a9cc7ffcd806da479ea2305f962a358a259
+    md5: b4ad86d2527b890e43ff2efc68b239f4
+    sha256: c37bb6ec8b09f690d84e8f14fabb75e00c221d11a256137d5b206e26f37e9483
   category: main
   optional: false
 - name: libssh2
@@ -2774,16 +2774,16 @@ package:
   category: dash
   optional: true
 - name: jupyterlab_pygments
-  version: 0.2.2
+  version: 0.3.0
   manager: conda
   platform: linux-64
   dependencies:
     pygments: '>=2.4.1,<3'
     python: '>=3.7'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.2.2-pyhd8ed1ab_0.tar.bz2
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.3.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 243f63592c8e449f40cd42eb5cf32f40
-    sha256: 08453e09d5a6bbaeeca839553a5dfd7a377a97550efab96019c334a8042f54f5
+    md5: 3f0915b1fb2252ab73686a533c5f9d3f
+    sha256: 6ee596138a778a841261476408435da78e3000661f3ee025fb6c3ed17d28c8b3
   category: dash
   optional: true
 - name: libclang
@@ -4006,7 +4006,7 @@ package:
   category: dash
   optional: true
 - name: jupyter_server
-  version: 2.11.0
+  version: 2.10.1
   manager: conda
   platform: linux-64
   dependencies:
@@ -4029,10 +4029,10 @@ package:
     tornado: '>=6.2.0'
     traitlets: '>=5.6.0'
     websocket-client: ''
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.11.0-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.10.1-pyhd8ed1ab_0.conda
   hash:
-    md5: b57a70d5eeb931f3cdc9f8e2f29e84b0
-    sha256: c87fb9903d886ddde6e30836e5772be69aab78116fb2705ec0b3562ccb04f144
+    md5: 7d15498584d83de3b357425e37086397
+    sha256: b8b55ee57785b39a9096884bfd1da3858da8f27764572321d51a3dd0a990de86
   category: dash
   optional: true
 - name: jupyter-lsp
@@ -4469,17 +4469,17 @@ package:
   category: dash
   optional: true
 - name: libsqlite
-  version: 3.44.0
+  version: 3.44.1
   manager: conda
   platform: win-64
   dependencies:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.44.0-hcfcfb64_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.44.1-hcfcfb64_0.conda
   hash:
-    md5: 446fb1973cfeb8b32de4add3c9ac1057
-    sha256: b2be4125343d89765269b537e90ea5ab7f219e7398e7ad610ddcdcf31e7b9e65
+    md5: cb795bb06d345285ce8b9a4b0553574f
+    sha256: cdcc7e14f0b12e521c2a7255a04a8c259b06a2c8394f7e571412c0e07ec514f5
   category: main
   optional: false
 - name: libwebp-base
@@ -6070,16 +6070,16 @@ package:
   category: dash
   optional: true
 - name: jupyterlab_pygments
-  version: 0.2.2
+  version: 0.3.0
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.7'
     pygments: '>=2.4.1,<3'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.2.2-pyhd8ed1ab_0.tar.bz2
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyterlab_pygments-0.3.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 243f63592c8e449f40cd42eb5cf32f40
-    sha256: 08453e09d5a6bbaeeca839553a5dfd7a377a97550efab96019c334a8042f54f5
+    md5: 3f0915b1fb2252ab73686a533c5f9d3f
+    sha256: 6ee596138a778a841261476408435da78e3000661f3ee025fb6c3ed17d28c8b3
   category: dash
   optional: true
 - name: lcms2
@@ -6447,8 +6447,8 @@ package:
   platform: win-64
   dependencies:
     python: '>=3.8'
-    click: '>=8.1.3'
     jinja2: '>=3.1.2'
+    click: '>=8.1.3'
     importlib-metadata: '>=3.6.0'
     itsdangerous: '>=2.1.2'
     blinker: '>=1.6.2'
@@ -7170,7 +7170,7 @@ package:
   category: main
   optional: false
 - name: jupyter_server
-  version: 2.11.0
+  version: 2.10.1
   manager: conda
   platform: win-64
   dependencies:
@@ -7193,10 +7193,10 @@ package:
     anyio: '>=3.1.0'
     send2trash: '>=1.8.2'
     jupyter_events: '>=0.9.0'
-  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.11.0-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/jupyter_server-2.10.1-pyhd8ed1ab_0.conda
   hash:
-    md5: b57a70d5eeb931f3cdc9f8e2f29e84b0
-    sha256: c87fb9903d886ddde6e30836e5772be69aab78116fb2705ec0b3562ccb04f144
+    md5: 7d15498584d83de3b357425e37086397
+    sha256: b8b55ee57785b39a9096884bfd1da3858da8f27764572321d51a3dd0a990de86
   category: dash
   optional: true
 - name: pyqtwebengine
