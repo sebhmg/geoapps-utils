@@ -34,9 +34,6 @@ tomli = "*"
 [tool.poetry.extras]
 dash = [
     "dash",
-    "ipyfilechooser",
-    "ipywidgets",
-    "jupyter-server",
     "pyqtwebengine",
     "pyside2",
 ]
