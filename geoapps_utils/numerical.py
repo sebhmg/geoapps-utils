@@ -11,9 +11,82 @@ from uuid import UUID
 
 import numpy as np
 from geoh5py import Workspace
-from geoh5py.objects import Curve
+from geoh5py.objects import Curve, DrapeModel, Octree
 from geoh5py.shared import Entity
-from scipy.interpolate import interp1d
+from scipy.interpolate import LinearNDInterpolator, NearestNDInterpolator, interp1d
+from scipy.spatial import Delaunay, cKDTree
+
+
+def active_from_xyz(
+    mesh: DrapeModel | Octree,
+    topo: np.ndarray,
+    grid_reference="center",
+    method="linear",
+):
+    """Returns an active cell index array below a surface
+
+    :param mesh: Mesh object
+    :param topo: Array of xyz locations
+    :param grid_reference: Cell reference. Must be "center", "top", or "bottom"
+    :param method: Interpolation method. Must be "linear", or "nearest"
+    """
+
+    mesh_dim = 2 if isinstance(mesh, DrapeModel) else 3
+    locations = mesh.centroids.copy()
+
+    if method == "linear":
+        delaunay_2d = Delaunay(topo[:, :-1])
+        z_interpolate = LinearNDInterpolator(delaunay_2d, topo[:, -1])
+    elif method == "nearest":
+        z_interpolate = NearestNDInterpolator(topo[:, :-1], topo[:, -1])
+    else:
+        raise ValueError("Method must be 'linear', or 'nearest'")
+
+    if mesh_dim == 2 and isinstance(mesh, DrapeModel):
+        z_offset = cell_size_z(mesh) / 2.0
+    elif isinstance(mesh, Octree) and mesh.octree_cells is not None:
+        z_offset = mesh.octree_cells["NCells"] * np.abs(mesh.w_cell_size) / 2
+    else:
+        raise ValueError("Invalid mesh.")
+
+    # Shift cell center location to top or bottom of cell
+    if grid_reference == "top":
+        locations[:, -1] += z_offset
+    elif grid_reference == "bottom":
+        locations[:, -1] -= z_offset
+    elif grid_reference == "center":
+        pass
+    else:
+        raise ValueError("'grid_reference' must be one of 'center', 'top', or 'bottom'")
+
+    z_locations = z_interpolate(locations[:, :2])
+
+    # Apply nearest neighbour if in extrapolation
+    ind_nan = np.isnan(z_locations)
+    if any(ind_nan):
+        tree = cKDTree(topo)
+        _, ind = tree.query(locations[ind_nan, :])
+        z_locations[ind_nan] = topo[ind, -1]
+
+    # fill_nan(locations, z_locations, filler=topo[:, -1])
+
+    # Return the active cell array
+    return locations[:, -1] < z_locations
+
+
+def cell_size_z(drape_model: DrapeModel) -> np.ndarray:
+    """Compute z cell sizes of drape model."""
+    hz = []
+    if drape_model.prisms is None or drape_model.layers is None:
+        return None
+    for prism in drape_model.prisms:
+        top_z, top_layer, n_layers = prism[2:]
+        bottoms = drape_model.layers[
+            range(int(top_layer), int(top_layer + n_layers)), 2
+        ]
+        z = np.hstack([top_z, bottoms])
+        hz.append(z[:-1] - z[1:])
+    return np.hstack(hz)
 
 
 def densify_curve(curve: Curve, increment: float) -> np.ndarray:
@@ -97,6 +170,52 @@ def resample_locations(locations: np.ndarray, increment: float) -> np.ndarray:
     return np.c_[resampled].T
 
 
+def rotate_xyz(xyz: np.ndarray, center: list, theta: float, phi: float = 0.0):
+    """
+    Perform a counterclockwise rotation of scatter points around the z-axis,
+        then x-axis, about a center point.
+
+    :param xyz: shape(*, 2) or shape(*, 3) Input coordinates.
+    :param center: len(2) or len(3) Coordinates for the center of rotation.
+    :param theta: Angle of rotation around z-axis in degrees.
+    :param phi: Angle of rotation around x-axis in degrees.
+    """
+    return2d = False
+    locs = xyz.copy()
+
+    # If the input is 2-dimensional, add zeros in the z column.
+    if len(center) == 2:
+        center.append(0)
+    if locs.shape[1] == 2:
+        locs = np.concatenate((locs, np.zeros((locs.shape[0], 1))), axis=1)
+        return2d = True
+
+    locs = np.subtract(locs, center)
+    phi = np.deg2rad(phi)
+    theta = np.deg2rad(theta)
+
+    # Construct rotation matrix
+    mat_x = np.r_[
+        np.c_[1, 0, 0],
+        np.c_[0, np.cos(phi), -np.sin(phi)],
+        np.c_[0, np.sin(phi), np.cos(phi)],
+    ]
+    mat_z = np.r_[
+        np.c_[np.cos(theta), -np.sin(theta), 0],
+        np.c_[np.sin(theta), np.cos(theta), 0],
+        np.c_[0, 0, 1],
+    ]
+    mat = mat_z.dot(mat_x)
+
+    xyz_rot = mat.dot(locs.T).T
+    xyz_out = xyz_rot + center
+
+    if return2d:
+        # Return 2-dimensional data if the input xyz was 2-dimensional.
+        return xyz_out[:, :2]
+    return xyz_out
+
+
 def running_mean(
     values: np.array, width: int = 1, method: str = "centered"
 ) -> np.array:
@@ -159,3 +278,63 @@ def traveling_salesman(locs: np.ndarray) -> np.ndarray:
         mask[current] = False
 
     return np.asarray(order)
+
+
+def weighted_average(  # pylint: disable=too-many-arguments, too-many-locals
+    xyz_in: np.ndarray,
+    xyz_out: np.ndarray,
+    values: list,
+    max_distance: float = np.inf,
+    n: int = 8,
+    return_indices: bool = False,
+    threshold: float = 1e-1,
+) -> list | tuple[list, np.ndarray]:
+    """
+    Perform a inverse distance weighted averaging on a list of values.
+
+    :param xyz_in: shape(*, 3) Input coordinate locations.
+    :param xyz_out: shape(*, 3) Output coordinate locations.
+    :param values: Values to be averaged from the input to output locations.
+    :param max_distance: Maximum averaging distance beyond which values do not
+        contribute to the average.
+    :param n: Number of nearest neighbours used in the weighted average.
+    :param return_indices: If True, return the indices of the nearest neighbours
+        from the input locations.
+    :param threshold: Small value added to the radial distance to avoid zero division.
+        The value can also be used to smooth the interpolation.
+
+    :return avg_values: List of values averaged to the output coordinates
+    """
+    n = np.min([xyz_in.shape[0], n])
+    assert isinstance(values, list), "Input 'values' must be a list of numpy.ndarrays"
+
+    assert all(
+        vals.shape[0] == xyz_in.shape[0] for vals in values
+    ), "Input 'values' must have the same shape as input 'locations'"
+
+    avg_values = []
+    for value in values:
+        sub = ~np.isnan(value)
+        tree = cKDTree(xyz_in[sub, :])
+        rad, ind = tree.query(xyz_out, n)
+        ind = np.c_[ind]
+        rad = np.c_[rad]
+        rad[rad > max_distance] = np.nan
+
+        values_interp = np.zeros(xyz_out.shape[0])
+        weight = np.zeros(xyz_out.shape[0])
+
+        for i in range(n):
+            v = value[sub][ind[:, i]] / (rad[:, i] + threshold)
+            values_interp = np.nansum([values_interp, v], axis=0)
+            w = 1.0 / (rad[:, i] + threshold)
+            weight = np.nansum([weight, w], axis=0)
+
+        values_interp[weight > 0] = values_interp[weight > 0] / weight[weight > 0]
+        values_interp[weight == 0] = np.nan
+        avg_values += [values_interp]
+
+    if return_indices:
+        return avg_values, ind
+
+    return avg_values
