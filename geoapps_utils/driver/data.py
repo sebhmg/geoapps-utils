@@ -17,7 +17,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from geoh5py.workspace import Workspace
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel
 from pydantic.dataclasses import dataclass
 
 
@@ -25,7 +25,7 @@ from pydantic.dataclasses import dataclass
 class BaseData(
     BaseModel,
     arbitrary_types_allowed=True,  # type: ignore
-    extra=Extra.ignore,  # type: ignore
+    extra="ignore",  # type: ignore
 ):
     """
     Core parameters for all apps.
@@ -42,13 +42,13 @@ class BaseData(
     :param generate_sweep: Boolean to determine whether to run param sweep.
     """
 
-    monitoring_directory: str | Path | None = None
-    workspace_geoh5: str | Path | None = None
-    geoh5: str | Path | None = None
-    workspace: str | Workspace | None = None
-    title: str | None = None
-    run_command: str | None = None
-    run_command_boolean: bool | None = None
-    conda_environment: str | None = None
-    conda_environment_boolean: bool | None = None
-    generate_sweep: bool | None = None
+    monitoring_directory: str | Path
+    workspace_geoh5: str | Path
+    geoh5: str | Path
+    workspace: str | Workspace
+    title: str
+    run_command: str
+    run_command_boolean: bool
+    conda_environment: str
+    conda_environment_boolean: bool
+    generate_sweep: bool

@@ -64,10 +64,10 @@ def test_dataclass(tmp_path):
         model.model_validate(invalid_params)
         pytest.fail()
     except ValidationError as e:
-        assert len(e.errors()) == 4
+        assert len(e.errors()) == 5
         error_params = [error["loc"][0] for error in e.errors()]
         error_types = [error["type"] for error in e.errors()]
-        assert "monitoring_directory" in error_params
-        assert "geoh5" in error_params
-        assert "string_type" in error_types
-        assert "path_type" in error_types
+        for error_param in ["monitoring_directory", "geoh5", "title"]:
+            assert error_param in error_params
+        for error_type in ["string_type", "path_type"]:
+            assert error_type in error_types
