@@ -44,6 +44,9 @@ def test_dataclass(tmp_path):
     for k, v in valid_params.items():
         assert output_params[k] == v
 
+def test_dataclass_invalid_values(tmp_path):
+    workspace = Workspace(tmp_path / "test.geoh5")
+
     invalid_params = {
         "monitoring_directory": 5,
         "workspace_geoh5": workspace.h5file,
