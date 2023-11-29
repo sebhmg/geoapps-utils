@@ -25,14 +25,12 @@ def test_dataclass(tmp_path):
         "title": "test title",
         "conda_environment": "test_env",
         "conda_environment_boolean": True,
-        "generate_sweep": True,
         "workspace": workspace,
         "run_command_boolean": False,
     }
 
     try:
-        model = BaseData.model_construct(**valid_params)
-        model.model_validate(valid_params)
+        model = BaseData(**valid_params)
     except ValidationError:
         pytest.fail()
 
@@ -54,14 +52,12 @@ def test_dataclass(tmp_path):
         "title": None,
         "conda_environment": "test_env",
         "conda_environment_boolean": True,
-        "generate_sweep": True,
         "workspace": workspace,
         "run_command_boolean": False,
     }
 
     try:
-        model = BaseData.model_construct(**invalid_params)
-        model.model_validate(invalid_params)
+        BaseData(**invalid_params)
         pytest.fail()
     except ValidationError as e:
         assert len(e.errors()) == 5

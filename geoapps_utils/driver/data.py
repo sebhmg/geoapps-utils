@@ -17,10 +17,8 @@ from typing import Union
 
 from geoh5py.workspace import Workspace
 from pydantic import BaseModel
-from pydantic.dataclasses import dataclass
 
 
-@dataclass
 class BaseData(
     BaseModel,
     arbitrary_types_allowed=True,  # type: ignore
@@ -29,16 +27,16 @@ class BaseData(
     """
     Core parameters for all apps.
 
-    :param monitoring_directory: Path to monitoring directory.
-    :param workspace_geoh5: Source geoh5 file.
-    :param geoh5: Workspace path.
-    :param workspace: Workspace.
+    :param monitoring_directory: Path to monitoring directory, where .geoh5 files
+        are automatically processed by GA.
+    :param workspace_geoh5: Path of the source .geoh5 file where the ui.json was created.
+    :param geoh5: Current workspace path.
+    :param workspace: Current workspace, where results will be exported.
     :param title: Application title.
     :param run_command: Command to run the application through GA.
     :param run_command_boolean: Boolean to determine if run command is used.
-    :param conda_environment: Conda environment.
+    :param conda_environment: Conda environment used to run run_command.
     :param conda_environment_boolean: Boolean to determine if conda environment is used.
-    :param generate_sweep: Boolean to determine whether to run param sweep.
     """
 
     monitoring_directory: Union[str, Path]
@@ -50,4 +48,3 @@ class BaseData(
     run_command_boolean: bool
     conda_environment: str
     conda_environment_boolean: bool
-    generate_sweep: bool
