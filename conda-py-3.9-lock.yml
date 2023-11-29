@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: 2741acd998b30428a401d1c903b0475e2fcaa2a6a8754582cd155ffe4fb49109
-    linux-64: 2876708d800f66cb9f11e2020390db6302bb54986012ce8df13ec8e5f372dc43
+    win-64: 02aa3be7e2172c43a9f93f0171317b7d0615371dec8dd247db3ade8505ae4c2a
+    linux-64: 20436761735d943ddfad29100c81f5624ebb2c5965c70b6593456eccaca8715e
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -1808,8 +1808,8 @@ package:
   hash:
     md5: 1482e77f87c6a702a7e05ef22c9b197b
     sha256: 860c11e7369d6a86fcc9c6cbca49d5c457f6c0a27faeacca4d46267f9dd10d78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: toml
   version: 0.10.2
   manager: conda
@@ -2205,8 +2205,8 @@ package:
   hash:
     md5: 761501a3de96c5855d840f4287a65e77
     sha256: 3965443356a6654f1852d6b948bdb72d9703360d0c3e23595772833081ba6dee
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pulseaudio-client
   version: '16.1'
   manager: conda
@@ -3852,8 +3852,8 @@ package:
   hash:
     md5: 1482e77f87c6a702a7e05ef22c9b197b
     sha256: 860c11e7369d6a86fcc9c6cbca49d5c457f6c0a27faeacca4d46267f9dd10d78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: toml
   version: 0.10.2
   manager: conda
@@ -4182,8 +4182,8 @@ package:
   hash:
     md5: 761501a3de96c5855d840f4287a65e77
     sha256: 3965443356a6654f1852d6b948bdb72d9703360d0c3e23595772833081ba6dee
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pysocks
   version: 1.7.1
   manager: conda

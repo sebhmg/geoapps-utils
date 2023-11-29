@@ -10,15 +10,13 @@ homepage = "https://mirageoscience.com"
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
-
 numpy = "~1.23.5"  # also in geoh5py
 geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
-
 dash = {version = "~2.12", optional = true}
-plotly = {version = "~5.13.1"}
-scipy = {version = "~1.10.1", optional = true}
-pydantic = {version = "~2.5", optional = true}
 
+plotly = {version = "~5.13.1", optional = true}
+scipy = {version = "~1.10.1"}
+pydantic = {version = "~2.5", optional = true}
 pyqtwebengine = {version = "~5.15", optional = true}
 pyside2 = {version = "~5.15", optional = true}
 
@@ -37,6 +35,7 @@ tomli = "*"
 dash = [
     "dash",
     "pyqtwebengine",
+    "plotly",
     "pyside2",
 ]
 
