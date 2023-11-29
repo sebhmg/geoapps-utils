@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: 6d5772126d29bbbeea59501bd15ceda4e464aa3cc0ec9c98d13b5802e17168b3
-    linux-64: 2694059a51dc7f1b53739eba753d13a0b31312d9699deae1fbf34f0e699f5916
+    win-64: 25d134fd669a16c0b34774a4d1b569e96e382d02894983485698533d342fca5b
+    linux-64: 6434f2e6fe3a30f6a974264c4c4d41b4e2fee597879dcdf61bdd1d23760b249f
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -89,10 +89,10 @@ package:
   manager: conda
   platform: linux-64
   dependencies: {}
-  url: https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-hab24e00_0.tar.bz2
+  url: https://conda.anaconda.org/conda-forge/noarch/font-ttf-ubuntu-0.83-h77eed37_1.conda
   hash:
-    md5: 19410c3df09dfb12d1206132a1d357c5
-    sha256: 470d5db54102bd51dbb0c5990324a2f4a0bc976faa493b22193338adb9882e2e
+    md5: 6185f640c43843e5ad6fd1c5372c3f80
+    sha256: 056c85b482d58faab5fd4670b6c1f5df0986314cca3bc831d458b22e4ef2c792
   category: dash
   optional: true
 - name: ld_impl_linux-64
@@ -889,16 +889,16 @@ package:
   category: main
   optional: false
 - name: libsqlite
-  version: 3.44.1
+  version: 3.44.2
   manager: conda
   platform: linux-64
   dependencies:
     libgcc-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.44.1-h2797004_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.44.2-h2797004_0.conda
   hash:
-    md5: b4ad86d2527b890e43ff2efc68b239f4
-    sha256: c37bb6ec8b09f690d84e8f14fabb75e00c221d11a256137d5b206e26f37e9483
+    md5: 3b6a9f225c3dbe0d24f4fedd4625c5bf
+    sha256: ee2c4d724a3ed60d5b458864d66122fb84c6ce1df62f735f90d8db17b66cd88a
   category: main
   optional: false
 - name: libssh2
@@ -1212,16 +1212,16 @@ package:
   category: dash
   optional: true
 - name: llvm-openmp
-  version: 17.0.5
+  version: 17.0.6
   manager: conda
   platform: linux-64
   dependencies:
     libzlib: '>=1.2.13,<1.3.0a0'
     zstd: '>=1.5.5,<1.6.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/llvm-openmp-17.0.5-h4dfa4b3_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/llvm-openmp-17.0.6-h4dfa4b3_0.conda
   hash:
-    md5: 799291c22ec87a0c86c0a4fc0e22b1c5
-    sha256: ef97ef1a8cbdb7862bc5a6f2aee17e289e355cb6f26a0f3b0549aedc9c174853
+    md5: c1665f9c1c9f6c93d8b4e492a6a39056
+    sha256: 18a9db4cc139e72e8eac80a34f6536491fe318d3785bc2c35fac42cd00676376
   category: main
   optional: false
 - name: mysql-libs
@@ -1242,20 +1242,20 @@ package:
   category: dash
   optional: true
 - name: nss
-  version: '3.94'
+  version: '3.95'
   manager: conda
   platform: linux-64
   dependencies:
     __glibc: '>=2.17,<3.0.a0'
     libgcc-ng: '>=12'
-    libsqlite: '>=3.43.0,<4.0a0'
+    libsqlite: '>=3.44.2,<4.0a0'
     libstdcxx-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
     nspr: '>=4.35,<5.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/nss-3.94-h1d7d5a4_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/nss-3.95-h1d7d5a4_0.conda
   hash:
-    md5: 7caef74bbfa730e014b20f0852068509
-    sha256: c9b7910fc554c6550905b9150f4c8230e973ca63f41b42f2c18a49e8aa458e78
+    md5: d3a8067adcc45a923f4b1987c91d69da
+    sha256: 02d8e38b4708ce707e51084d0dff7286e6e6d24d1bf32ebbda7710fac4a0581e
   category: dash
   optional: true
 - name: python
@@ -1510,15 +1510,15 @@ package:
   category: dash
   optional: true
 - name: idna
-  version: '3.4'
+  version: '3.6'
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.6'
-  url: https://conda.anaconda.org/conda-forge/noarch/idna-3.4-pyhd8ed1ab_0.tar.bz2
+  url: https://conda.anaconda.org/conda-forge/noarch/idna-3.6-pyhd8ed1ab_0.conda
   hash:
-    md5: 34272b248891bddccc64479f9a7fffed
-    sha256: 9887c35c374ec1847f167292d3fde023cb4c994a4ceeec283072b95440131f09
+    md5: 1a76f09108576397c41c0b0c5bd84134
+    sha256: 6ee4c986d69ce61e60a20b2459b6f2027baeba153f0a64995fd3cb47c2cc7e07
   category: main
   optional: false
 - name: iniconfig
@@ -1615,7 +1615,7 @@ package:
     krb5: '>=1.21.2,<1.22.0a0'
     libgcc-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
-    openssl: '>=3.1.4,<4.0a0'
+    openssl: '>=3.1.4,<3.2.0a0'
   url: https://conda.anaconda.org/conda-forge/linux-64/libpq-16.1-hfc447b1_0.conda
   hash:
     md5: 2b7f1893cf40b4ccdc0230bcd94d5ed9
@@ -1808,8 +1808,8 @@ package:
   hash:
     md5: 1482e77f87c6a702a7e05ef22c9b197b
     sha256: 860c11e7369d6a86fcc9c6cbca49d5c457f6c0a27faeacca4d46267f9dd10d78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: toml
   version: 0.10.2
   manager: conda
@@ -1859,15 +1859,15 @@ package:
   category: main
   optional: false
 - name: wheel
-  version: 0.41.3
+  version: 0.42.0
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.7'
-  url: https://conda.anaconda.org/conda-forge/noarch/wheel-0.41.3-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/wheel-0.42.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 3fc026b9c87d091c4b34a6c997324ae8
-    sha256: 84c3b57fba778add2bd47b7cc70e86f746d2c55549ffd2ccb6f3d6bf7c94d21d
+    md5: 1cdea58981c5cbc17b51973bcaddcea7
+    sha256: 80be0ccc815ce22f80c141013302839b0ed938a2edb50b846cf48d8a8c1cfa01
   category: main
   optional: false
 - name: xcb-util-image
@@ -2205,8 +2205,8 @@ package:
   hash:
     md5: 761501a3de96c5855d840f4287a65e77
     sha256: 3965443356a6654f1852d6b948bdb72d9703360d0c3e23595772833081ba6dee
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pulseaudio-client
   version: '16.1'
   manager: conda
@@ -3137,17 +3137,17 @@ package:
   category: dash
   optional: true
 - name: libsqlite
-  version: 3.44.1
+  version: 3.44.2
   manager: conda
   platform: win-64
   dependencies:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.44.1-hcfcfb64_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.44.2-hcfcfb64_0.conda
   hash:
-    md5: cb795bb06d345285ce8b9a4b0553574f
-    sha256: cdcc7e14f0b12e521c2a7255a04a8c259b06a2c8394f7e571412c0e07ec514f5
+    md5: 4a5f5ab56cbf3ccd08d71a1168061213
+    sha256: 25bfcf79ec863c2c0f0b3599981e2eac57efc5302faf2bb84f68c3f0faa55d1c
   category: main
   optional: false
 - name: libwebp-base
@@ -3192,7 +3192,7 @@ package:
   category: main
   optional: false
 - name: openssl
-  version: 3.1.4
+  version: 3.2.0
   manager: conda
   platform: win-64
   dependencies:
@@ -3200,10 +3200,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/openssl-3.1.4-hcfcfb64_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/openssl-3.2.0-hcfcfb64_1.conda
   hash:
-    md5: 2eebbc64373a1c6db62ad23304e9678e
-    sha256: e30b7f55c27d06e3322876c9433a3522e751d06a40b3bb6c4f8b4bcd781a3794
+    md5: d10167022f99bad12ee07dea022d5830
+    sha256: 373b9671173ef3413d2a95f3781176b818db904ba82298f8447b9658d71e2cc9
   category: main
   optional: false
 - name: pthreads-win32
@@ -3549,15 +3549,15 @@ package:
   category: main
   optional: false
 - name: idna
-  version: '3.4'
+  version: '3.6'
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.6'
-  url: https://conda.anaconda.org/conda-forge/noarch/idna-3.4-pyhd8ed1ab_0.tar.bz2
+  url: https://conda.anaconda.org/conda-forge/noarch/idna-3.6-pyhd8ed1ab_0.conda
   hash:
-    md5: 34272b248891bddccc64479f9a7fffed
-    sha256: 9887c35c374ec1847f167292d3fde023cb4c994a4ceeec283072b95440131f09
+    md5: 1a76f09108576397c41c0b0c5bd84134
+    sha256: 6ee4c986d69ce61e60a20b2459b6f2027baeba153f0a64995fd3cb47c2cc7e07
   category: main
   optional: false
 - name: iniconfig
@@ -3809,8 +3809,8 @@ package:
   hash:
     md5: 1482e77f87c6a702a7e05ef22c9b197b
     sha256: 860c11e7369d6a86fcc9c6cbca49d5c457f6c0a27faeacca4d46267f9dd10d78
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: toml
   version: 0.10.2
   manager: conda
@@ -3860,15 +3860,15 @@ package:
   category: main
   optional: false
 - name: wheel
-  version: 0.41.3
+  version: 0.42.0
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.7'
-  url: https://conda.anaconda.org/conda-forge/noarch/wheel-0.41.3-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/wheel-0.42.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 3fc026b9c87d091c4b34a6c997324ae8
-    sha256: 84c3b57fba778add2bd47b7cc70e86f746d2c55549ffd2ccb6f3d6bf7c94d21d
+    md5: 1cdea58981c5cbc17b51973bcaddcea7
+    sha256: 80be0ccc815ce22f80c141013302839b0ed938a2edb50b846cf48d8a8c1cfa01
   category: main
   optional: false
 - name: win_inet_pton
@@ -4139,8 +4139,8 @@ package:
   hash:
     md5: 761501a3de96c5855d840f4287a65e77
     sha256: 3965443356a6654f1852d6b948bdb72d9703360d0c3e23595772833081ba6dee
-  category: main
-  optional: false
+  category: dash
+  optional: true
 - name: pysocks
   version: 1.7.1
   manager: conda
