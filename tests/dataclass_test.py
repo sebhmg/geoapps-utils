@@ -14,7 +14,7 @@ from pydantic import ValidationError
 from geoapps_utils.driver.data import BaseData
 
 
-def test_dataclass(tmp_path):
+def test_dataclass_valid_values(tmp_path):
     workspace = Workspace(tmp_path / "test.geoh5")
 
     valid_params = {
@@ -44,6 +44,7 @@ def test_dataclass(tmp_path):
     for k, v in valid_params.items():
         assert output_params[k] == v
 
+
 def test_dataclass_invalid_values(tmp_path):
     workspace = Workspace(tmp_path / "test.geoh5")
 
@@ -54,7 +55,6 @@ def test_dataclass_invalid_values(tmp_path):
         "run_command": "test.driver",
         "title": None,
         "conda_environment": "test_env",
-        "conda_environment_boolean": True,
         "workspace": workspace,
         "run_command_boolean": False,
     }
@@ -63,10 +63,15 @@ def test_dataclass_invalid_values(tmp_path):
         BaseData(**invalid_params)
         pytest.fail()
     except ValidationError as e:
-        assert len(e.errors()) == 5
+        assert len(e.errors()) == 6
         error_params = [error["loc"][0] for error in e.errors()]
         error_types = [error["type"] for error in e.errors()]
-        for error_param in ["monitoring_directory", "geoh5", "title"]:
+        for error_param in [
+            "monitoring_directory",
+            "geoh5",
+            "title",
+            "conda_environment_boolean",
+        ]:
             assert error_param in error_params
-        for error_type in ["string_type", "path_type"]:
+        for error_type in ["string_type", "path_type", "missing"]:
             assert error_type in error_types
