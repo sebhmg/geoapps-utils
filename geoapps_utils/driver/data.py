@@ -12,9 +12,8 @@
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
-from __future__ import annotations
-
 from pathlib import Path
+from typing import Union
 
 from geoh5py.workspace import Workspace
 from pydantic import BaseModel
@@ -42,10 +41,10 @@ class BaseData(
     :param generate_sweep: Boolean to determine whether to run param sweep.
     """
 
-    monitoring_directory: str | Path
-    workspace_geoh5: str | Path
-    geoh5: str | Path
-    workspace: str | Workspace
+    monitoring_directory: Union[str, Path]
+    workspace_geoh5: Union[str, Path]
+    geoh5: Union[str, Path]
+    workspace: Union[str, Workspace]
     title: str
     run_command: str
     run_command_boolean: bool
