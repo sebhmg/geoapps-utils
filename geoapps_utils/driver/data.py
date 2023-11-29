@@ -25,7 +25,7 @@ class BaseData(
     extra="ignore",  # type: ignore
 ):
     """
-    Core parameters expected by the ui.json file format. 
+    Core parameters expected by the ui.json file format.
 
     :param monitoring_directory: Path to monitoring directory, where .geoh5 files
         are automatically processed by GA.
