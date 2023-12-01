@@ -2,7 +2,8 @@
 #
 #  This file is part of geoapps-utils.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
@@ -86,13 +87,14 @@ def sorted_children_dict(
     :return : sorted name/uid dictionary of children entities of entity.
 
     """
-
     if isinstance(entity, UUID) and workspace is not None:
-        entity = workspace.get_entity(entity)[0]
+        entity_obj = workspace.get_entity(entity)[0]
+    elif isinstance(entity, Entity):
+        entity_obj = entity
 
-    if hasattr(entity, "children"):
+    if isinstance(entity_obj, Entity):
         children_dict = {}
-        for child in entity.children:
+        for child in entity_obj.children:
             if not isinstance(child, (IntegerData, FloatData)):
                 continue
 
