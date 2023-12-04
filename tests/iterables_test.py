@@ -5,27 +5,20 @@
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
-# pylint: disable=import-outside-toplevel
-import os
+
 import random
 from pathlib import Path
 
-import geoh5py
 import numpy as np
-import pytest
 from geoh5py import Workspace
 from geoh5py.objects import Grid2D
 
 from geoapps_utils.conversions import string_to_numeric
-from geoapps_utils.formatters import string_name
-from geoapps_utils.importing import warn_module_not_found
 from geoapps_utils.iterables import (
     find_value,
     sorted_alphanumeric_list,
     sorted_children_dict,
 )
-from geoapps_utils.numerical import running_mean
-from geoapps_utils.plotting import inv_symlog, symlog
 
 
 def test_find_value():
@@ -38,58 +31,6 @@ def test_find_value():
     assert find_value(labels, ["model"]) == 1
     assert find_value(labels, ["data"]) == 2
     assert find_value(labels, ["lskdjf"]) is None
-
-
-def test_no_warn_module_not_found(recwarn):
-    with warn_module_not_found():
-        import os as test_import  # pylint: disable=W0404
-
-    assert test_import == os
-
-    with warn_module_not_found():
-        from os import system as test_import_from
-    assert test_import_from == os.system
-
-    with warn_module_not_found():
-        import geoh5py.objects as test_import_submodule  # pylint: disable=W0404
-    assert test_import_submodule == geoh5py.objects
-
-    with warn_module_not_found():
-        from geoh5py.objects import ObjectBase as test_import_from_submodule
-    assert test_import_from_submodule == geoh5py.objects.ObjectBase
-
-    assert len(recwarn) == 0
-
-
-def test_plotting_symlog():
-    thresh = 1.0
-    vals = np.logspace(-6, 6, 13)
-    symlog_vals = symlog(vals, thresh)
-    inv_symlog_vals = inv_symlog(symlog_vals, thresh)
-    thresh_vals = symlog_vals[symlog_vals > thresh]
-
-    assert np.allclose(vals, inv_symlog_vals)
-    assert len(thresh_vals) == 6
-    assert np.all(np.diff(thresh_vals) > 0.9)
-
-
-def test_running_mean():
-    vec = np.random.randn(100)
-    mean_forw = running_mean(vec, method="forward")
-    mean_back = running_mean(vec, method="backward")
-    mean_cent = running_mean(vec, method="centered")
-
-    mean_test = (vec[1:] + vec[:-1]) / 2
-
-    assert (
-        np.linalg.norm(mean_back[:-1] - mean_test) < 1e-12
-    ), "Backward averaging does not match expected values."
-    assert (
-        np.linalg.norm(mean_forw[1:] - mean_test) < 1e-12
-    ), "Forward averaging does not match expected values."
-    assert (
-        np.linalg.norm((mean_test[1:] + mean_test[:-1]) / 2 - mean_cent[1:-1]) < 1e-12
-    ), "Centered averaging does not match expected values."
 
 
 def test_sorted_alphanumeric_list():
@@ -173,55 +114,3 @@ def test_string_to_numeric():
     assert string_to_numeric("34") == 34
     assert string_to_numeric("1e-2") == 0.01
     assert string_to_numeric("1.05e2") == 105
-
-
-def test_string_name():
-    chars = "!@#$%^&*().,"
-    value = "H!e(l@l#o.W$o%r^l&d*"
-    assert (
-        string_name(value, characters=chars) == "H_e_l_l_o_W_o_r_l_d_"
-    ), "string_name validator failed"
-
-
-def test_warn_module_not_found():
-    # pylint: disable=import-error
-    # pylint: disable=no-name-in-module
-
-    def noop(_):
-        return None
-
-    with pytest.warns(match="Module 'nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            import nonexisting as test_import
-    with pytest.raises(NameError):
-        noop(test_import)
-
-    with pytest.warns(match="Module 'nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            from nonexisting import nope as test_import_from
-    with pytest.raises(NameError):
-        noop(test_import_from)
-
-    with pytest.warns(match="Module 'os.nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            import os.nonexisting as test_import_os_submodule
-    with pytest.raises(NameError):
-        noop(test_import_os_submodule)
-
-    with pytest.warns(match="Module 'os.nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            from os.nonexisting import nope as test_import_from_os_submodule
-    with pytest.raises(NameError):
-        noop(test_import_from_os_submodule)
-
-    with pytest.warns(match="Module 'nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            import nonexisting.nope as test_import_nonexising_submodule
-    with pytest.raises(NameError):
-        noop(test_import_nonexising_submodule)
-
-    with pytest.warns(match="Module 'nonexisting' is missing from the environment."):
-        with warn_module_not_found():
-            from nonexisting.nope import nada as test_import_from_nonexisting_submodule
-    with pytest.raises(NameError):
-        noop(test_import_from_nonexisting_submodule)
