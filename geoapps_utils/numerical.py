@@ -309,13 +309,14 @@ def find_curves(  # pylint: disable=too-many-locals
     distances = np.linalg.norm(vertices[edges[:, 0]] - vertices[edges[:, 1]], axis=1)
     edges = edges[distances <= max_distance, :]
 
-    # Check if both in columns have same id
+    # Reject edges with same vertices id
     edge_ids = ids[edges]
     edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
 
-    # Compute vectors for each edge
+    # Compute vector for each edge
     vectors = vertices[edges[:, 1]] - vertices[edges[:, 0]]
 
+    # Walk edges until no more edges can be added
     mask = np.ones(vertices.shape[0], dtype=bool)
     out_curves = []
     for ind in range(edges.shape[0]):
@@ -336,7 +337,15 @@ def find_curves(  # pylint: disable=too-many-locals
     return out_curves
 
 
-def walk_edges(path, ind, edges, vectors, max_angle, direction="forward", mask=None):
+def walk_edges(
+    path: list,
+    ind: int,
+    edges: np.ndarray,
+    vectors: np.ndarray,
+    max_angle: float,
+    direction: str = "forward",
+    mask: np.ndarray | None = None,
+):
     """
     Find all edges connected to a point.
 

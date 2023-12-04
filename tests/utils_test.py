@@ -30,6 +30,7 @@ from geoapps_utils.plotting import inv_symlog, symlog
 
 def test_find_curves():  # pylint: disable=too-many-locals
     import matplotlib.pyplot as plt
+    from matplotlib import collections as mc
 
     # Create test data
     # Survey lines
@@ -85,25 +86,28 @@ def test_find_curves():  # pylint: disable=too-many-locals
         path = find_curves(
             points_data[channel_inds],
             np.array(line_ids)[channel_inds],
-            min_length=3,
-            max_distance=15,
-            min_angle=np.deg2rad(100),
+            min_edges=3,
+            max_distance=50,
+            max_angle=np.deg2rad(100),
         )
-        ind = np.r_[np.vstack(path[0]).flatten()[::2], path[0][-1][-1]]
-        plt.subplot()
-
-        plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        plt.plot(
-            points_data[channel_inds][ind][:, 0],
-            points_data[channel_inds][ind][:, 1],
-            "r",
-        )
-
-        plt.show()
+        if len(path) > 0:
+            ax = plt.subplot()
+            plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+            lc = mc.LineCollection(
+                [
+                    [
+                        points_data[channel_inds][edge[0], :],
+                        points_data[channel_inds][edge[1], :],
+                    ]
+                    for edge in path[0]
+                ]
+            )
+            ax.add_collection(lc)
+            plt.show()
 
         result_curves += path
 
-    assert [len(curve) for curve in result_curves] == [10, 10, 10, 4, 9, 7]
+    assert [len(curve) for curve in result_curves] == [9, 9, 9, 9]
 
 
 def test_find_value():
