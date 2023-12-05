@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import warnings
 from contextlib import contextmanager
+from pathlib import Path
 
 
 @contextmanager
@@ -32,3 +33,19 @@ def warn_module_not_found():
             f"Consider installing with: 'conda install -c conda-forge {module_name}'"
         )
         warnings.warn(err)
+
+
+def assets_path(file: str) -> Path:
+    """
+    Return the path to the assets folder.
+
+    :param file: Pathname of file from which the app was loaded.
+    """
+
+    parent = Path(file).parent
+    folder_name = f"{parent.name}-assets"
+    assets_folder = parent.parent / folder_name
+    if not assets_folder.is_dir():
+        raise RuntimeError(f"Assets folder not found: {assets_folder}")
+
+    return assets_folder

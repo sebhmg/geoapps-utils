@@ -87,10 +87,11 @@ def sorted_children_dict(
     :return : sorted name/uid dictionary of children entities of entity.
 
     """
+    entity_obj = entity
     if isinstance(entity, UUID) and workspace is not None:
-        entity_obj = workspace.get_entity(entity)[0]
-    elif isinstance(entity, Entity):
-        entity_obj = entity
+        obj = workspace.get_entity(entity)[0]
+        if isinstance(obj, Entity):
+            entity_obj = obj
 
     if isinstance(entity_obj, Entity):
         children_dict = {}

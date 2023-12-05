@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geoapps-utils"
-version = "0.1.0"
+version = "0.2.0-alpha.1"
 license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
@@ -10,19 +10,17 @@ homepage = "https://mirageoscience.com"
 
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
-
 numpy = "~1.23.5"  # also in geoh5py
 geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
-
 dash = {version = "~2.12", optional = true}
-plotly = {version = "~5.13.1"}
-
+plotly = {version = "~5.13.1", optional = true}
+scipy = {version = "~1.10.1"}
 pyqtwebengine = {version = "~5.15", optional = true}
 pyside2 = {version = "~5.15", optional = true}
 
 ## indirect dependencies, forcing them here for installation through Conda not pip
-Pillow = "~9.4.0"  # from geoh5py
-h5py = "~3.8.0"  # from geoh5py
+Pillow = "*"  # from geoh5py
+h5py = "*"  # from geoh5py
 
 [tool.poetry.dev-dependencies]
 pylint = "*"
@@ -34,6 +32,7 @@ tomli = "*"
 dash = [
     "dash",
     "pyqtwebengine",
+    "plotly",
     "pyside2",
 ]
 
