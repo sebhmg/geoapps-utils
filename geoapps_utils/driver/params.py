@@ -17,7 +17,7 @@ from geoh5py.ui_json import InputFile, InputValidation, utils
 from geoh5py.workspace import Workspace
 
 
-class BaseParams:
+class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-public-methods
     """
     Stores input parameters to drive a ui.json application.
 
@@ -441,7 +441,8 @@ class BaseParams:
 
         if (
             self.input_file is not None
-            and getattr(self.input_file, "data", None) is not None
+            and hasattr(self.input_file, "data")
+            and self.input_file.data is not None
         ):
             if value != self.input_file.data[key]:
                 self.input_file.set_data_value(key, value)

@@ -54,6 +54,17 @@ class BaseDriver(ABC):
         self._params = val
 
     @property
+    def validations(self):
+        """Driver validations."""
+        print("in getter", self._validations)
+        return self._validations
+
+    @validations.setter
+    def validations(self, val):
+        print("setter", val)
+        self._validations = val
+
+    @property
     def workspace(self):
         """Application workspace."""
         if self._workspace is None and self._params is not None:
@@ -82,8 +93,7 @@ class BaseDriver(ABC):
         """Run the application."""
         raise NotImplementedError
 
-    @classmethod
-    def start(cls, filepath: str | Path, driver_class=None):
+    def start(self, filepath: str | Path, driver_class=None):
         """
         Run application specified by 'filepath' ui.json file.
 
@@ -92,11 +102,11 @@ class BaseDriver(ABC):
         """
 
         if driver_class is None:
-            driver_class = cls
+            driver_class = self.__class__
 
         print("Loading input file . . .")
         filepath = Path(filepath).resolve()
-        ifile = InputFile.read_ui_json(filepath, validations=driver_class._validations)
+        ifile = InputFile.read_ui_json(filepath, validations=self.validations)
 
         params = driver_class._params_class(ifile)
         print("Initializing application . . .")
