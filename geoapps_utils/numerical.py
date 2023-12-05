@@ -296,16 +296,17 @@ def find_curves(  # pylint: disable=too-many-locals
     if not hasattr(tri, "simplices"):
         return []
 
+    simplices: np.ndarray = getattr(tri, "simplices")
+
     edges = np.vstack(
         (
-            tri.simplices[:, :2],  # pylint: disable=no-member
-            tri.simplices[:, 1:],  # pylint: disable=no-member
-            tri.simplices[:, ::2],  # pylint: disable=no-member
+            simplices[:, :2],
+            simplices[:, 1:],
+            simplices[:, ::2],
         )
     )
     edges = np.sort(edges, axis=1)
     edges = np.unique(edges, axis=0)
-
     distances = np.linalg.norm(vertices[edges[:, 0]] - vertices[edges[:, 1]], axis=1)
     edges = edges[distances <= max_distance, :]
 
@@ -319,14 +320,15 @@ def find_curves(  # pylint: disable=too-many-locals
     # Walk edges until no more edges can be added
     mask = np.ones(vertices.shape[0], dtype=bool)
     out_curves = []
+
     for ind in range(edges.shape[0]):
         if not np.any(mask[edges[ind]]):
             continue
 
         mask[edges[ind]] = False
         path = [edges[ind]]
-        path, actives = walk_edges(path, ind, edges, vectors, max_angle, mask=mask)
-        path, actives = walk_edges(
+        path, mask = walk_edges(path, ind, edges, vectors, max_angle, mask=mask)
+        path, mask = walk_edges(
             path, ind, edges, vectors, max_angle, direction="backward", mask=mask
         )
         if len(path) < min_edges:
@@ -337,7 +339,7 @@ def find_curves(  # pylint: disable=too-many-locals
     return out_curves
 
 
-def walk_edges(
+def walk_edges(  # pylint: disable=too-many-arguments
     path: list,
     ind: int,
     edges: np.ndarray,
