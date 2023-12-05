@@ -24,6 +24,7 @@ class BaseDriver(ABC):
 
     _params: BaseParams
     _params_class = BaseParams
+    _validations: dict | None = None
 
     def __init__(self, params: BaseParams):
         """
@@ -31,7 +32,6 @@ class BaseDriver(ABC):
         """
         self._workspace: Workspace | None = None
         self._out_group: str | None = None
-        self._validations: dict | None = None
         self.params = params
 
         if hasattr(self.params, "out_group") and self.params.out_group is None:
@@ -52,17 +52,6 @@ class BaseDriver(ABC):
         if not isinstance(val, BaseParams):
             raise TypeError("Parameters must be of type BaseParams.")
         self._params = val
-
-    @property
-    def validations(self):
-        """Driver validations."""
-        print("in getter", self._validations)
-        return self._validations
-
-    @validations.setter
-    def validations(self, val):
-        print("setter", val)
-        self._validations = val
 
     @property
     def workspace(self):
@@ -93,7 +82,8 @@ class BaseDriver(ABC):
         """Run the application."""
         raise NotImplementedError
 
-    def start(self, filepath: str | Path, driver_class=None):
+    @classmethod
+    def start(cls, filepath: str | Path, driver_class=None):
         """
         Run application specified by 'filepath' ui.json file.
 
@@ -102,11 +92,11 @@ class BaseDriver(ABC):
         """
 
         if driver_class is None:
-            driver_class = self.__class__
+            driver_class = cls
 
         print("Loading input file . . .")
         filepath = Path(filepath).resolve()
-        ifile = InputFile.read_ui_json(filepath, validations=self.validations)
+        ifile = InputFile.read_ui_json(filepath, validations=cls._validations)
 
         params = driver_class._params_class(ifile)
         print("Initializing application . . .")

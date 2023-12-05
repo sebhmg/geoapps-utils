@@ -38,10 +38,10 @@ def test_base_driver(tmp_path):
     class TestDriver(BaseDriver):
         _params: TestParams
         _params_class = TestParams
+        _validations = {}
 
         def __init__(self, params: TestParams):
             super().__init__(params)
-            self.validations = {}
 
         def run(self):
             pass
