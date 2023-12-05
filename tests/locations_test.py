@@ -8,7 +8,7 @@ from pathlib import Path
 
 import numpy as np
 from geoh5py import Workspace
-from geoh5py.objects import Grid2D
+from geoh5py.objects import Grid2D, Points
 
 from geoapps_utils.locations import get_locations
 
@@ -26,9 +26,25 @@ def test_get_locations(tmp_path: Path):
             name="test_grid",
             allow_move=False,
         )
+        # Test get_locations with centroids
         base_locs = get_locations(workspace, grid)
 
+        # Test get_locations with a child of the grid
         test_data = grid.add_data({"test_data": {"values": np.ones(10 * 15)}})
         data_locs = get_locations(workspace, test_data)
 
         np.testing.assert_array_equal(base_locs, data_locs)
+
+        # Test from uuid
+        base_locs_from_uuid = get_locations(workspace, grid.uid)
+        assert np.all(base_locs_from_uuid == base_locs)
+
+        # Test get_locations with vertices
+        vertices = np.random.rand(10, 3)
+        points = Points.create(
+            workspace,
+            name="test_points",
+            vertices=vertices,
+            parent=grid,
+        )
+        assert np.all(get_locations(workspace, points) == vertices)

@@ -22,3 +22,5 @@ def test_rotation_xyz():
     assert (
         np.linalg.norm(np.cross(rot_vec, [0, 1, 0])) < 1e-8
     ), "Error on negative rotation about point."
+
+    assert (rotate_xyz(np.c_[1, 0], [0, 0], 45)).shape[1] == 2, "Error on 2D input."

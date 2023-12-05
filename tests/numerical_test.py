@@ -5,8 +5,9 @@
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 import numpy as np
+from numpy import random
 
-from geoapps_utils.numerical import running_mean, weighted_average
+from geoapps_utils.numerical import running_mean, traveling_salesman, weighted_average
 
 
 def test_running_mean():
@@ -26,6 +27,21 @@ def test_running_mean():
     assert (
         np.linalg.norm((mean_test[1:] + mean_test[:-1]) / 2 - mean_cent[1:-1]) < 1e-12
     ), "Centered averaging does not match expected values."
+
+
+def test_traveling_salesman():
+    x = np.linspace(0, np.pi, 50)
+    y = np.sin(x)
+    locs = np.zeros((len(x), 3))
+    locs[:, 0] = x
+    locs[:, 1] = y
+    shuffled_locs = locs.copy()
+    random.shuffle(shuffled_locs)
+    inds = traveling_salesman(shuffled_locs)
+
+    assert np.all(shuffled_locs[inds] == locs) or np.all(
+        np.flip(shuffled_locs[inds], axis=0) == locs
+    )
 
 
 def test_weighted_average():

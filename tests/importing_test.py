@@ -6,11 +6,21 @@
 #  (see LICENSE file at the root of this source code package).
 # pylint: disable=import-outside-toplevel
 import os
+import tempfile
 
 import geoh5py
 import pytest
 
-from geoapps_utils.importing import warn_module_not_found
+from geoapps_utils.importing import assets_path, warn_module_not_found
+
+
+def test_assets_path(tmp_path):
+    with tempfile.NamedTemporaryFile(dir=tmp_path) as file:
+        with pytest.raises(RuntimeError):
+            assert assets_path(tmp_path / file.name)
+        folder_name = str(tmp_path.name) + "-assets"
+        os.mkdir(tmp_path.parent / folder_name)
+        assert assets_path(tmp_path / file.name) == tmp_path.parent / folder_name
 
 
 def test_no_warn_module_not_found(recwarn):

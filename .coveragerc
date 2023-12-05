@@ -1,1 +1,2 @@
 [run]
+omit = geoapps_utils/application/*

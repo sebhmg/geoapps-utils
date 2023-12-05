@@ -13,7 +13,6 @@ import numpy as np
 from geoh5py import Workspace
 from geoh5py.objects import Grid2D
 
-from geoapps_utils.conversions import string_to_numeric
 from geoapps_utils.iterables import (
     find_value,
     sorted_alphanumeric_list,
@@ -67,9 +66,9 @@ def test_sorted_children_dict(tmp_path: Path):
     n_x, n_y = 10, 15
     grid = Grid2D.create(
         workspace,
-        origin=[0, 0, 0],
-        u_cell_size=20.0,
-        v_cell_size=30.0,
+        origin=[10, 10, 10],
+        u_cell_size=30.0,
+        v_cell_size=20.0,
         u_count=n_x,
         v_count=n_y,
         name="test_grid",
@@ -96,6 +95,14 @@ def test_sorted_children_dict(tmp_path: Path):
     grid.add_data({"Iteration_12_model": {"values": np.ones(10 * 15)}})
     grid.add_data({"topo": {"values": np.ones(10 * 15)}})
     grid.add_data({"uncert": {"values": np.ones(10 * 15)}})
+    grid.add_data(
+        {
+            "wrong_data_type": {
+                "type": "text",
+                "values": np.array(["test" for _ in range(10 * 15)], dtype=object),
+            }
+        }
+    )
 
     data_dict = sorted_children_dict(grid)
     assert data_dict is not None
@@ -107,10 +114,9 @@ def test_sorted_children_dict(tmp_path: Path):
     assert data_keys[-2] == "topo"
     assert data_keys[-1] == "uncert"
 
+    assert "wrong_data_type" not in data_keys
 
-def test_string_to_numeric():
-    assert string_to_numeric("test") == "test"
-    assert string_to_numeric("2.1") == 2.1
-    assert string_to_numeric("34") == 34
-    assert string_to_numeric("1e-2") == 0.01
-    assert string_to_numeric("1.05e2") == 105
+    data_dict_from_uuid = sorted_children_dict(grid.uid, workspace)
+    assert data_dict == data_dict_from_uuid
+
+    assert sorted_children_dict(grid.uid, None) is None
