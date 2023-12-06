@@ -30,10 +30,10 @@ def find_curves(  # pylint: disable=too-many-locals
     :return: List of curves.
     """
     tri = Delaunay(vertices, qhull_options="QJ")
-    if not hasattr(tri, "simplices"):
+    if tri.simplices is None:
         return []
 
-    simplices: np.ndarray = getattr(tri, "simplices")
+    simplices: np.ndarray = tri.simplices
 
     edges = np.vstack(
         (
