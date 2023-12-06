@@ -6,6 +6,21 @@ description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
 homepage = "https://mirageoscience.com"
 
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Natural Language :: English",
+]
+
 [tool.poetry.scripts]
 
 [tool.poetry.dependencies]
