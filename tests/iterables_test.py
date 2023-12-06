@@ -75,31 +75,31 @@ def test_sorted_children_dict(tmp_path: Path):
         allow_move=False,
     )
 
-    grid.add_data({"Iteration_10_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_1_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_5_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_3_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_2_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_4_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_9.0_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_8e0_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_11_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_6_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_7_data": {"values": np.ones(10 * 15)}})
-    grid.add_data({"interp_02": {"values": np.ones(10 * 15)}})
-    grid.add_data({"interp_01": {"values": np.ones(10 * 15)}})
-    grid.add_data({"interp_11": {"values": np.ones(10 * 15)}})
-    grid.add_data({"iteration_2_model": {"values": np.ones(10 * 15)}})
-    grid.add_data({"iteration_12_model": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_2_model": {"values": np.ones(10 * 15)}})
-    grid.add_data({"Iteration_12_model": {"values": np.ones(10 * 15)}})
-    grid.add_data({"topo": {"values": np.ones(10 * 15)}})
-    grid.add_data({"uncert": {"values": np.ones(10 * 15)}})
+    grid.add_data({"Iteration_10_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_1_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_5_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_3_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_2_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_4_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_9.0_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_8e0_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_11_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_6_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_7_data": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"interp_02": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"interp_01": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"interp_11": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"iteration_2_model": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"iteration_12_model": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_2_model": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"Iteration_12_model": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"topo": {"values": np.ones(grid.n_cells)}})
+    grid.add_data({"uncert": {"values": np.ones(grid.n_cells)}})
     grid.add_data(
         {
             "wrong_data_type": {
                 "type": "text",
-                "values": np.array(["test" for _ in range(10 * 15)], dtype=object),
+                "values": np.array(["test" for _ in range(grid.n_cells)], dtype=object),
             }
         }
     )
@@ -107,13 +107,18 @@ def test_sorted_children_dict(tmp_path: Path):
     data_dict = sorted_children_dict(grid)
     assert data_dict is not None
     data_keys = list(data_dict.keys())
+    for i, k in enumerate(data_keys):
+        print(i, k)
     assert data_keys[0] == "Iteration_1_data"
     assert data_keys[1] == "Iteration_2_data"
     assert data_keys[7] == "Iteration_8e0_data"
     assert data_keys[8] == "Iteration_9.0_data"
+    assert data_keys[11] == "Iteration_2_model"
+    assert data_keys[12] == "Iteration_12_model"
+    assert data_keys[16] == "iteration_2_model"
+    assert data_keys[17] == "iteration_12_model"
     assert data_keys[-2] == "topo"
     assert data_keys[-1] == "uncert"
-
     assert "wrong_data_type" not in data_keys
 
     data_dict_from_uuid = sorted_children_dict(grid.uid, workspace)

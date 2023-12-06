@@ -44,32 +44,43 @@ def test_traveling_salesman():
     )
 
 
-def test_weighted_average():
+def test_weighted_average_same_point():
     # in loc == out loc -> in val == out val
-    xyz_out = np.array([[0, 0, 0]])
     xyz_in = np.array([[0, 0, 0]])
+    xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99])]
     out = weighted_average(xyz_in, xyz_out, values)
     assert out[0] == 99
 
+
+def test_weighted_average_same_distance():
     # two point same distance away -> arithmetic mean
     xyz_in = np.array([[1, 0, 0], [0, 1, 0]])
+    xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
     assert (out[0] - 99.5) < 1e-10
 
+
+def test_weighted_average_two_far_points():
     # two points different distance away but close to infinity -> arithmetic mean
     xyz_in = np.array([[1e30, 0, 0], [1e30 + 1, 0, 0]])
+    xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
     assert (out[0] - 99.5) < 1e-10
 
+
+def test_weighted_average_one_far_point():
     # one point close to infinity, one not -> out val is near-field value
     xyz_in = np.array([[1, 0, 0], [1e30, 0, 0]])
+    xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
     assert (out[0] - 99.0) < 1e-10
 
+
+def test_weighted_average_diff_length_locs():
     # one values vector and n out locs -> one out vector of length 20
     xyz_in = np.random.rand(10, 3)
     xyz_out = np.random.rand(20, 3)
@@ -78,6 +89,8 @@ def test_weighted_average():
     assert len(out) == 1
     assert len(out[0]) == 20
 
+
+def test_weighted_average_two_values_vecs():
     # two values vectors and n out locs -> two out vectors of length 20 each
     xyz_in = np.random.rand(10, 3)
     xyz_out = np.random.rand(20, 3)
@@ -87,6 +100,8 @@ def test_weighted_average():
     assert len(out[0]) == 20
     assert len(out[1]) == 20
 
+
+def test_weighted_average_max_distance():
     # max distance keeps out points from average
     xyz_in = np.array([[1, 0, 0], [3, 0, 0]])
     xyz_out = np.array([[0, 0, 0]])
@@ -94,6 +109,8 @@ def test_weighted_average():
     out = weighted_average(xyz_in, xyz_out, values, max_distance=2)
     assert out[0] == 1
 
+
+def test_weighted_average_n():
     # n caps the number of points that go into the average
     xyz_in = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
     xyz_out = np.array([[0, 0, 0]])
@@ -103,13 +120,17 @@ def test_weighted_average():
     out = weighted_average(xyz_in, xyz_out, values, n=2)
     assert out[0] == 1.5
 
+
+def test_weighted_average_return_indices():
     # return indices with n=1 returns closest in loc to the out loc
     xyz_in = np.array([[2, 0, 0], [0, 1, 0], [0, 0, 2]])
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([1, 2, 3])]
-    out, ind = weighted_average(xyz_in, xyz_out, values, n=1, return_indices=True)
+    _, ind = weighted_average(xyz_in, xyz_out, values, n=1, return_indices=True)
     assert ind[0][0] == 1
 
+
+def test_weighted_average_threshold():
     # threshold >> r -> arithmetic mean
     xyz_in = np.array([[1, 0, 0], [0, 100, 0], [0, 0, 1000]])
     xyz_out = np.array([[0, 0, 0]])
