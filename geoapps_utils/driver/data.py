@@ -21,8 +21,8 @@ from pydantic import BaseModel
 
 class BaseData(
     BaseModel,
-    arbitrary_types_allowed=True,  # type: ignore
-    extra="ignore",  # type: ignore
+    arbitrary_types_allowed=True,
+    extra="ignore",
 ):
     """
     Core parameters expected by the ui.json file format.

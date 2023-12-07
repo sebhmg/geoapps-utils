@@ -29,11 +29,7 @@ def test_dataclass_valid_values(tmp_path):
         "run_command_boolean": False,
     }
 
-    try:
-        model = BaseData(**valid_params)
-    except ValidationError:
-        pytest.fail()
-
+    model = BaseData(**valid_params)
     output_params = {**model.model_dump()}
 
     for k, v in output_params.items():
@@ -59,10 +55,8 @@ def test_dataclass_invalid_values(tmp_path):
         "run_command_boolean": False,
     }
 
-    try:
+    with pytest.raises(ValidationError) as e:
         BaseData(**invalid_params)
-        pytest.fail()
-    except ValidationError as e:
         assert len(e.errors()) == 6
         error_params = [error["loc"][0] for error in e.errors()]
         error_types = [error["type"] for error in e.errors()]
