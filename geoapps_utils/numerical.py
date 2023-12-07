@@ -8,7 +8,7 @@
 from __future__ import annotations
 
 import numpy as np
-from scipy.spatial import Delaunay, cKDTree
+from scipy.spatial import Delaunay, cKDTree  # pylint: disable=no-name-in-module
 
 
 def find_curves(  # pylint: disable=too-many-locals
