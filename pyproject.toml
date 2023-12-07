@@ -1,10 +1,25 @@
 [tool.poetry]
 name = "geoapps-utils"
-version = "0.1.0"
+version = "0.2.0-alpha.1"
 license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
 homepage = "https://mirageoscience.com"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Natural Language :: English",
+]
 
 [tool.poetry.scripts]
 
