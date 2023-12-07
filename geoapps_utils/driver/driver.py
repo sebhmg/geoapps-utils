@@ -24,6 +24,7 @@ class BaseDriver(ABC):
 
     _params: BaseParams
     _params_class = BaseParams
+    _validations: dict | None = None
 
     def __init__(self, params: BaseParams):
         """
@@ -31,7 +32,6 @@ class BaseDriver(ABC):
         """
         self._workspace: Workspace | None = None
         self._out_group: str | None = None
-        self._validations: dict | None = None
         self.params = params
 
         if hasattr(self.params, "out_group") and self.params.out_group is None:
@@ -96,11 +96,9 @@ class BaseDriver(ABC):
 
         print("Loading input file . . .")
         filepath = Path(filepath).resolve()
-        ifile = InputFile.read_ui_json(
-            filepath, validations=driver_class._validations  # pylint: disable=W0212
-        )
+        ifile = InputFile.read_ui_json(filepath, validations=cls._validations)
 
-        params = driver_class._params_class(ifile)  # pylint: disable=W0212
+        params = driver_class._params_class(ifile)
         print("Initializing application . . .")
         driver = driver_class(params)
 
