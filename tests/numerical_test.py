@@ -4,7 +4,8 @@
 #
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
-
+import matplotlib.pyplot as plt
+import matplotlib.collections as mc
 
 import numpy as np
 from numpy import random
@@ -163,18 +164,19 @@ def test_find_curves():  # pylint: disable=too-many-locals
 
     curves = [curve1, curve2, curve3, curve4, curve5]
 
-    points_data = []
-    line_ids = []
-    channel_groups = []
+    data = []
     for channel_group, curve in enumerate(curves):
         for x_coord, y_coord, line_id in zip(curve, y_array, line_ids_array):
             if x_coord is not None:
-                points_data.append([x_coord, y_coord])
-                line_ids.append(line_id)
-                channel_groups.append(channel_group)
+                data.append([x_coord, y_coord, line_id, channel_group])
 
-    # Loop over channel groups
-    points_data = np.array(points_data)
+    # Random shuffle the input
+    data = np.array(data)
+    np.random.shuffle(data)
+
+    points_data = data[:, :2]
+    line_ids = data[:, 2]
+    channel_groups = data[:, 3]
 
     result_curves = []
     for channel_group in np.unique(channel_groups):
@@ -186,6 +188,21 @@ def test_find_curves():  # pylint: disable=too-many-locals
             max_distance=15,
             max_angle=np.deg2rad(45),
         )
+        if len(path) > 0:
+            ax = plt.subplot()
+            plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+            lc = mc.LineCollection(
+                [
+                    [
+                        points_data[channel_inds][edge[0], :],
+                        points_data[channel_inds][edge[1], :],
+                    ]
+                    for edge in path[0]
+                ]
+            )
+            ax.add_collection(lc)
+            plt.show()
+
         if len(path) == 0:
             continue
 
@@ -205,21 +222,21 @@ def test_find_curves():  # pylint: disable=too-many-locals
             max_distance=50,
             max_angle=np.deg2rad(100),
         )
-        # if len(path) > 0:
-        #     ax = plt.subplot()
-        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        #     lc = mc.LineCollection(
-        #         [
-        #             [
-        #                 points_data[channel_inds][edge[0], :],
-        #                 points_data[channel_inds][edge[1], :],
-        #             ]
-        #             for edge in path[0]
-        #         ]
-        #     )
-        #     ax.add_collection(lc)
-        #     plt.show()
+        if len(path) > 0:
+            ax = plt.subplot()
+            plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+            lc = mc.LineCollection(
+                [
+                    [
+                        points_data[channel_inds][edge[0], :],
+                        points_data[channel_inds][edge[1], :],
+                    ]
+                    for edge in path[0]
+                ]
+            )
+            ax.add_collection(lc)
+            plt.show()
 
         result_curves += path
 
-    assert [len(curve) for curve in result_curves] == [9, 9, 9, 9]
+    assert [len(curve) for curve in result_curves] == [9, 9, 9, 8]

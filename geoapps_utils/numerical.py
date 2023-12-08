@@ -51,9 +51,6 @@ def find_curves(  # pylint: disable=too-many-locals
     edge_ids = ids[edges]
     edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
 
-    # Compute vector for each edge
-    vectors = vertices[edges[:, 1]] - vertices[edges[:, 0]]
-
     # Walk edges until no more edges can be added
     mask = np.ones(vertices.shape[0], dtype=bool)
     out_curves = []
@@ -64,9 +61,9 @@ def find_curves(  # pylint: disable=too-many-locals
 
         mask[edges[ind]] = False
         path = [edges[ind]]
-        path, mask = walk_edges(path, ind, edges, vectors, max_angle, mask=mask)
+        path, mask = walk_edges(path, ind, edges, vertices, max_angle, mask=mask)
         path, mask = walk_edges(
-            path, ind, edges, vectors, max_angle, direction="backward", mask=mask
+            path, ind, edges, vertices, max_angle, direction="backward", mask=mask
         )
         if len(path) < min_edges:
             continue
@@ -144,7 +141,7 @@ def walk_edges(  # pylint: disable=too-many-arguments
     path: list,
     ind: int,
     edges: np.ndarray,
-    vectors: np.ndarray,
+    vertices: np.ndarray,
     max_angle: float,
     direction: str = "forward",
     mask: np.ndarray | None = None,
@@ -155,7 +152,7 @@ def walk_edges(  # pylint: disable=too-many-arguments
     :param path: Current list of edges forming a path.
     :param ind: Index of incoming edge.
     :param edges: All edges.
-    :param vectors: Direction of the edges.
+    :param vertices: Direction of the edges.
     :param max_angle: Maximum angle between points in a curve, in radians.
     :param direction: Direction to walk in.
     :param mask: Mask for nodes that have already been visited.
@@ -163,6 +160,7 @@ def walk_edges(  # pylint: disable=too-many-arguments
     :return: Edges connected to point.
     """
     node = 1 if direction == "forward" else 0
+    incoming = vertices[edges[ind][node], :] - vertices[edges[ind][node - 1], :]
 
     if mask is None:
         mask = np.ones(edges.max() + 1, dtype=bool)
@@ -175,35 +173,27 @@ def walk_edges(  # pylint: disable=too-many-arguments
     if len(neighbours) == 0:
         return path, mask
 
-    dot = np.dot(vectors[ind], vectors[neighbours].T)
-    vec_lengths = np.linalg.norm(vectors[neighbours], axis=1)
-    angle = np.arccos(dot / (np.linalg.norm(vectors[ind]) * vec_lengths))
+    # Outgoing candidate nodes
+    candidates = edges[neighbours][edges[neighbours] != edges[ind][node]]
 
-    # Filter large angles
-    keep = angle < max_angle
-
-    if not np.any(keep):
-        return path, mask
-
-    dot, neighbours, vec_lengths, angle = (
-        dot[keep],
-        neighbours[keep],
-        vec_lengths[keep],
-        angle[keep],
-    )
+    vectors = vertices[candidates, :] - vertices[edges[ind][node], :]
+    dot = np.dot(incoming, vectors.T)
+    vec_lengths = np.linalg.norm(vectors, axis=1)
+    angle = np.arccos(dot / (np.linalg.norm(incoming) * vec_lengths) - 1e-10)
 
     # Minimize the torque
     sub_ind = np.argmin(angle * vec_lengths)
 
+    if angle[sub_ind] > max_angle:
+        return path, mask
+
     fork = neighbours[sub_ind]
     mask[edges[fork]] = False
 
-    # Reverse the edge if necessary
-    if dot[sub_ind] < 0:
-        edges[fork] = edges[fork][::-1]
-
+    # Set the edge direction
+    edges[fork] = np.r_[edges[ind][node], candidates[sub_ind]]
     path.append(edges[fork].tolist())
-    path, mask = walk_edges(path, fork, edges, vectors, max_angle, mask=mask)
+    path, mask = walk_edges(path, fork, edges, vertices, max_angle, mask=mask)
 
     return path, mask
 
