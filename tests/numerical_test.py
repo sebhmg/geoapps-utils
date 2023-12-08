@@ -4,9 +4,8 @@
 #
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
-import matplotlib.pyplot as plt
 import matplotlib.collections as mc
-
+import matplotlib.pyplot as plt
 import numpy as np
 from numpy import random
 
