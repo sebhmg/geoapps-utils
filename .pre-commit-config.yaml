@@ -40,6 +40,7 @@ repos:
         additional_dependencies: [
             types-toml,
             tomli, # to read config from pyproject.toml
+            pydantic,
         ]
         args: [--ignore-missing-imports, --scripts-are-modules, --show-error-context,
                --show-column-numbers]
