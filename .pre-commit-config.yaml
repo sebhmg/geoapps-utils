@@ -37,7 +37,7 @@ repos:
     rev: v1.7.1
     hooks:
     -   id: mypy
-        additional_dependencies: [types-toml]
+        additional_dependencies: [types-toml, pydantic]
         args: [--ignore-missing-imports, --scripts-are-modules, --show-error-context,
                --show-column-numbers]
 -   repo: https://github.com/codingjoe/relint
