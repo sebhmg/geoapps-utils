@@ -14,6 +14,7 @@ from geoh5py import Workspace
 from geoh5py.objects import ObjectBase
 from geoh5py.ui_json import InputFile, monitored_directory_copy
 
+from geoapps_utils.driver.data import BaseData
 from geoapps_utils.driver.params import BaseParams
 
 
@@ -22,7 +23,7 @@ class BaseDriver(ABC):
     Base driver class.
     """
 
-    _params: BaseParams
+    _params: BaseParams | BaseData
     _params_class = BaseParams
     _validations: dict | None = None
 
