@@ -9,10 +9,12 @@ from __future__ import annotations
 from uuid import UUID
 
 from geoh5py import Workspace
-from geoh5py.shared import Entity
+from geoh5py.data import Data
+from geoh5py.objects import Points
+from geoh5py.objects.grid_object import GridObject
 
 
-def get_locations(workspace: Workspace, entity: UUID | Entity):
+def get_locations(workspace: Workspace, entity: UUID | Points | GridObject | Data):
     """
     Returns entity's centroids or vertices.
 
@@ -26,22 +28,21 @@ def get_locations(workspace: Workspace, entity: UUID | Entity):
     :return: Array shape(*, 3) of x, y, z location data
 
     """
-    locations = None
-    entity_obj = entity
     if isinstance(entity, UUID):
-        obj = workspace.get_entity(entity)[0]
-        if isinstance(obj, Entity):
-            entity_obj = obj
+        entity_obj = workspace.get_entity(entity)[0]
+    else:
+        entity_obj = entity
 
-    if hasattr(entity_obj, "centroids"):
-        locations = entity_obj.centroids
-    elif hasattr(entity_obj, "vertices"):
+    if not isinstance(entity_obj, (Points, GridObject, Data)):
+        raise TypeError(
+            f"Entity must be of type Points, GridObject or Data, {type(entity_obj)} provided."
+        )
+
+    if isinstance(entity_obj, Points):
         locations = entity_obj.vertices
-    elif (
-        isinstance(entity_obj, Entity)
-        and getattr(entity_obj, "parent", None) is not None
-        and entity_obj.parent is not None
-    ):
+    elif isinstance(entity_obj, GridObject):
+        locations = entity_obj.vertices
+    else:
         locations = get_locations(workspace, entity_obj.parent)
 
     return locations

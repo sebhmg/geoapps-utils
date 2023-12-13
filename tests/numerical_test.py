@@ -4,10 +4,16 @@
 #
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
+
 import numpy as np
 from numpy import random
 
-from geoapps_utils.numerical import running_mean, traveling_salesman, weighted_average
+from geoapps_utils.numerical import (
+    find_curves,
+    running_mean,
+    traveling_salesman,
+    weighted_average,
+)
 
 
 def test_running_mean():
@@ -137,3 +143,98 @@ def test_weighted_average_threshold():
     values = [np.array([1, 2, 3])]
     out = weighted_average(xyz_in, xyz_out, values, threshold=1e30)
     assert out[0] == 2
+
+
+def test_find_curves():  # pylint: disable=too-many-locals
+    # Create test data
+    # Survey lines
+    y_array = np.linspace(0, 50, 10)
+    line_ids_array = np.arange(0, len(y_array))
+
+    curve1 = 5 * np.sin(y_array) + 10  # curve
+    curve2 = 0.7 * y_array + 20  # crossing lines
+    curve3 = -0.4 * y_array + 50
+    curve4 = (80 + np.random.randn(len(y_array)) * 0.25).tolist()  # zig-zag
+    curve4[3] = 85
+    curve5 = [None] * (len(y_array) - 1)  # short line
+    curve5[0:1] = [60, 62]  # type: ignore
+    curve5[-2:-1] = [2, 4]  # type: ignore
+
+    curves = [curve1, curve2, curve3, curve4, curve5]
+
+    data = []
+    for channel_group, curve in enumerate(curves):
+        for x_coord, y_coord, line_id in zip(curve, y_array, line_ids_array):
+            if x_coord is not None:
+                data.append([x_coord, y_coord, line_id, channel_group])
+
+    # Random shuffle the input
+    data = np.array(data)
+    np.random.shuffle(data)
+
+    points_data = data[:, :2]
+    line_ids = data[:, 2]
+    channel_groups = data[:, 3]
+
+    result_curves = []
+    for channel_group in np.unique(channel_groups):
+        channel_inds = channel_groups == channel_group
+        path = find_curves(
+            points_data[channel_inds],
+            np.array(line_ids)[channel_inds],
+            min_edges=3,
+            max_distance=15,
+            damping=0.75,
+        )
+        # if len(path) > 0:
+        #     ax = plt.subplot()
+        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+        #     lc = mc.LineCollection(
+        #         [
+        #             [
+        #                 points_data[channel_inds][edge[0], :],
+        #                 points_data[channel_inds][edge[1], :],
+        #             ]
+        #             for edge in path[0]
+        #         ]
+        #     )
+        #     ax.add_collection(lc)
+        #     plt.show()
+
+        if len(path) == 0:
+            continue
+
+        result_curves += path
+
+    assert len(result_curves) == 4
+    assert len(result_curves[3]) == 8
+
+    # Test with different angle to get zig-zag line
+    result_curves = []
+    for channel_group in np.unique(channel_groups):
+        channel_inds = channel_groups == channel_group
+        path = find_curves(
+            points_data[channel_inds],
+            np.array(line_ids)[channel_inds],
+            min_edges=3,
+            max_distance=50,
+            damping=1,
+        )
+        # if len(path) > 0:
+        #     ax = plt.subplot()
+        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
+        #     lc = mc.LineCollection(
+        #         [
+        #             [
+        #                 points_data[channel_inds][edge[0], :],
+        #                 points_data[channel_inds][edge[1], :],
+        #             ]
+        #             for edge in path[0]
+        #         ]
+        #     )
+        #     ax.add_collection(lc)
+        #     plt.show()
+
+        result_curves += path
+
+    assert [len(curve) for curve in result_curves] == [9, 9, 9, 9]
