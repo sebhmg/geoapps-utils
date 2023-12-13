@@ -25,7 +25,7 @@ def find_curves(  # pylint: disable=too-many-locals
     :param ids: Ids for points.
     :param min_edges: Minimum number of points in a curve.
     :param max_distance: Maximum distance between points in a curve.
-    :param damping: Maximum angle between points in a curve, in radians.
+    :param damping: Damping factor between [0, 1] for the path roughness.
 
     :return: List of curves.
     """
