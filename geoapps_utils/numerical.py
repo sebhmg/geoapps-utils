@@ -146,7 +146,7 @@ def walk_edges(  # pylint: disable=too-many-arguments
     vertices: np.ndarray,
     damping: float = 0.0,
     mask: np.ndarray | None = None,
-):
+) -> tuple[list, np.ndarray]:
     """
     Find all edges connected to a point.
 
