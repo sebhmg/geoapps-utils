@@ -151,7 +151,7 @@ def walk_edges(  # pylint: disable=too-many-arguments
     Find all edges connected to a point.
 
     :param path: Current list of edges forming a path.
-    :param ind: Index of incoming edge.
+    :param incoming: Incoming edge.
     :param edges: All edges.
     :param vertices: Direction of the edges.
     :param damping: Damping factor between [0, 1] for the path roughness.
