@@ -41,7 +41,7 @@ def get_locations(workspace: Workspace, entity: UUID | Points | GridObject | Dat
     if isinstance(entity_obj, Points):
         locations = entity_obj.vertices
     elif isinstance(entity_obj, GridObject):
-        locations = entity_obj.vertices
+        locations = entity_obj.centroids
     else:
         locations = get_locations(workspace, entity_obj.parent)
 
