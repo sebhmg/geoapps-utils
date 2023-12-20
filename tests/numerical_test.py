@@ -59,6 +59,7 @@ def test_weighted_average_same_distance():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.5) < 1e-10
 
 
@@ -68,6 +69,7 @@ def test_weighted_average_two_far_points():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.5) < 1e-10
 
 
@@ -77,6 +79,7 @@ def test_weighted_average_one_far_point():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.0) < 1e-10
 
 
