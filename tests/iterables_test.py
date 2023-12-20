@@ -62,7 +62,7 @@ def test_sorted_alphanumeric_list():
 
 
 def test_sorted_children_dict(tmp_path: Path):
-    workspace = Workspace(tmp_path / "test.geoh5")
+    workspace = Workspace.create(tmp_path / "test.geoh5")
     n_x, n_y = 10, 15
     grid = Grid2D.create(
         workspace,
