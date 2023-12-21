@@ -30,7 +30,7 @@
     :alt: pre-commit.ci status
     :target: https://results.pre-commit.ci/latest/github/MiraGeoscience/geoapps-utils/develop
 
-.. |maintainability| image:: https://api.codeclimate.com/v1/badges/_token_/maintainability
+.. |maintainability| image:: https://api.codeclimate.com/v1/badges/f1aace7a543ba2bf14e4/maintainability
    :target: https://codeclimate.com/github/MiraGeoscience/geoapps-utils/maintainability
    :alt: Maintainability
 
