@@ -28,6 +28,8 @@ def test_get_locations_centroids():
     # Test get_locations with centroids
     base_locs = get_locations(workspace, grid)
 
+    assert base_locs.shape == (n_x * n_y, 3)
+
     # Test get_locations with a child of the grid
     test_data = grid.add_data({"test_data": {"values": np.ones(10 * 15)}})
     data_locs = get_locations(workspace, test_data)
