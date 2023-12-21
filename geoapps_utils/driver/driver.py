@@ -44,12 +44,12 @@ class BaseDriver(ABC):
         return self._out_group
 
     @property
-    def params(self) -> BaseParams:
+    def params(self) -> BaseParams | BaseData:
         """Application parameters."""
         return self._params
 
     @params.setter
-    def params(self, val: BaseParams):
+    def params(self, val: BaseParams | BaseData):
         if not isinstance(val, BaseParams):
             raise TypeError("Parameters must be of type BaseParams.")
         self._params = val
