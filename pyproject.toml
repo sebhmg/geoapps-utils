@@ -1,34 +1,73 @@
 [tool.poetry]
-name = "geoapps_utils"
-version = "0.1.0"
+name = "geoapps-utils"
+version = "0.2.0"
+license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
-packages = [
-     { include = "geoapps_utils" }
+repository = "https://github.com/MiraGeoscience/geoapps-utils"
+homepage = "https://mirageoscience.com"
+readme = "README.rst"
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Natural Language :: English",
 ]
 
 [tool.poetry.scripts]
 
-
 [tool.poetry.dependencies]
 python = "^3.9, <3.11"
+numpy = "~1.23.5"  # also in geoh5py
+geoh5py = {version = "~0.8.0rc1", source = "pypi", allow-prereleases = true}
+dash = {version = "~2.12", optional = true}
+plotly = {version = "~5.13.1", optional = true}
+scipy = {version = "~1.10.1"}
+pyqtwebengine = {version = "~5.15", optional = true}
+pyside2 = {version = "~5.15", optional = true}
 
-## dependencies for a minimal environment
-numpy = "~1.23.5"
-geoh5py = {version = "~0.8.0a3", source = "pypi", allow-prereleases = true}
+## indirect dependencies, forcing them here for installation through Conda not pip
+Pillow = "^10.0.1"  # from geoh5py
+h5py = "^3.2.1"  # from geoh5py
 
-ipyfilechooser = {version = "~0.6.0"}
-ipywidgets = {version = "^7.6.5"}
+## about pip dependencies
+# to be specified to work with conda-lock
+# - from PyPI: my_package = { version = "1.2.3", source = "pypi" }
+# - from URL:
+#   - for a tags:   my_package = { url = "https://github.com/ORGANISATION/REPO/archive/refs/tags/VERSION_TAG.zip#sha256=" }
+#   - for a branch: my_package = { url = "https://github.com/ORGANISATION/REPO/archive/refs/heads/BRANCH.zip#sha256=" }
+# Note - conda-lock does not support the syntax: my_package = { git = ... }
+#        while poetry2conda supports only { git = "...", tag = "..." }, and not { url = ... }
 
 [tool.poetry.dev-dependencies]
+Pygments = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
-toml = "*"
+tomli = "*"
+
+[tool.poetry.extras]
+dash = [
+    "dash",
+    "pyqtwebengine",
+    "plotly",
+    "pyside2",
+]
 
 [tool.conda-lock]
 platforms = ['win-64', 'linux-64']
 channels = ['conda-forge']
+
+[tool.conda-lock.dependencies]
+libblas = "*=*mkl"
 
 [tool.isort]
 # settings for compatibility between ``isort`` and ``black`` formatting
@@ -40,6 +79,40 @@ line_length = 88
 
 [tool.black]
 # defaults are just fine
+
+[tool.mypy]
+warn_unused_configs = true
+ignore_missing_imports = true
+scripts_are_modules = true
+show_error_context = true
+show_column_numbers = true
+check_untyped_defs = true
+
+plugins = [
+#    'numpy.typing.mypy_plugin'
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov geoapps_utils --cov-report html --cov-report term-missing:skip-covered"
+
+[tool.coverage.run]
+branch = true
+source = ["geoapps_utils"]
+omit = ["geoapps_utils/application/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "raise NotImplementedError",
+    "pass",
+    "if TYPE_CHECKING",
+    "pragma: no cover"
+]
+
+fail_under = 79.5
+
+[tool.coverage.html]
+skip_empty = true
+skip_covered = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0", "setuptools"]
