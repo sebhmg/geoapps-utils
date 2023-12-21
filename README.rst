@@ -6,7 +6,7 @@
         :alt: Documentation Status
         :target: https://geoapps-utils.readthedocs.io/en/latest/?badge=latest
 
-.. |coverage| image:: https://codecov.io/gh/MiraGeoscience/geoapps-utils/branch/main/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/MiraGeoscience/geoapps-utils/graph/badge.svg?token=Z0Q0T1U5LH
     :alt: Code coverage
     :target: https://codecov.io/gh/MiraGeoscience/geoapps-utils
 
