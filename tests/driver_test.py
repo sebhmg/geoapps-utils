@@ -14,7 +14,7 @@ from geoapps_utils.driver.params import BaseParams
 
 
 def test_base_driver(tmp_path):
-    workspace = Workspace(tmp_path / "test_workspace.geoh5")
+    workspace = Workspace.create(tmp_path / "test_workspace.geoh5")
     # Create params
     test_params = {
         "monitoring_directory": None,
@@ -37,7 +37,7 @@ def test_base_driver(tmp_path):
 
     class TestDriver(BaseDriver):
         _params: TestParams
-        _params_class = TestParams
+        _params_class: type[BaseParams] = TestParams
         _validations = {}
 
         def __init__(self, params: TestParams):

@@ -1,19 +1,30 @@
-#  Copyright (c) 2023 Mira Geoscience Ltd.
+#  Copyright (c) 2022-2023 Mira Geoscience Ltd.
 #
-#  This file is part of geoapps-utils package.
+#  This file is part of geoapps_utils package.
 #
-#  geoapps-utils is distributed under the terms and conditions of the MIT License
-#  (see LICENSE file at the root of this source code package).
+#  All rights reserved.
 
 from __future__ import annotations
 
 import re
+from pathlib import Path
+
+import tomli as toml
 
 import geoapps_utils
 
 
-def test_version_is_consistent(pyproject: dict):
-    assert geoapps_utils.__version__ == pyproject["tool"]["poetry"]["version"]
+def get_version():
+    path = Path(__file__).resolve().parents[1] / "pyproject.toml"
+
+    with open(str(path), encoding="utf-8") as file:
+        pyproject = toml.loads(file.read())
+
+    return pyproject["tool"]["poetry"]["version"]
+
+
+def test_version_is_consistent():
+    assert geoapps_utils.__version__ == get_version()
 
 
 def test_version_is_semver():
