@@ -6,7 +6,7 @@
         :alt: Documentation Status
         :target: https://geoapps-utils.readthedocs.io/en/latest/?badge=latest
 
-.. |coverage| image:: https://codecov.io/gh/MiraGeoscience/geoapps-utils/branch/develop/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/MiraGeoscience/geoapps-utils/branch/main/graph/badge.svg
     :alt: Code coverage
     :target: https://codecov.io/gh/MiraGeoscience/geoapps-utils
 
@@ -26,13 +26,13 @@
     :alt: Python versions
     :target: https://pypi.python.org/pypi/geoapps-utils/
 
-.. |precommit_ci| image:: https://results.pre-commit.ci/badge/github/MiraGeoscience/geoapps-utils/develop.svg
+.. |precommit_ci| image:: https://results.pre-commit.ci/badge/github/MiraGeoscience/geoapps-utils/main.svg
     :alt: pre-commit.ci status
-    :target: https://results.pre-commit.ci/latest/github/MiraGeoscience/geoapps-utils/develop
+    :target: https://results.pre-commit.ci/latest/github/MiraGeoscience/geoapps-utils/main
 
 .. |maintainability| image:: https://api.codeclimate.com/v1/badges/f1aace7a543ba2bf14e4/maintainability
-   :target: https://codeclimate.com/github/MiraGeoscience/geoapps-utils/maintainability
-   :alt: Maintainability
+    :alt: Maintainability
+    :target: https://codeclimate.com/github/MiraGeoscience/geoapps-utils/maintainability
 
 
 geoapps-utils
