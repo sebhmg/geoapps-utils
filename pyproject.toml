@@ -35,8 +35,8 @@ pyqtwebengine = {version = "~5.15", optional = true}
 pyside2 = {version = "~5.15", optional = true}
 
 ## indirect dependencies, forcing them here for installation through Conda not pip
-Pillow = "*"  # from geoh5py
-h5py = "*"  # from geoh5py
+Pillow = "^10.0.1"  # from geoh5py
+h5py = "^3.2.1"  # from geoh5py
 
 ## about pip dependencies
 # to be specified to work with conda-lock
