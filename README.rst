@@ -1,9 +1,10 @@
-|coverage| |maintainability| |precommit_ci| |docs| |style| |version| |status| |pyversions|
+|coverage| |maintainability| |precommit_ci| |style| |version| |status| |pyversions|
 
 
-.. |docs| image:: https://readthedocs.org/projects/geoapps-utils/badge/
-    :alt: Documentation Status
-    :target: https://geoapps-utils.readthedocs.io/en/latest/?badge=latest
+..
+    .. |docs| image:: https://readthedocs.org/projects/geoapps-utils/badge/
+        :alt: Documentation Status
+        :target: https://geoapps-utils.readthedocs.io/en/latest/?badge=latest
 
 .. |coverage| image:: https://codecov.io/gh/MiraGeoscience/geoapps-utils/branch/develop/graph/badge.svg
     :alt: Code coverage
@@ -43,9 +44,10 @@ used by `geoapps <https://github.com/MiraGeoscience/geoapps>`_.
    :local:
    :depth: 3
 
-Documentation
-^^^^^^^^^^^^^
-`Online documentation <https://geoapps-utils.readthedocs.io/en/latest/>`_
+..
+    Documentation
+    ^^^^^^^^^^^^^
+    `Online documentation <https://geoapps-utils.readthedocs.io/en/latest/>`_
 
 
 Installation
