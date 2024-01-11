@@ -38,9 +38,9 @@ if !errorlevel! neq 0 (
   exit /B !errorlevel!
 )
 
-if exist %project_dir%\..\geoh5py\ (
-  call !MY_CONDA_EXE! run -p %env_path% pip install --upgrade --force-reinstall -e %project_dir%\..\geoh5py
-)
+@REM if exist %project_dir%\..\geoh5py\ (
+@REM   call !MY_CONDA_EXE! run -p %env_path% pip install --upgrade --force-reinstall -e %project_dir%\..\geoh5py
+@REM )
 
 if !errorlevel! neq 0 (
   pause
