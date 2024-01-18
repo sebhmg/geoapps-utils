@@ -161,7 +161,7 @@ def curves_data_fixture() -> list:
     curve1 = 5 * np.sin(y_array) + 10  # curve
     curve2 = 0.7 * y_array + 20  # crossing lines
     curve3 = -0.4 * y_array + 50
-    curve4 = (80 + np.random.randn(len(y_array)) * 0.25).tolist()  # zig-zag
+    curve4 = np.ones_like(y_array) * 80  # zig-zag
     curve4[3] = 85
     curve5 = [None] * (len(y_array) - 1)  # short line
     curve5[0:1] = [60, 62]  # type: ignore
