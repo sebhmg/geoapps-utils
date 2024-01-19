@@ -99,7 +99,7 @@ def test_overlapping_limits():
 
     # Multiple overlap
     width = np.random.randint(2, 10)
-    size = np.random.randint(width, 10 * width)
+    size = np.random.randint(2 * width, 10 * width)
     overlap = 0.25
     limits = get_overlapping_limits(size, width, overlap=overlap)
 
