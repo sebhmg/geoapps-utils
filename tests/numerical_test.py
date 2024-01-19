@@ -196,20 +196,6 @@ def test_find_curves(curves_data: list):
             max_distance=15,
             damping=0.75,
         )
-        # if len(path) > 0:
-        #     ax = plt.subplot()
-        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        #     lc = mc.LineCollection(
-        #         [
-        #             [
-        #                 points_data[channel_inds][edge[0], :],
-        #                 points_data[channel_inds][edge[1], :],
-        #             ]
-        #             for edge in path[0]
-        #         ]
-        #     )
-        #     ax.add_collection(lc)
-        #     plt.show()
 
         if len(path) == 0:
             continue
@@ -230,20 +216,6 @@ def test_find_curves(curves_data: list):
             max_distance=50,
             damping=1,
         )
-        # if len(path) > 0:
-        #     ax = plt.subplot()
-        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        #     lc = mc.LineCollection(
-        #         [
-        #             [
-        #                 points_data[channel_inds][edge[0], :],
-        #                 points_data[channel_inds][edge[1], :],
-        #             ]
-        #             for edge in path[0]
-        #         ]
-        #     )
-        #     ax.add_collection(lc)
-        #     plt.show()
 
         result_curves += path
 
