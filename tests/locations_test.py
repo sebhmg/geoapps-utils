@@ -1,15 +1,21 @@
-#  Copyright (c) 2023 Mira Geoscience Ltd.
+#  Copyright (c) 2023-2024 Mira Geoscience Ltd.
 #
 #  This file is part of geoapps-utils.
 #
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
+from __future__ import annotations
+
 import numpy as np
 from geoh5py import Workspace
 from geoh5py.objects import Grid2D, Points
 
-from geoapps_utils.locations import get_locations
+from geoapps_utils.locations import (
+    get_locations,
+    get_overlapping_limits,
+    map_indices_to_coordinates,
+)
 
 
 def test_get_locations_centroids():
@@ -51,3 +57,60 @@ def test_get_locations_vertices():
         vertices=vertices,
     )
     assert np.all(get_locations(workspace, points) == vertices)
+
+
+def test_map_indices_to_coordinates():
+    workspace = Workspace()
+    n_x, n_y = 10, 15
+    u_size, v_size = 20.0, 30.0
+    grid = Grid2D.create(
+        workspace,
+        origin=[0, 0, 0],
+        u_cell_size=u_size,
+        v_cell_size=v_size,
+        u_count=n_x,
+        v_count=n_y,
+        name="test_grid",
+        allow_move=False,
+    )
+    y, x = np.meshgrid(
+        np.arange(n_y) * v_size + v_size / 2, np.arange(n_x) * u_size + u_size / 2
+    )
+
+    ind_x = np.random.randint(0, n_x, 20)
+    ind_y = np.random.randint(0, n_y, 20)
+
+    indices = np.c_[ind_x, ind_y]
+
+    np.testing.assert_array_equal(
+        map_indices_to_coordinates(grid, indices),
+        np.c_[
+            x[indices[:, 0], indices[:, 1]].flatten(order="F"),
+            y[indices[:, 0], indices[:, 1]].flatten(order="F"),
+            np.zeros(20),
+        ],
+    )
+
+
+def test_overlapping_limits():
+    # Width too large
+    limits = get_overlapping_limits(2, 5, overlap=0.25)
+    assert limits == [[0, 2]]
+
+    # Multiple overlap
+    width = np.random.randint(2, 10)
+    size = np.random.randint(2 * width, 10 * width)
+    overlap = 0.25
+    limits = get_overlapping_limits(size, width, overlap=overlap)
+
+    assert all((lim[1] - lim[0]) == width for lim in limits)
+    assert all(
+        width / (limits[ind][1] - limits[ind + 1][0]) >= (1 + overlap)
+        for ind in range(len(limits) - 1)
+    )
+
+    # No overlap
+    overlap = 0
+    limits = get_overlapping_limits(width * 4, width, overlap=overlap)
+
+    assert limits[0][1] == limits[1][0]

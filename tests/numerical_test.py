@@ -1,11 +1,14 @@
-#  Copyright (c) 2023 Mira Geoscience Ltd.
+#  Copyright (c) 2023-2024 Mira Geoscience Ltd.
 #
 #  This file is part of geoapps-utils.
 #
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
+from __future__ import annotations
+
 import numpy as np
+import pytest
 from numpy import random
 
 from geoapps_utils.numerical import (
@@ -65,6 +68,7 @@ def test_weighted_average_same_distance():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.5) < 1e-10
 
 
@@ -74,6 +78,7 @@ def test_weighted_average_two_far_points():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.5) < 1e-10
 
 
@@ -83,6 +88,7 @@ def test_weighted_average_one_far_point():
     xyz_out = np.array([[0, 0, 0]])
     values = [np.array([99, 100])]
     out = weighted_average(xyz_in, xyz_out, values)
+    assert isinstance(out, list)
     assert (out[0] - 99.0) < 1e-10
 
 
@@ -145,7 +151,8 @@ def test_weighted_average_threshold():
     assert out[0] == 2
 
 
-def test_find_curves():  # pylint: disable=too-many-locals
+@pytest.fixture(name="curves_data")
+def curves_data_fixture() -> list:
     # Create test data
     # Survey lines
     y_array = np.linspace(0, 50, 10)
@@ -154,7 +161,7 @@ def test_find_curves():  # pylint: disable=too-many-locals
     curve1 = 5 * np.sin(y_array) + 10  # curve
     curve2 = 0.7 * y_array + 20  # crossing lines
     curve3 = -0.4 * y_array + 50
-    curve4 = (80 + np.random.randn(len(y_array)) * 0.25).tolist()  # zig-zag
+    curve4 = np.ones_like(y_array) * 80  # zig-zag
     curve4[3] = 85
     curve5 = [None] * (len(y_array) - 1)  # short line
     curve5[0:1] = [60, 62]  # type: ignore
@@ -167,9 +174,12 @@ def test_find_curves():  # pylint: disable=too-many-locals
         for x_coord, y_coord, line_id in zip(curve, y_array, line_ids_array):
             if x_coord is not None:
                 data.append([x_coord, y_coord, line_id, channel_group])
+    return data
 
+
+def test_find_curves(curves_data: list):
     # Random shuffle the input
-    data = np.array(data)
+    data = np.array(curves_data)
     np.random.shuffle(data)
 
     points_data = data[:, :2]
@@ -186,20 +196,6 @@ def test_find_curves():  # pylint: disable=too-many-locals
             max_distance=15,
             damping=0.75,
         )
-        # if len(path) > 0:
-        #     ax = plt.subplot()
-        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        #     lc = mc.LineCollection(
-        #         [
-        #             [
-        #                 points_data[channel_inds][edge[0], :],
-        #                 points_data[channel_inds][edge[1], :],
-        #             ]
-        #             for edge in path[0]
-        #         ]
-        #     )
-        #     ax.add_collection(lc)
-        #     plt.show()
 
         if len(path) == 0:
             continue
@@ -220,20 +216,6 @@ def test_find_curves():  # pylint: disable=too-many-locals
             max_distance=50,
             damping=1,
         )
-        # if len(path) > 0:
-        #     ax = plt.subplot()
-        #     plt.scatter(points_data[:, 0], points_data[:, 1], c=np.hstack(line_ids))
-        #     lc = mc.LineCollection(
-        #         [
-        #             [
-        #                 points_data[channel_inds][edge[0], :],
-        #                 points_data[channel_inds][edge[1], :],
-        #             ]
-        #             for edge in path[0]
-        #         ]
-        #     )
-        #     ax.add_collection(lc)
-        #     plt.show()
 
         result_curves += path
 
