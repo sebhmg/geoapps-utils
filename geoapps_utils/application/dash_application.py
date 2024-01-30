@@ -679,14 +679,12 @@ class MainWindow(QMainWindow):
         ):
             return
 
-        if width_diff < height_diff:
-            if width > width_diff:
-                new_width = width_diff
-                new_height = height * self.aspect_ratio
-        else:
-            if height > height_diff:
-                new_height = height_diff
-                new_width = width * self.aspect_ratio
+        if width_diff < height_diff and width > width_diff:
+            new_width = width_diff
+            new_height = height * self.aspect_ratio
+        elif height > height_diff:
+            new_height = height_diff
+            new_width = width * self.aspect_ratio
 
         width_margin = np.floor((width - new_width) / 2)
         height_margin = np.floor((height - new_height) / 2)
