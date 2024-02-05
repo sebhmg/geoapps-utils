@@ -180,20 +180,32 @@ class BaseDashApplication(ABC):
         return output_dict
 
     @staticmethod
-    def init_vals(layout: list[Component], ui_json_data: dict):
+    def init_vals(layout: list[Component], ui_json_data: dict, kwargs: dict = None):
         """
         Initialize dash components in layout from ui_json_data.
 
         :param layout: Dash layout.
         :param ui_json_data: Uploaded ui.json data.
         """
+
         for comp in layout:
-            BaseDashApplication._init_component(comp, ui_json_data)
+            BaseDashApplication._init_component(comp, ui_json_data, kwargs=kwargs)
 
     @staticmethod
-    def _init_component(comp: Component, ui_json_data: dict):
-        if hasattr(comp, "children") and not isinstance(comp, dcc.Markdown):
-            BaseDashApplication.init_vals(comp.children, ui_json_data)
+    def _init_component(comp: Component, ui_json_data: dict, kwargs: dict = None):
+        if isinstance(comp, dcc.Markdown):
+            return
+        if hasattr(comp, "children"):
+            BaseDashApplication.init_vals(comp.children, ui_json_data, kwargs)
+            return
+
+        if (
+            kwargs is not None
+            and hasattr(comp, "id")
+            and comp.id in kwargs
+            and hasattr(comp, kwargs[comp.id]["property"])
+        ):
+            setattr(comp, kwargs[comp.id]["property"], kwargs[comp.id]["value"])
             return
 
         if hasattr(comp, "id") and comp.id in ui_json_data:
