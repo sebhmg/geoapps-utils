@@ -11,12 +11,14 @@ import numpy as np
 from scipy.spatial import Delaunay, cKDTree
 
 
-def find_curves(  # pylint: disable=too-many-locals
+def find_curves(  # pylint: disable=too-many-locals, too-many-arguments
     vertices: np.ndarray,
     ids: np.ndarray,
-    min_edges: int,
-    max_distance: float,
-    damping: float,
+    min_edges: int = 1,
+    max_distance: float = np.inf,
+    damping: float = 1,
+    azimuth: float | None = None,
+    azimuth_tol: float = 15,
 ) -> list[list[list[float]]]:
     """
     Find curves in a set of points.
@@ -26,6 +28,8 @@ def find_curves(  # pylint: disable=too-many-locals
     :param min_edges: Minimum number of points in a curve.
     :param max_distance: Maximum distance between points in a curve.
     :param damping: Damping factor between [0, 1] for the path roughness.
+    :param azimuth: Filter angle (degree) on segments orientation.
+    :param azimuth_tol: Tolerance (degree) on the azimuth.
 
     :return: List of curves.
     """
@@ -53,6 +57,10 @@ def find_curves(  # pylint: disable=too-many-locals
     edge_ids = ids[edges]
     edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
 
+    if azimuth is not None:
+        ind = filter_segments_orientation(vertices, edges, azimuth, azimuth_tol)
+        edges = edges[ind]
+
     # Walk edges until no more edges can be added
     mask = np.ones(vertices.shape[0], dtype=bool)
     out_curves = []
@@ -73,6 +81,30 @@ def find_curves(  # pylint: disable=too-many-locals
         out_curves.append(path)
 
     return out_curves
+
+
+def filter_segments_orientation(
+    vertices: np.ndarray, edges: np.ndarray, azimuth: float, azimuth_tol: float
+):
+    """
+    Filter segments orientation.
+
+    :param vertices: Vertices for points.
+    :param edges: Edges for points.
+    :param azimute: Filter angle (degree) on segments orientation, clockwise from North.
+    :param azimuth_tol: Tolerance (degree) on the azimuth.
+
+    :return: Array of boolean.
+    """
+    vectors = vertices[edges[:, 1], :] - vertices[edges[:, 0], :]
+    test_vector = np.array([np.sin(np.deg2rad(azimuth)), np.cos(np.deg2rad(azimuth))])
+
+    angles = np.arccos(np.dot(vectors, test_vector) / np.linalg.norm(vectors, axis=1))
+
+    return np.logical_or(
+        np.abs(angles) < np.deg2rad(azimuth_tol),
+        np.abs(angles - np.pi) < np.deg2rad(azimuth_tol),
+    )
 
 
 def running_mean(
