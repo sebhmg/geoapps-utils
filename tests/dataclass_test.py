@@ -19,8 +19,8 @@ def test_dataclass_valid_values(tmp_path):
 
     valid_params = {
         "monitoring_directory": workspace.h5file,
-        "workspace_geoh5": workspace.h5file,
-        "geoh5": workspace.h5file,
+        "workspace_geoh5": workspace,
+        "geoh5": workspace,
         "run_command": "test.driver",
         "title": "test title",
         "conda_environment": "test_env",
@@ -51,8 +51,7 @@ def test_dataclass_invalid_values(tmp_path):
         "run_command": "test.driver",
         "title": None,
         "conda_environment": "test_env",
-        "workspace": workspace,
-        "run_command_boolean": False,
+        "workspace": workspace.h5file,
     }
 
     with pytest.raises(ValidationError) as e:

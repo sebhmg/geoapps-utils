@@ -6,38 +6,79 @@
 #  (see LICENSE file at the root of this source code package).
 
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
+from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
-class BaseData(
-    BaseModel,
-    arbitrary_types_allowed=True,
-    extra="ignore",
-):
+class BaseData(BaseModel):
     """
     Core parameters expected by the ui.json file format.
 
+    :param conda_environment: Environment used to run run_command.
+    :param geoh5: Current workspace path.
     :param monitoring_directory: Path to monitoring directory, where .geoh5 files
         are automatically processed by GA.
-    :param workspace_geoh5: Path of the source .geoh5 file where the ui.json was created.
-    :param geoh5: Current workspace path.
-    :param workspace: Current workspace, where results will be exported.
-    :param title: Application title.
     :param run_command: Command to run the application through GA.
-    :param run_command_boolean: Boolean to determine if run command is used.
-    :param conda_environment: Conda environment used to run run_command.
-    :param conda_environment_boolean: Boolean to determine if conda environment is used.
+    :param title: Application title.
+    :param workspace_geoh5: Current workspace, where results will be exported.
     """
 
-    monitoring_directory: Union[str, Path]
-    workspace_geoh5: Union[str, Path]
-    geoh5: Union[str, Path]
-    workspace: Union[str, Workspace]
-    title: str
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    _input_file: InputFile
+    _name: str = "base"
+
+    conda_environment: Optional[str] = None
+    geoh5: Workspace
+    monitoring_directory: Optional[Union[str, Path]] = None
     run_command: str
-    run_command_boolean: bool
-    conda_environment: str
-    conda_environment_boolean: bool
+    title: str
+    workspace_geoh5: Optional[Workspace] = None
+
+    @classmethod
+    def _parse_input(cls, input_data: Union[InputFile, dict]) -> dict:
+        """
+        Parse input parameter and values from ui.json data.
+
+        :param input_data: Dictionary of parameters and values.
+
+        :return: Dataclass of application parameters.
+        """
+        if isinstance(input_data, InputFile) and input_data.data is not None:
+            data = input_data.data
+            data["_input_file"] = input_data
+        elif isinstance(input_data, dict):
+            data = input_data
+        else:
+            raise TypeError("Input data must be a dictionary or InputFile.")
+
+        return data
+
+    def flatten(self) -> dict:
+        """
+        Flatten the parameters to a dictionary.
+
+        :return: Dictionary of parameters.
+        """
+        param_dict = dict(self)
+        out_dict = {}
+        for key, value in param_dict.items():
+            if isinstance(value, BaseModel):
+                out_dict.update(dict(value))
+            else:
+                out_dict.update({key: value})
+
+        return out_dict
+
+    @property
+    def input_file(self) -> InputFile:
+        """Application input file."""
+        return self._input_file
+
+    @property
+    def name(self) -> str:
+        """Application name."""
+        return self._name
