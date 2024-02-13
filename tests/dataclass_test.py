@@ -24,9 +24,6 @@ def test_dataclass_valid_values(tmp_path):
         "run_command": "test.driver",
         "title": "test title",
         "conda_environment": "test_env",
-        "conda_environment_boolean": True,
-        "workspace": workspace,
-        "run_command_boolean": False,
     }
 
     model = BaseData(**valid_params)
