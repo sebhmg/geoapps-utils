@@ -113,7 +113,7 @@ def filter_segments_orientation(
 
     :param vertices: Vertices for points.
     :param edges: Edges for points.
-    :param azimute: Filter angle (degree) on segments orientation, clockwise from North.
+    :param azimuth: Filter angle (degree) on segments orientation, clockwise from North.
     :param azimuth_tol: Tolerance (degree) on the azimuth.
 
     :return: Array of boolean.
