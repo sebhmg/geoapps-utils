@@ -12,6 +12,7 @@ import pytest
 from numpy import random
 
 from geoapps_utils.numerical import (
+    DetectionParameters,
     filter_segments_orientation,
     find_curves,
     running_mean,
@@ -188,14 +189,15 @@ def test_find_curves(curves_data: list):
     channel_groups = data[:, 3]
 
     result_curves = []
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=15,
+        damping=0.75,
+    )
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
         path = find_curves(
-            points_data[channel_inds],
-            np.array(line_ids)[channel_inds],
-            min_edges=3,
-            max_distance=15,
-            damping=0.75,
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
         )
 
         if len(path) == 0:
@@ -208,14 +210,16 @@ def test_find_curves(curves_data: list):
 
     # Test with different angle to get zig-zag line
     result_curves = []
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=50,
+        damping=1,
+    )
+
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
         path = find_curves(
-            points_data[channel_inds],
-            np.array(line_ids)[channel_inds],
-            min_edges=3,
-            max_distance=50,
-            damping=1,
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
         )
 
         result_curves += path
@@ -231,16 +235,18 @@ def test_find_curve_orientation(curves_data: list):
     channel_groups = data[:, 3]
 
     result_curves = []
+
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=15,
+        damping=0.75,
+        azimuth=5,
+        azimuth_tol=10,
+    )
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
         path = find_curves(
-            points_data[channel_inds],
-            np.array(line_ids)[channel_inds],
-            min_edges=3,
-            max_distance=15,
-            damping=0.75,
-            azimuth=5,
-            azimuth_tol=10,
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
         )
 
         if len(path) == 0:
