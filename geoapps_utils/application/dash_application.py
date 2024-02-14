@@ -180,32 +180,40 @@ class BaseDashApplication(ABC):
         return output_dict
 
     @staticmethod
-    def init_vals(layout: list[Component], ui_json_data: dict, kwargs: dict = None):
+    def init_vals(
+        layout: list[Component], ui_json_data: dict, kwargs: dict | None = None
+    ):
         """
         Initialize dash components in layout from ui_json_data.
 
         :param layout: Dash layout.
         :param ui_json_data: Uploaded ui.json data.
+        :param kwargs: Optional properties to set for components.
         """
 
         for comp in layout:
             BaseDashApplication._init_component(comp, ui_json_data, kwargs=kwargs)
 
     @staticmethod
-    def _init_component(comp: Component, ui_json_data: dict, kwargs: dict = None):
+    def _init_component(
+        comp: Component, ui_json_data: dict, kwargs: dict | None = None
+    ):
+        """
+        Initialize dash component from ui_json_data.
+
+        :param comp: Dash component.
+        :param ui_json_data: Uploaded ui.json data.
+        :param kwargs: Optional properties to set for components.
+        """
         if isinstance(comp, dcc.Markdown):
             return
         if hasattr(comp, "children"):
             BaseDashApplication.init_vals(comp.children, ui_json_data, kwargs)
             return
 
-        if (
-            kwargs is not None
-            and hasattr(comp, "id")
-            and comp.id in kwargs
-            and hasattr(comp, kwargs[comp.id]["property"])
-        ):
-            setattr(comp, kwargs[comp.id]["property"], kwargs[comp.id]["value"])
+        if kwargs is not None and hasattr(comp, "id") and comp.id in kwargs:
+            for prop in kwargs[comp.id]:
+                setattr(comp, prop["property"], prop["value"])
             return
 
         if hasattr(comp, "id") and comp.id in ui_json_data:
@@ -225,10 +233,10 @@ class BaseDashApplication(ABC):
                 return
 
             if isinstance(comp, dcc.Checklist):
+                comp.value = []
                 if ui_json_data[comp.id]:
                     comp.value = [True]
-                else:
-                    comp.value = []
+
             else:
                 comp.value = ui_json_data[comp.id]
 
