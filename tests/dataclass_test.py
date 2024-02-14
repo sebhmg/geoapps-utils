@@ -8,33 +8,33 @@
 from __future__ import annotations
 
 import pytest
+from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from geoapps_utils.driver.data import BaseData
 
+WORKSPACE = Workspace()
+VALID_PARAMETERS = {
+    "monitoring_directory": None,
+    "workspace_geoh5": WORKSPACE,
+    "geoh5": WORKSPACE,
+    "run_command": "test.driver",
+    "title": "test title",
+    "conda_environment": "test_env",
+}
 
-def test_dataclass_valid_values(tmp_path):
-    workspace = Workspace(tmp_path / "test.geoh5")
 
-    valid_params = {
-        "monitoring_directory": workspace.h5file,
-        "workspace_geoh5": workspace,
-        "geoh5": workspace,
-        "run_command": "test.driver",
-        "title": "test title",
-        "conda_environment": "test_env",
-    }
-
-    model = BaseData(**valid_params)
+def test_dataclass_valid_values():
+    model = BaseData(**VALID_PARAMETERS)
     output_params = {**model.model_dump()}
 
     for k, v in output_params.items():
         assert output_params[k] == v
 
-    assert len(output_params) == len(valid_params)
+    assert len(output_params) == len(VALID_PARAMETERS) + 1
 
-    for k, v in valid_params.items():
+    for k, v in VALID_PARAMETERS.items():
         assert output_params[k] == v
 
 
@@ -65,3 +65,45 @@ def test_dataclass_invalid_values(tmp_path):
             assert error_param in error_params
         for error_type in ["string_type", "path_type", "missing"]:
             assert error_type in error_types
+
+
+def test_dataclass_input_file():
+    ifile = InputFile(ui_json=VALID_PARAMETERS)
+    model = BaseData.build(ifile)
+
+    assert model.geoh5 == WORKSPACE
+    assert model.flatten() == VALID_PARAMETERS
+    assert model.input_file == ifile
+
+
+def test_nested_model():
+    class GroupParams(BaseModel):
+        value: str
+
+    class NestedModel(BaseData):
+        """
+        Example of nested model
+        """
+
+        _name = "nested"
+        group: GroupParams
+
+        @classmethod
+        def _parse_input(cls, input_data):
+            """
+            Parse input parameter into dicts for nested models.
+            """
+            input_data["group"] = {"value": input_data.pop("value")}
+            return input_data
+
+    valid_params = VALID_PARAMETERS.copy()
+    valid_params["value"] = "test"
+
+    ifile = InputFile(ui_json=valid_params)
+    model = NestedModel.build(ifile)
+
+    assert isinstance(model.group, GroupParams)
+    assert model.group.value == "test"
+    assert model.flatten() == valid_params
+
+    assert model.name == "nested"

@@ -6,11 +6,12 @@
 #  (see LICENSE file at the root of this source code package).
 
 from pathlib import Path
-from typing import Optional, Union
+from typing import Any, Optional, Union
 
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
 from pydantic import BaseModel, ConfigDict
+from typing_extensions import Self
 
 
 class BaseData(BaseModel):
@@ -28,9 +29,9 @@ class BaseData(BaseModel):
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    _input_file: InputFile
     _name: str = "base"
 
+    input_file: Optional[InputFile] = None
     conda_environment: Optional[str] = None
     geoh5: Workspace
     monitoring_directory: Optional[Union[str, Path]] = None
@@ -39,23 +40,34 @@ class BaseData(BaseModel):
     workspace_geoh5: Optional[Workspace] = None
 
     @classmethod
-    def _parse_input(cls, input_data: Union[InputFile, dict]) -> dict:
+    def _parse_input(cls, input_data: dict[str, Any]) -> dict[str, Union[dict, Any]]:
         """
-        Parse input parameter and values from ui.json data.
+        Parse input parameter into dicts for nested models.
+        """
+        return input_data
+
+    @classmethod
+    def build(cls, input_data: Union[InputFile, dict]) -> Self:
+        """
+        Build a dataclass from a dictionary or InputFile.
 
         :param input_data: Dictionary of parameters and values.
 
         :return: Dataclass of application parameters.
         """
+
+        data = input_data
+
         if isinstance(input_data, InputFile) and input_data.data is not None:
             data = input_data.data
-            data["_input_file"] = input_data
-        elif isinstance(input_data, dict):
-            data = input_data
-        else:
+            data["input_file"] = input_data
+
+        if not isinstance(data, dict):
             raise TypeError("Input data must be a dictionary or InputFile.")
 
-        return data
+        nested_data = cls._parse_input(data.copy())
+
+        return cls(**nested_data)
 
     def flatten(self) -> dict:
         """
@@ -71,12 +83,9 @@ class BaseData(BaseModel):
             else:
                 out_dict.update({key: value})
 
-        return out_dict
+        out_dict.pop("input_file", None)
 
-    @property
-    def input_file(self) -> InputFile:
-        """Application input file."""
-        return self._input_file
+        return out_dict
 
     @property
     def name(self) -> str:
