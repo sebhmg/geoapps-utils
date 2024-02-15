@@ -7,25 +7,42 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import numpy as np
+from pydantic import BaseModel
 from scipy.spatial import Delaunay, cKDTree
 
 
-def find_curves(  # pylint: disable=too-many-locals
+class DetectionParameters(BaseModel):
+    """
+    Detection parameters expected by the ui.json file format.
+
+    :param azimuth: Azimuth of the path.
+    :param azimuth_tol: Tolerance for the azimuth of the path.
+    :param damping: Damping factor between [0, 1] for the path roughness.
+    :param min_edges: Minimum number of points in a curve.
+    :param max_distance: Maximum distance between points in a curve.
+    """
+
+    azimuth: Optional[float] = None
+    azimuth_tol: Optional[float] = None
+    damping: float = 0
+    min_edges: int = 1
+    max_distance: Optional[float] = None
+
+
+def find_curves(
     vertices: np.ndarray,
-    ids: np.ndarray,
-    min_edges: int,
-    max_distance: float,
-    damping: float,
+    parts: np.ndarray,
+    detection_params: DetectionParameters = DetectionParameters(),
 ) -> list[list[list[float]]]:
     """
     Find curves in a set of points.
 
     :param vertices: Vertices for points.
-    :param ids: Ids for points.
-    :param min_edges: Minimum number of points in a curve.
-    :param max_distance: Maximum distance between points in a curve.
-    :param damping: Damping factor between [0, 1] for the path roughness.
+    :param parts: Identifier for points belong to common parts.
+    :param detection_params: Detection parameters expected for the parts connection.
 
     :return: List of curves.
     """
@@ -47,11 +64,22 @@ def find_curves(  # pylint: disable=too-many-locals
     distances = np.linalg.norm(vertices[edges[:, 0]] - vertices[edges[:, 1]], axis=1)
     distance_sort = np.argsort(distances)
     edges, distances = edges[distance_sort, :], distances[distance_sort]
-    edges = edges[distances <= max_distance, :]
+
+    if detection_params.max_distance is not None:
+        edges = edges[distances <= detection_params.max_distance, :]
 
     # Reject edges with same vertices id
-    edge_ids = ids[edges]
-    edges = edges[edge_ids[:, 0] != edge_ids[:, 1]]
+    edge_parts = parts[edges]
+    edges = edges[edge_parts[:, 0] != edge_parts[:, 1]]
+
+    if (
+        detection_params.azimuth is not None
+        and detection_params.azimuth_tol is not None
+    ):
+        ind = filter_segments_orientation(
+            vertices, edges, detection_params.azimuth, detection_params.azimuth_tol
+        )
+        edges = edges[ind]
 
     # Walk edges until no more edges can be added
     mask = np.ones(vertices.shape[0], dtype=bool)
@@ -63,16 +91,42 @@ def find_curves(  # pylint: disable=too-many-locals
 
         mask[edges[ind]] = False
         path = [edges[ind]]
-        path, mask = walk_edges(path, edges[ind], edges, vertices, damping, mask=mask)
         path, mask = walk_edges(
-            path, edges[ind][::-1], edges, vertices, damping, mask=mask
+            path, edges[ind], edges, vertices, detection_params.damping, mask=mask
         )
-        if len(path) < min_edges:
+        path, mask = walk_edges(
+            path, edges[ind][::-1], edges, vertices, detection_params.damping, mask=mask
+        )
+        if len(path) < detection_params.min_edges:
             continue
 
         out_curves.append(path)
 
     return out_curves
+
+
+def filter_segments_orientation(
+    vertices: np.ndarray, edges: np.ndarray, azimuth: float, azimuth_tol: float
+):
+    """
+    Filter segments orientation.
+
+    :param vertices: Vertices for points.
+    :param edges: Edges for points.
+    :param azimuth: Filter angle (degree) on segments orientation, clockwise from North.
+    :param azimuth_tol: Tolerance (degree) on the azimuth.
+
+    :return: Array of boolean.
+    """
+    vectors = vertices[edges[:, 1], :] - vertices[edges[:, 0], :]
+    test_vector = np.array([np.sin(np.deg2rad(azimuth)), np.cos(np.deg2rad(azimuth))])
+
+    angles = np.arccos(np.dot(vectors, test_vector) / np.linalg.norm(vectors, axis=1))
+
+    return np.logical_or(
+        np.abs(angles) < np.deg2rad(azimuth_tol),
+        np.abs(angles - np.pi) < np.deg2rad(azimuth_tol),
+    )
 
 
 def running_mean(
