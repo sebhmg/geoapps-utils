@@ -88,14 +88,6 @@ def test_nested_model():
         _name = "nested"
         group: GroupParams
 
-        @classmethod
-        def _parse_input(cls, input_data):
-            """
-            Parse input parameter into dicts for nested models.
-            """
-            input_data["group"] = {"value": input_data.pop("value")}
-            return input_data
-
     valid_params = VALID_PARAMETERS.copy()
     valid_params["value"] = "test"
 

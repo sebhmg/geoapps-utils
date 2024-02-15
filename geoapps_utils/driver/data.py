@@ -44,6 +44,22 @@ class BaseData(BaseModel):
         """
         Parse input parameter into dicts for nested models.
         """
+        for field, info in cls.model_fields.items():
+            if isinstance(info.annotation, type) and issubclass(
+                info.annotation, BaseModel
+            ):
+                field_data = {}
+                for sub_field in info.annotation.model_fields:
+                    if sub_field in input_data:
+                        field_data.update({sub_field: input_data.pop(sub_field)})
+
+                if field in input_data:
+                    raise ValueError(
+                        f"Field {field} defines both a nested model and a value."
+                    )
+
+                input_data.update({field: field_data})
+
         return input_data
 
     @classmethod
@@ -59,7 +75,7 @@ class BaseData(BaseModel):
         data = input_data
 
         if isinstance(input_data, InputFile) and input_data.data is not None:
-            data = input_data.data
+            data = input_data.data.copy()
             data["input_file"] = input_data
 
         if not isinstance(data, dict):
