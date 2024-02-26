@@ -86,7 +86,15 @@ def get_overlapping_limits(size: int, width: int, overlap: float = 0.25) -> list
         return [[0, int(size)]]
 
     n_tiles = int(np.ceil((1 + overlap) * size / width))
-    left = np.linspace(0, size - width, n_tiles)
-    limits = np.c_[left, left + width].astype(int)
+
+    def left_limits(n_tiles):
+        left = np.linspace(0, size - width, n_tiles)
+        return np.c_[left, left + width].astype(int)
+
+    limits = left_limits(n_tiles)
+
+    while np.any((limits[:-1, 1] - limits[1:, 0]) / width < overlap):
+        n_tiles += 1
+        limits = left_limits(n_tiles)
 
     return limits.tolist()
