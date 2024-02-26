@@ -83,7 +83,7 @@ class BaseDashApplication(ABC):
 
         assert self.params is not None, "No parameters provided."
         self.workspace = self.params.geoh5
-        self.workspace.open()
+
         if self._driver_class is not None:
             self.driver = self._driver_class(self.params)
 
