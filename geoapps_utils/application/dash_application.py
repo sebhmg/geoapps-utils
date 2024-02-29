@@ -14,12 +14,10 @@ import os
 import signal
 import socket
 import sys
-import tempfile
 import threading
 import uuid
 from abc import ABC, abstractmethod
 from pathlib import Path
-from time import time
 from typing import Any
 
 import numpy as np
@@ -46,12 +44,8 @@ class BaseDashApplication(ABC):
     Base class for geoapps dash applications
     """
 
-    _params = None
-    _param_class = BaseParams
+    _param_class: type = BaseParams
     _driver_class = None
-    _workspace = None
-    _app_initializer: dict | None = None
-    _ui_json_data: dict | None = None
 
     def __init__(
         self,
@@ -62,11 +56,15 @@ class BaseDashApplication(ABC):
         """
         Set initial ui_json_data from input file and open workspace.
         """
-        if params is not None:
+        self._app_initializer: dict | None = None
+        self._workspace: Workspace | None = None
+
+        if isinstance(params, BaseParams):
             # Launched from notebook
             # Params for initialization are coming from params
             # ui_json_data is provided
             self.params = params
+
         elif (
             ui_json is not None
             and ui_json.path is not None
@@ -76,14 +74,24 @@ class BaseDashApplication(ABC):
             # Params for initialization are coming from ui_json
             # ui_json_data starts as None
             self.params = self._param_class(ui_json)
-            input_file = self.params.input_file
-            if input_file is not None:
-                ui_json_data = input_file.demote(self.params.to_dict())
-        self._ui_json_data = ui_json_data
+
+        input_file = self.params.input_file
+
+        if input_file is None:
+            raise ValueError("No input file provided.")
+
+        if ui_json_data is not None:
+            with fetch_active_workspace(self.params.geoh5):
+                for key, value in ui_json_data.items():
+                    setattr(self.params, key, value)
+
+        json_data = input_file.demote(self.params.to_dict())
+
+        self._ui_json_data = json_data
 
         assert self.params is not None, "No parameters provided."
         self.workspace = self.params.geoh5
-        self.workspace.open()
+
         if self._driver_class is not None:
             self.driver = self._driver_class(self.params)
 
@@ -254,7 +262,7 @@ class BaseDashApplication(ABC):
         return {"display": "none"}
 
     @property
-    def params(self) -> BaseParams | None:
+    def params(self) -> BaseParams:
         """
         Application parameters
         """
@@ -291,8 +299,6 @@ class ObjectSelection:
     opens a Qt window to run an app.
     """
 
-    _app_initializer: dict | None = None
-
     def __init__(
         self,
         app_name: str,
@@ -301,6 +307,7 @@ class ObjectSelection:
         param_class: type[BaseParams],
         **kwargs,
     ):
+        self._app_initializer: dict | None = None
         self._app_name = None
         self._app_class = BaseDashApplication
         self._param_class = BaseParams
@@ -528,47 +535,11 @@ class ObjectSelection:
         ):
             return ""
 
-        # Make new workspace with only the selected object
-        obj = self.workspace.get_entity(uuid.UUID(objects))[0]
-        if not isinstance(obj, Entity):
-            return ""
-
-        temp_geoh5 = self.workspace.name + "_" + f"{time():.0f}.geoh5"
-        with tempfile.TemporaryDirectory() as tempdir_name:
-            tempdir = Path(tempdir_name)
-            temp_workspace = Workspace.create(tempdir / temp_geoh5)
-
-            # Update ui.json with temp_workspace to pass initialize scatter plot app
-            param_dict = self.params.to_dict()
-            param_dict["geoh5"] = temp_workspace
-
-            with fetch_active_workspace(temp_workspace), fetch_active_workspace(
-                self.workspace
-            ):
-                param_dict["objects"] = obj.copy(
-                    parent=temp_workspace, copy_children=True
-                )
-
-                if hasattr(obj, "property_groups"):
-                    self._copy_property_groups(obj.property_groups, param_dict)
-
-            new_params = self.param_class(**param_dict)
-
-            temp_ui_json_name = temp_geoh5.replace(".geoh5", ".ui.json")
-            new_params.write_input_file(
-                name=temp_ui_json_name,
-                path=tempdir_name,
-                validate=False,
-            )
-
-            ifile = InputFile.read_ui_json(tempdir / temp_ui_json_name)
-            ui_json_data = ifile.demote(ifile.data)
-
         # Start server
         port = ObjectSelection.get_port()
         threading.Thread(
             target=self.start_server,
-            args=(port, self.app_class, ifile, ui_json_data, new_params),
+            args=(port, self.app_class, None, None, self.params),
             daemon=True,
         ).start()
 
