@@ -39,9 +39,10 @@ class BaseData(BaseModel):
     title: str
     workspace_geoh5: Optional[Workspace] = None
 
-
     @staticmethod
-    def model_to_dict(base_model: BaseModel, data: dict[str, Any]) -> dict[str, Union[dict, Any]]:
+    def model_to_dict(
+        base_model: BaseModel, data: dict[str, Any]
+    ) -> dict[str, Union[dict, Any]]:
         """
         Recursively replace BaseModel objects with dictionary of 'data' values.
 
@@ -60,7 +61,6 @@ class BaseData(BaseModel):
                     update[field] = data.get(field, info.default)
 
         return update
-
 
     @classmethod
     def build(cls, input_data: Union[InputFile, dict]) -> Self:
@@ -101,7 +101,6 @@ class BaseData(BaseModel):
                 out_dict.update({key: value})
 
         return out_dict
-
 
     def flatten(self) -> dict:
         """
