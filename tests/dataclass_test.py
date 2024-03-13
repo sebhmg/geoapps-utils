@@ -95,7 +95,7 @@ def test_dataclass_input_file():
 
 def test_pydantic_validates_nested_models():
 
-    with pytest.raises(ValidationError) as e:
+    with pytest.raises(ValidationError):
         TestModel(
             name="test",
             value=1.0,
@@ -108,7 +108,7 @@ def test_pydantic_validates_nested_models():
             ),
         )
 
-    with pytest.raises(ValidationError) as e:
+    with pytest.raises(ValidationError):
         TestModel(
             **{
                 "name": "test",
