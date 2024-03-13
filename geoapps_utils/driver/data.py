@@ -33,18 +33,18 @@ class BaseData(BaseModel):
 
     _name: str = "base"
 
-    input_file: Optional[InputFile] = None
-    conda_environment: Optional[str] = None
+    input_file: InputFile | None = None
+    conda_environment: str | None = None
     geoh5: Workspace
-    monitoring_directory: Optional[Union[str, Path]] = None
+    monitoring_directory: str | Path | None = None
     run_command: str
     title: str
-    workspace_geoh5: Optional[Workspace] = None
+    workspace_geoh5: Workspace | None = None
 
     @staticmethod
     def collect_input_from_dict(
         base_model: BaseModel, data: dict[str, Any]
-    ) -> dict[str, Union[dict, Any]]:
+    ) -> dict[str, dict | Any]:
         """
         Recursively replace BaseModel objects with dictionary of 'data' values.
 
@@ -67,7 +67,7 @@ class BaseData(BaseModel):
         return update
 
     @classmethod
-    def build(cls, input_data: Union[InputFile, dict]) -> Self:
+    def build(cls, input_data: InputFile | dict) -> Self:
         """
         Build a dataclass from a dictionary or InputFile.
 
