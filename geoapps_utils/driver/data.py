@@ -5,12 +5,14 @@
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Any, Optional, Union
 
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
-from pydantic import BaseModel, ConfigDict, PydanticUndefinedAnnotation
+from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
 
@@ -40,7 +42,7 @@ class BaseData(BaseModel):
     workspace_geoh5: Optional[Workspace] = None
 
     @staticmethod
-    def model_to_dict(
+    def collect_input_from_dict(
         base_model: BaseModel, data: dict[str, Any]
     ) -> dict[str, Union[dict, Any]]:
         """
@@ -55,7 +57,9 @@ class BaseData(BaseModel):
             if isinstance(info.annotation, type) and issubclass(
                 info.annotation, BaseModel
             ):
-                update[field] = BaseData.model_to_dict(info.annotation, data)
+                update[field] = BaseData.collect_input_from_dict(
+                    info.annotation, data  # type: ignore
+                )
             else:
                 if field in data:
                     update[field] = data.get(field, info.default)
@@ -81,7 +85,7 @@ class BaseData(BaseModel):
         if not isinstance(data, dict):
             raise TypeError("Input data must be a dictionary or InputFile.")
 
-        kwargs = BaseData.model_to_dict(cls, data)
+        kwargs = BaseData.collect_input_from_dict(cls, data)  # type: ignore
 
         return cls(**kwargs)
 
