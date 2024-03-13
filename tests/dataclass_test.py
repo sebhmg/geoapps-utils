@@ -123,6 +123,7 @@ def test_pydantic_validates_nested_models():
             },
         )
 
+
 def test_model_to_dict():
 
     test_data = {
