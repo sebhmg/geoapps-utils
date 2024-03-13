@@ -70,9 +70,9 @@ def test_dataclass_invalid_values(tmp_path):
 
     with pytest.raises(ValidationError) as e:
         BaseData(**invalid_params)
-        assert len(e.errors()) == 6
-        error_params = [error["loc"][0] for error in e.errors()]
-        error_types = [error["type"] for error in e.errors()]
+        assert len(e.errors()) == 6  # type: ignore
+        error_params = [error["loc"][0] for error in e.errors()]  # type: ignore
+        error_types = [error["type"] for error in e.errors()]  # type: ignore
         for error_param in [
             "monitoring_directory",
             "geoh5",
@@ -100,7 +100,7 @@ def test_pydantic_validates_nested_models():
             value=1.0,
             params=TestParams(
                 type="big",
-                options=TestOpts(opt2="opt2", opt3="opt3"),
+                options=TestOpts(opt2="opt2", opt3="opt3"),  # type: ignore
             ),
         )
 
@@ -120,7 +120,7 @@ def test_pydantic_validates_nested_models():
         )
 
 
-def test_model_to_dict():
+def test_collect_input_from_dict():
     test_data = {
         "name": "test",
         "value": 1.0,
@@ -130,7 +130,7 @@ def test_model_to_dict():
         "opt3": "opt3",
     }
 
-    data = BaseData.model_to_dict(TestModel, test_data)
+    data = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
     assert data["name"] == "test"
     assert data["value"] == 1.0
     assert data["params"]["type"] == "big"
@@ -147,31 +147,31 @@ def test_missing_parameters():
         "opt2": "opt2",
         "opt3": "opt3",
     }
-    kwargs = BaseData.model_to_dict(TestModel, test_data)
-    with pytest.raises(ValidationError, match="value\n  Field required") as e:
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    with pytest.raises(ValidationError, match="value\n  Field required"):
         TestModel(**VALID_PARAMETERS, **kwargs)
 
     test_data = {
         "name": "test",
-        "value": 1.0,
+        "value": 1.0,  # type: ignore
         "type": "big",
         "opt2": "opt2",
         "opt3": "opt3",
     }
-    kwargs = BaseData.model_to_dict(TestModel, test_data)
-    with pytest.raises(ValidationError, match="opt1\n  Field required") as e:
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    with pytest.raises(ValidationError, match="opt1\n  Field required"):
         TestModel(**VALID_PARAMETERS, **kwargs)
 
     test_data = {
         "name": "test",
-        "value": 1.0,
+        "value": 1.0,  # type: ignore
         "type": "big",
         "opt1": "opt1",
         "opt3": "opt3",
     }
-    kwargs = BaseData.model_to_dict(TestModel, test_data)
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
     model = TestModel(**VALID_PARAMETERS, **kwargs)
-    model.params.options.opt2 == "default"
+    assert model.params.options.opt2 == "default"
 
 
 def test_nested_model():
