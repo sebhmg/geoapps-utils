@@ -790,65 +790,61 @@ package:
   category: dash
   optional: true
 - name: glib
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: linux-64
   dependencies:
-    glib-tools: 2.78.4
-    libgcc-ng: '>=12'
-    libglib: 2.78.4
+    glib-tools: 2.80.0
+    libglib: 2.80.0
     python: '*'
-  url: https://conda.anaconda.org/conda-forge/linux-64/glib-2.78.4-hf2295e7_4.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/glib-2.80.0-hf2295e7_0.conda
   hash:
-    md5: 6065385300c1fb1d0e93fe8a247dc19c
-    sha256: 7ed908431a69b3086a8ac098144d487d16a701f46ff3d90323355c909133b795
+    md5: 56a4c2ed7723cf0847752f74dba1929f
+    sha256: d35cc8fef34498826d37d3ddfdb56eee7cb0c100650597102d4d17233056ce18
   category: dash
   optional: true
 - name: glib
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: win-64
   dependencies:
-    glib-tools: 2.78.4
-    libglib: 2.78.4
-    libiconv: '>=1.17,<2.0a0'
+    glib-tools: 2.80.0
+    libglib: 2.80.0
     python: '*'
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/glib-2.78.4-h39d0aa6_4.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/glib-2.80.0-h39d0aa6_0.conda
   hash:
-    md5: d281967b7344a1c50b45152db4a65d9a
-    sha256: 910de22ee634442787f120bb4f9d30f4c7aa44d7436f38aa35e2ce54a394f7fa
+    md5: 7390ec9a83c88bca0760592bd305d0ab
+    sha256: 071e9727cf7c147ec5d9c29637b0a278c40d3aca557311d84e0382e8b043f923
   category: dash
   optional: true
 - name: glib-tools
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: linux-64
   dependencies:
-    libgcc-ng: '>=12'
-    libglib: 2.78.4
-  url: https://conda.anaconda.org/conda-forge/linux-64/glib-tools-2.78.4-hde27a5a_4.conda
+    libglib: 2.80.0
+  url: https://conda.anaconda.org/conda-forge/linux-64/glib-tools-2.80.0-hde27a5a_0.conda
   hash:
-    md5: c28e0698b0a8a91d74f51764b63cfc95
-    sha256: 13cec964ea5bd357ed0b9281f84a53fa2c751876a7b21e95b0229ad8c825fa66
+    md5: 072608f7b71755993a294c3cdf909fa6
+    sha256: bc321122185e6586d374ce6cb242c2404c44d2681ea695bf1f300c294d20b511
   category: dash
   optional: true
 - name: glib-tools
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: win-64
   dependencies:
-    libglib: 2.78.4
-    libiconv: '>=1.17,<2.0a0'
+    libglib: 2.80.0
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/glib-tools-2.78.4-h0a98069_4.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/glib-tools-2.80.0-h0a98069_0.conda
   hash:
-    md5: 1458df11f7c404fb0b14ce79d4f4edf8
-    sha256: 1a2fc70e087be7a19a95de5955db2f60cb22d621fcb2ee57827bd4e71509bcf0
+    md5: fe2d7343d48cb2c07e170bd7f87b8478
+    sha256: c6c0155a11da48596ca03a115bf29fa2f387aad0e9b1fd2098cde91a2847f99c
   category: dash
   optional: true
 - name: graphite2
@@ -1718,29 +1714,25 @@ package:
   category: main
   optional: false
 - name: libglib
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: linux-64
   dependencies:
-    gettext: '>=0.21.1,<1.0a0'
     libffi: '>=3.4,<4.0a0'
-    libgcc-ng: '>=12'
     libiconv: '>=1.17,<2.0a0'
-    libstdcxx-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
     pcre2: '>=10.43,<10.44.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libglib-2.78.4-hf2295e7_4.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libglib-2.80.0-hf2295e7_0.conda
   hash:
-    md5: 33c2d37e9460579b5b9a7194e5637884
-    sha256: 53816fc4770d27d871c3e85b1b945f70d06ccf63f6cbb525b6a6aec073726252
+    md5: 6c0d5a4f5292e54bf9b8dc14ee7df448
+    sha256: 0340d960ef2ddc79f74aada85659db48b79a4c0a9e8a0be5b8287f7cd4e42dd2
   category: dash
   optional: true
 - name: libglib
-  version: 2.78.4
+  version: 2.80.0
   manager: conda
   platform: win-64
   dependencies:
-    gettext: '>=0.21.1,<1.0a0'
     libffi: '>=3.4,<4.0a0'
     libiconv: '>=1.17,<2.0a0'
     libzlib: '>=1.2.13,<1.3.0a0'
@@ -1748,10 +1740,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/libglib-2.78.4-h39d0aa6_4.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/libglib-2.80.0-h39d0aa6_0.conda
   hash:
-    md5: b34028db5380ccff8d51fa17857e15e4
-    sha256: ffff11ec9e864d49771a68c4fd23122a1e5b9842c11d6227f8e74034934e4e34
+    md5: a0ae0ebc994b94ceef4e19fe4c6a3c3b
+    sha256: 23ed998f01664fa179d892b1168ed1d6b398e1fc3e98df306b26bae2826466c7
   category: dash
   optional: true
 - name: libgpg-error
@@ -2018,30 +2010,30 @@ package:
   category: dash
   optional: true
 - name: libsqlite
-  version: 3.45.1
+  version: 3.45.2
   manager: conda
   platform: linux-64
   dependencies:
     libgcc-ng: '>=12'
     libzlib: '>=1.2.13,<1.3.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.45.1-h2797004_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/libsqlite-3.45.2-h2797004_0.conda
   hash:
-    md5: fc4ccadfbf6d4784de88c41704792562
-    sha256: 1b379d1c652b25d0540251d422ef767472e768fd36b77261045e97f9ba6d3faa
+    md5: 866983a220e27a80cb75e85cb30466a1
+    sha256: 8cdbeb7902729e319510a82d7c642402981818702b58812af265ef55d1315473
   category: main
   optional: false
 - name: libsqlite
-  version: 3.45.1
+  version: 3.45.2
   manager: conda
   platform: win-64
   dependencies:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.45.1-hcfcfb64_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/libsqlite-3.45.2-hcfcfb64_0.conda
   hash:
-    md5: c583c1d6999b7aa148eff3089e13c44b
-    sha256: e1010f4ac7b056d85d91e6cb6137ef118f920eba88059261689e543780b230df
+    md5: f95359f8dc5abf7da7776ece9ef10bc5
+    sha256: 4bb24b986550275a6d02835150d943c4c675808d05c0efc5c2a22154d007a69f
   category: main
   optional: false
 - name: libssh2
@@ -3828,27 +3820,27 @@ package:
   category: main
   optional: false
 - name: setuptools
-  version: 69.1.1
+  version: 69.2.0
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.8'
-  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-69.1.1-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-69.2.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 576de899521b7d43674ba3ef6eae9142
-    sha256: 7a6dca60efcaa42d0ebb784950bc16230a968256cb5048a4441cb34653b5ec58
+    md5: da214ecd521a720a9d521c68047682dc
+    sha256: 78a75c75a5dacda6de5f4056c9c990141bdaf4f64245673a590594d00bc63713
   category: main
   optional: false
 - name: setuptools
-  version: 69.1.1
+  version: 69.2.0
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.8'
-  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-69.1.1-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-69.2.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 576de899521b7d43674ba3ef6eae9142
-    sha256: 7a6dca60efcaa42d0ebb784950bc16230a968256cb5048a4441cb34653b5ec58
+    md5: da214ecd521a720a9d521c68047682dc
+    sha256: 78a75c75a5dacda6de5f4056c9c990141bdaf4f64245673a590594d00bc63713
   category: main
   optional: false
 - name: sip
