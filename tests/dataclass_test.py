@@ -25,6 +25,23 @@ VALID_PARAMETERS = {
 }
 
 
+class TestOpts(BaseModel):
+    opt1: str
+    opt2: str = "default"
+    opt3: str | None = None
+
+
+class TestParams(BaseModel):
+    type: str
+    options: TestOpts
+
+
+class TestModel(BaseModel):
+    name: str
+    value: float
+    params: TestParams
+
+
 def test_dataclass_valid_values():
     model = BaseData(**VALID_PARAMETERS)
     output_params = {**model.model_dump()}
@@ -53,9 +70,9 @@ def test_dataclass_invalid_values(tmp_path):
 
     with pytest.raises(ValidationError) as e:
         BaseData(**invalid_params)
-        assert len(e.errors()) == 6
-        error_params = [error["loc"][0] for error in e.errors()]
-        error_types = [error["type"] for error in e.errors()]
+        assert len(e.errors()) == 6  # type: ignore
+        error_params = [error["loc"][0] for error in e.errors()]  # type: ignore
+        error_types = [error["type"] for error in e.errors()]  # type: ignore
         for error_param in [
             "monitoring_directory",
             "geoh5",
@@ -76,9 +93,94 @@ def test_dataclass_input_file():
     assert model.input_file == ifile
 
 
+def test_pydantic_validates_nested_models():
+    with pytest.raises(ValidationError):
+        TestModel(
+            name="test",
+            value=1.0,
+            params=TestParams(
+                type="big",
+                options=TestOpts(opt2="opt2", opt3="opt3"),  # type: ignore
+            ),
+        )
+
+    with pytest.raises(ValidationError):
+        TestModel(
+            **{
+                "name": "test",
+                "value": 1.0,
+                "params": {
+                    "type": "big",
+                    "options": {
+                        "opt2": "opt2",
+                        "opt3": "opt3",
+                    },
+                },
+            },
+        )
+
+
+def test_collect_input_from_dict():
+    test_data = {
+        "name": "test",
+        "value": 1.0,
+        "type": "big",
+        "opt1": "opt1",
+        "opt2": "opt2",
+        "opt3": "opt3",
+    }
+
+    data = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    assert data["name"] == "test"
+    assert data["value"] == 1.0
+    assert data["params"]["type"] == "big"
+    assert data["params"]["options"]["opt1"] == "opt1"
+    assert data["params"]["options"]["opt2"] == "opt2"
+    assert data["params"]["options"]["opt3"] == "opt3"
+
+
+def test_missing_parameters():
+    test_data = {
+        "name": "test",
+        "type": "big",
+        "opt1": "opt1",
+        "opt2": "opt2",
+        "opt3": "opt3",
+    }
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    with pytest.raises(ValidationError, match="value\n  Field required"):
+        TestModel(**VALID_PARAMETERS, **kwargs)
+
+    test_data = {
+        "name": "test",
+        "value": 1.0,  # type: ignore
+        "type": "big",
+        "opt2": "opt2",
+        "opt3": "opt3",
+    }
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    with pytest.raises(ValidationError, match="opt1\n  Field required"):
+        TestModel(**VALID_PARAMETERS, **kwargs)
+
+    test_data = {
+        "name": "test",
+        "value": 1.0,  # type: ignore
+        "type": "big",
+        "opt1": "opt1",
+        "opt3": "opt3",
+    }
+    kwargs = BaseData.collect_input_from_dict(TestModel, test_data)  # type: ignore
+    model = TestModel(**VALID_PARAMETERS, **kwargs)
+    assert model.params.options.opt2 == "default"
+
+
 def test_nested_model():
+    class GroupOptions(BaseModel):
+        group_type: str
+
     class GroupParams(BaseModel):
         value: str
+        options: GroupOptions
 
     class NestedModel(BaseData):
         """
@@ -90,6 +192,7 @@ def test_nested_model():
 
     valid_params = VALID_PARAMETERS.copy()
     valid_params["value"] = "test"
+    valid_params["group_type"] = "multi"
 
     ifile = InputFile(ui_json=valid_params)
     model = NestedModel.build(ifile)
@@ -99,3 +202,5 @@ def test_nested_model():
     assert model.flatten() == valid_params
 
     assert model.name == "nested"
+
+    assert model.group.options.group_type == "multi"

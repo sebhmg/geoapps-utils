@@ -5,8 +5,10 @@
 #  geoapps-utils is distributed under the terms and conditions of the MIT License
 #  (see LICENSE file at the root of this source code package).
 
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, Optional, Union
+from typing import Any
 
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
@@ -31,39 +33,41 @@ class BaseData(BaseModel):
 
     _name: str = "base"
 
-    input_file: Optional[InputFile] = None
-    conda_environment: Optional[str] = None
+    input_file: InputFile | None = None
+    conda_environment: str | None = None
     geoh5: Workspace
-    monitoring_directory: Optional[Union[str, Path]] = None
+    monitoring_directory: str | Path | None = None
     run_command: str
     title: str
-    workspace_geoh5: Optional[Workspace] = None
+    workspace_geoh5: Workspace | None = None
 
-    @classmethod
-    def _parse_input(cls, input_data: dict[str, Any]) -> dict[str, Union[dict, Any]]:
+    @staticmethod
+    def collect_input_from_dict(
+        base_model: BaseModel, data: dict[str, Any]
+    ) -> dict[str, dict | Any]:
         """
-        Parse input parameter into dicts for nested models.
+        Recursively replace BaseModel objects with dictionary of 'data' values.
+
+        :param base_model: BaseModel object holding data and possibly other nested
+            BaseModel objects.
+        :param data: Dictionary of parameters and values without nesting structure.
         """
-        for field, info in cls.model_fields.items():
+        update = {}
+        for field, info in base_model.model_fields.items():
             if isinstance(info.annotation, type) and issubclass(
                 info.annotation, BaseModel
             ):
-                field_data = {}
-                for sub_field in info.annotation.model_fields:
-                    if sub_field in input_data:
-                        field_data.update({sub_field: input_data.pop(sub_field)})
+                update[field] = BaseData.collect_input_from_dict(
+                    info.annotation, data  # type: ignore
+                )
+            else:
+                if field in data:
+                    update[field] = data.get(field, info.default)
 
-                if field in input_data:
-                    raise ValueError(
-                        f"Field {field} defines both a nested model and a value."
-                    )
-
-                input_data.update({field: field_data})
-
-        return input_data
+        return update
 
     @classmethod
-    def build(cls, input_data: Union[InputFile, dict]) -> Self:
+    def build(cls, input_data: InputFile | dict) -> Self:
         """
         Build a dataclass from a dictionary or InputFile.
 
@@ -81,9 +85,26 @@ class BaseData(BaseModel):
         if not isinstance(data, dict):
             raise TypeError("Input data must be a dictionary or InputFile.")
 
-        nested_data = cls._parse_input(data.copy())
+        kwargs = BaseData.collect_input_from_dict(cls, data)  # type: ignore
 
-        return cls(**nested_data)
+        return cls(**kwargs)
+
+    def _recursive_flatten(self, data: dict[str, Any]) -> dict[str, Any]:
+        """
+        Recursively flatten nested dictionary.
+
+        To be used on output of BaseModel.model_dump.
+
+        :param data: Dictionary of parameters and values.
+        """
+        out_dict = {}
+        for key, value in data.items():
+            if isinstance(value, dict):
+                out_dict.update(self._recursive_flatten(value))
+            else:
+                out_dict.update({key: value})
+
+        return out_dict
 
     def flatten(self) -> dict:
         """
@@ -91,17 +112,10 @@ class BaseData(BaseModel):
 
         :return: Dictionary of parameters.
         """
-        param_dict = dict(self)
-        out_dict = {}
-        for key, value in param_dict.items():
-            if isinstance(value, BaseModel):
-                out_dict.update(dict(value))
-            else:
-                out_dict.update({key: value})
+        out = self._recursive_flatten(self.model_dump())
+        out.pop("input_file", None)
 
-        out_dict.pop("input_file", None)
-
-        return out_dict
+        return out
 
     @property
     def name(self) -> str:
