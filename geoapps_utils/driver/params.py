@@ -219,13 +219,10 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         :param ui_json_format: Return dictionary in ui_json format.
         """
 
-        if self.input_file is None:
-            raise ValueError("No input file has been set.")
-        if self.input_file.ui_json is None:
-            raise ValueError("Input file must have it's ui_json set.")
+        if self.input_file is None or self.input_file.ui_json is None:
+            return {}
 
         if ui_json_format:
-            assert self.input_file is not None
             return self.input_file.stringify(
                 self.input_file.demote(self.input_file.ui_json)
             )
@@ -262,6 +259,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
 
         if self.ui_json is None:
             raise ValueError("No ui_json has been set.")
+
         free_parameter_dict: dict = {}
         if (
             self._free_parameter_keys is not None
