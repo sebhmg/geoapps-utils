@@ -48,7 +48,9 @@ geoh5py = {version = "~0.9.0a4", source = "pypi", allow-prereleases = true}
 #-------------------------------
 dash = {version = "~2.12", optional = true}
 flask = {version = "~3.0.3", optional = true}
-pyqtwebengine = {version = "~5.15.2", optional = true}  # 5.15.7 and newer on conda-forge, but not in PyPI
+pyqt5-qt5 = {version = "5.15.2", optional = true}  # force version or poetry resolves to 5.15.12 with no wheels for Windows!
+pyqtwebengine = {version = "~5.15.2, <5.15.7", optional = true}  # 5.15.7 and newer on conda-forge, but not in PyPI
+pyqtwebengine-qt5 = {version = "5.15.2", optional = true}  # force version or poetry resolves to 5.15.12 with no wheels for Windows!
 pyside2 = {version = "~5.15.2.1, <5.15.3", optional = true}  # 5.15.3 and newer on conda-forge, but not in Pypi
 
 ## indirect dependencies, forcing them here for installation through Conda not pip
@@ -76,7 +78,9 @@ tomli = "*"
 dash = [
     "dash",
     "flask",
+    "pyqt5-qt5",
     "pyqtwebengine",
+    "pyqtwebengine-qt5",
     "pyside2",
 ]
 
