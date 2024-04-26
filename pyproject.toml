@@ -8,6 +8,14 @@ repository = "https://github.com/MiraGeoscience/geoapps-utils"
 homepage = "https://mirageoscience.com"
 readme = "README.rst"
 
+include = [
+    "COPYING",
+    "COPYING.LESSER",
+    "LICENSE",
+    "README.rst",
+    "THIRD_PARTY_SOFTWARE.rst",
+]
+
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
