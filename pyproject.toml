@@ -46,7 +46,7 @@ pyside2 = {version = "~5.15.2.1", optional = true}  # 5.15.3 and newer on conda-
 ## indirect dependencies, forcing them here for installation through Conda not pip
 #---------------------------------------------------------------------------------
 h5py = "^3.2.1"  # from geoh5py
-Pillow = "^10.0.1"  # from geoh5py
+Pillow = "^10.1.0"  # from geoh5py
 
 ## about pip dependencies
 # to be specified to work with conda-lock
