@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geoapps-utils"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 license = "MIT"
 description = "Geoapps Utils"
 authors = ["Mira Geoscience <support@mirageoscience.com>"]
@@ -52,7 +52,7 @@ geoh5py = {version = "~0.9.0rc1", source = "pypi", allow-prereleases = true}
 dash = {version = "~2.12", optional = true}
 flask = {version = "~3.0.3", optional = true}
 pyqtwebengine = {version = "~5.15.2, <5.15.7", optional = true}  # 5.15.7 and newer on conda-forge, but not in PyPI
-pyside2 = {version = "~5.15.2.1", optional = true}  # 5.15.3 and newer on conda-forge, but not in Pypi
+pyside2 = {version = "~5.15.2.1", optional = true}  # 5.15.3 and newer on conda-forge, but not in PyPI
 
 ## indirect dependencies, forcing them here for installation through Conda not pip
 #---------------------------------------------------------------------------------
@@ -67,6 +67,9 @@ Pillow = "~10.1.0"  # from geoh5py
 #   - for a branch: my_package = { url = "https://github.com/ORGANISATION/REPO/archive/refs/heads/BRANCH.zip#sha256=" }
 # Note - conda-lock does not support the syntax: my_package = { git = ... }
 #        while poetry2conda supports only { git = "...", tag = "..." }, and not { url = ... }
+
+[tool.conda-lock.dependencies]
+pyside2 = {version = "5.15.*", optional = true}  # allow Conda to resolve to a higher existing version than in PyPI
 
 [tool.poetry.group.dev.dependencies]
 Pygments = "*"
