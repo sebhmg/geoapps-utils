@@ -68,6 +68,9 @@ Pillow = "~10.1.0"  # from geoh5py
 # Note - conda-lock does not support the syntax: my_package = { git = ... }
 #        while poetry2conda supports only { git = "...", tag = "..." }, and not { url = ... }
 
+[tool.conda-lock.dependencies]
+pyside2 = {version = "5.15.*", optional = true}  # still give a chance to Conda to resolve to a higher existing version
+
 [tool.poetry.group.dev.dependencies]
 Pygments = "*"
 pylint = "*"
