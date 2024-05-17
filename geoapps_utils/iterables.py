@@ -95,7 +95,7 @@ def sorted_children_dict(
 
     if isinstance(entity_obj, Entity):
         children_dict = {}
-        for child in entity_obj.children:
+        for child in entity_obj.children:  # type: ignore
             if not isinstance(child, (IntegerData, FloatData)):
                 continue
 

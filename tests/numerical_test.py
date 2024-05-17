@@ -12,6 +12,8 @@ import pytest
 from numpy import random
 
 from geoapps_utils.numerical import (
+    DetectionParameters,
+    filter_segments_orientation,
     find_curves,
     running_mean,
     traveling_salesman,
@@ -187,14 +189,15 @@ def test_find_curves(curves_data: list):
     channel_groups = data[:, 3]
 
     result_curves = []
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=15,
+        damping=0.75,
+    )
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
         path = find_curves(
-            points_data[channel_inds],
-            np.array(line_ids)[channel_inds],
-            min_edges=3,
-            max_distance=15,
-            damping=0.75,
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
         )
 
         if len(path) == 0:
@@ -207,16 +210,74 @@ def test_find_curves(curves_data: list):
 
     # Test with different angle to get zig-zag line
     result_curves = []
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=50,
+        damping=1,
+    )
+
     for channel_group in np.unique(channel_groups):
         channel_inds = channel_groups == channel_group
         path = find_curves(
-            points_data[channel_inds],
-            np.array(line_ids)[channel_inds],
-            min_edges=3,
-            max_distance=50,
-            damping=1,
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
         )
 
         result_curves += path
 
     assert [len(curve) for curve in result_curves] == [9, 9, 9, 9]
+
+
+def test_find_curve_orientation(curves_data: list):
+    # Random shuffle the input
+    data = np.array(curves_data)
+    points_data = data[:, :2]
+    line_ids = data[:, 2]
+    channel_groups = data[:, 3]
+
+    result_curves = []
+
+    parameters = DetectionParameters(
+        min_edges=3,
+        max_distance=15,
+        damping=0.75,
+        azimuth=5,
+        azimuth_tol=10,
+    )
+    for channel_group in np.unique(channel_groups):
+        channel_inds = channel_groups == channel_group
+        path = find_curves(
+            points_data[channel_inds], np.array(line_ids)[channel_inds], parameters
+        )
+
+        if len(path) == 0:
+            continue
+
+        result_curves += path
+
+    assert len(result_curves) == 1
+
+
+def test_filter_segments_orientation():
+    angles = np.arange(0, 360, 180 / 8)
+
+    points = np.c_[
+        np.sin(np.deg2rad(angles)),
+        np.cos(np.deg2rad(angles)),
+    ]
+    points = np.r_[np.c_[0, 0], points]
+    segments = np.c_[np.zeros_like(angles), np.arange(1, len(angles) + 1)].astype(int)
+
+    ind = filter_segments_orientation(points, segments, 0, 0.1)
+    np.testing.assert_allclose(angles[ind], [0, 180])
+
+    ind = filter_segments_orientation(points, segments, 0, 30)
+    np.testing.assert_allclose(angles[ind], [0, 22.5, 157.5, 180, 202.5, 337.5])
+
+    ind = filter_segments_orientation(points, segments, -45, 30)
+    np.testing.assert_allclose(angles[ind], [112.5, 135.0, 157.5, 292.5, 315.0, 337.5])
+
+    ind = filter_segments_orientation(points, segments, -45, 360)
+    assert np.all(ind)
+
+    ind = filter_segments_orientation(points, segments, 5, 1)
+    assert ~np.all(ind)

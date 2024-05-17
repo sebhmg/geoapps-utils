@@ -84,6 +84,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         """
         Custom actions to initialize the class and deal with input values.
         """
+
         original_validate_state = self.validate
         self.validate = False
 
@@ -95,6 +96,8 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
             )
         input_file = self.input_file
         assert input_file is not None
+        assert input_file.data is not None
+
         self.update(input_file.data)
         self.validate = original_validate_state
         self.param_names = list(input_file.data.keys())
@@ -216,8 +219,10 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         :param ui_json_format: Return dictionary in ui_json format.
         """
 
+        if self.input_file is None or self.input_file.ui_json is None:
+            return {}
+
         if ui_json_format:
-            assert self.input_file is not None
             return self.input_file.stringify(
                 self.input_file.demote(self.input_file.ui_json)
             )
@@ -251,6 +256,10 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
 
         :return: Dictionary of free parameters.
         """
+
+        if self.ui_json is None:
+            raise ValueError("No ui_json has been set.")
+
         free_parameter_dict: dict = {}
         if (
             self._free_parameter_keys is not None
