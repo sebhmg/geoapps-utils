@@ -114,7 +114,13 @@ class BaseDriver(ABC):
 
         :param entity: Object to add ui.json file to.
         """
-        assert self.params.input_file is not None
+        if (
+            self.params.input_file is None
+            or self.params.input_file.path is None
+            or self.params.input_file.name is None
+        ):
+            raise ValueError("Input file and it's name and path must be set.")
+
         entity.add_file(
             str(Path(self.params.input_file.path) / self.params.input_file.name)
         )
