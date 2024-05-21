@@ -7,8 +7,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import numpy as np
 from pydantic import BaseModel
 from scipy.spatial import Delaunay, cKDTree
@@ -25,11 +23,11 @@ class DetectionParameters(BaseModel):
     :param max_distance: Maximum distance between points in a curve.
     """
 
-    azimuth: Optional[float] = None
-    azimuth_tol: Optional[float] = None
+    azimuth: float | None = None
+    azimuth_tol: float | None = None
     damping: float = 0
     min_edges: int = 1
-    max_distance: Optional[float] = None
+    max_distance: float | None = None
 
 
 def find_curves(
