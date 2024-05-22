@@ -34,8 +34,9 @@ class BaseData(BaseModel):
 
     model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
 
+    name: ClassVar[str] = "base"
     default_ui_json: ClassVar[Path] = assets_path() / "uijson/base.ui.json"
-    title: ClassVar[str] = "base"
+    title: ClassVar[str] = "Base Data"
     run_command: ClassVar[str] = "geoapps_utils.driver.driver"
 
     conda_environment: str | None = None

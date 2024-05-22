@@ -209,7 +209,7 @@ def test_nested_model():
 def test_params_construction(tmp_path):
     params = BaseData(geoh5=Workspace(tmp_path / "test.geoh5"))
     assert BaseData.default_ui_json == assets_path() / "uijson/base.ui.json"
-    assert BaseData.title == "base"
+    assert BaseData.title == "Base Data"
     assert BaseData.run_command == "geoapps_utils.driver.driver"
     assert str(params.geoh5.h5file) == str(tmp_path / "test.geoh5")
 
