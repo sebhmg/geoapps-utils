@@ -123,12 +123,9 @@ class BaseData(BaseModel):
 
         return out
 
-    def write_ui_json(self, path: Path) -> None:
-        """
-        Write the ui.json file for the application.
-
-        :param path: Path to write the ui.json file.
-        """
+    @property
+    def input_file(self) -> InputFile:
+        """Create an InputFile with data matching current parameter state."""
 
         if self._input_file is None:
             ifile = InputFile.read_ui_json(self.default_ui_json, validate=False)
@@ -136,4 +133,13 @@ class BaseData(BaseModel):
             ifile = copy(self._input_file)
 
         ifile.data = dict(ifile.data, **self.flatten())
-        ifile.write_ui_json(path.name, str(path.parent))
+
+        return ifile
+
+    def write_ui_json(self, path: Path) -> None:
+        """
+        Write the ui.json file for the application.
+
+        :param path: Path to write the ui.json file.
+        """
+        self.input_file.write_ui_json(path.name, str(path.parent))
