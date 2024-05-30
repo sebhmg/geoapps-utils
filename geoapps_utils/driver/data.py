@@ -131,6 +131,7 @@ class BaseData(BaseModel):
             ifile = InputFile.read_ui_json(self.default_ui_json, validate=False)
         else:
             ifile = copy(self._input_file)
+            ifile.validate = False
 
         ifile.data = dict(ifile.data, **self.flatten())
 
