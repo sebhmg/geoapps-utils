@@ -22,23 +22,6 @@ def hex_to_rgb(hex_color: str) -> list[int]:
     return [int(code[i : i + 2], 16) for i in (0, 2, 4)]
 
 
-def string_to_list(text: str) -> list[float]:
-    """
-    Converts a string containing comma separated numeric characters to list of floats.
-
-    :param text: String to be converted.
-    """
-    try:
-        float_list = [float(val) for val in text.replace(" ", "").split(",")]
-    except ValueError as err:
-        raise ValueError(
-            f"Malformed text string: {text}.  "
-            f"Must contain only commas and characters that can be converted to floats."
-        ) from err
-
-    return float_list
-
-
 def string_to_numeric(text: str) -> int | float | str:
     """
     Converts numeric string representation to int, float, or nan if possible.
