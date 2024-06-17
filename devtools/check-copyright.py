@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
-#  Copyright (c) 2022-2023 Mira Geoscience Ltd.
+#  Copyright (c) 2022-2024 Mira Geoscience Ltd.
 #
 #  This file is part of geoapps-utils package.
 #
-#  All rights reserved.
+#  geoapps-utils is distributed under the terms and conditions of the MIT License
+#  (see LICENSE file at the root of this source code package).
 
 from __future__ import annotations
 
@@ -40,7 +41,7 @@ if __name__ == "__main__":
     if len(report_files) > 0:
         for f in report_files:
             sys.stderr.write(f"{f}: No copyright or invalid year\n")
-        exit(1)
+        sys.exit(1)
 
 # readonly CURRENT_YEAR=$(date +"%Y")
 

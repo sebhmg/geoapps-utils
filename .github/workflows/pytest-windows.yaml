@@ -2,6 +2,7 @@ name: pytest on Windows
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
     branches:
       - develop
       - main
@@ -20,19 +21,17 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
-env:
-  source_dir: geoapps_utils
-
 jobs:
   pytest:
     name: pytest (Windows)
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     strategy:
       fail-fast: false
       matrix:
-        python_ver: ['3.9', '3.10']
+        python_ver: ['3.10']
     defaults:
       run:
-        shell: powershell
+        shell: bash
     runs-on: windows-latest
     env:
       PYTHONUTF8: 1
@@ -48,13 +47,15 @@ jobs:
         with:
           environment-file: ${{ env.CONDA_LOCK_ENV_FILE }}
           environment-name: test_env
-          init-shell: powershell
+          init-shell: bash
           cache-downloads: true
       - name: pytest
-        run: |
-          pytest --cov=${source_dir} --cov-report=xml --cov-branch
+        shell: bash -el {0}
+        run: pytest --cov --cov-report=xml
       - name: Codecov
         if: ${{ success() && matrix.python_ver == '3.10' }}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           name: GitHub
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

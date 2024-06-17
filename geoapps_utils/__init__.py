@@ -1,4 +1,4 @@
-#  Copyright (c) 2022-2023 Mira Geoscience Ltd.
+#  Copyright (c) 2022-2024 Mira Geoscience Ltd.
 #
 #  This file is part of geoapps-utils package.
 #
@@ -7,4 +7,4 @@
 
 from __future__ import annotations
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"

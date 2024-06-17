@@ -1,4 +1,4 @@
-#  Copyright (c) 2023 Mira Geoscience Ltd.
+#  Copyright (c) 2023-2024 Mira Geoscience Ltd.
 #
 #  This file is part of geoapps-utils.
 #
@@ -14,12 +14,10 @@ import os
 import signal
 import socket
 import sys
-import tempfile
 import threading
 import uuid
 from abc import ABC, abstractmethod
 from pathlib import Path
-from time import time
 from typing import Any
 
 import numpy as np
@@ -34,7 +32,8 @@ from geoh5py.shared import Entity
 from geoh5py.shared.utils import fetch_active_workspace, is_uuid
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
-from PySide2 import QtCore, QtWebEngineWidgets, QtWidgets
+from PySide2 import QtCore, QtWebEngineWidgets
+from PySide2.QtWidgets import QApplication, QHBoxLayout, QMainWindow, QWidget
 
 from geoapps_utils.application.layout import object_selection_layout
 from geoapps_utils.driver.params import BaseParams
@@ -45,12 +44,8 @@ class BaseDashApplication(ABC):
     Base class for geoapps dash applications
     """
 
-    _params = None
-    _param_class = BaseParams
+    _param_class: type = BaseParams
     _driver_class = None
-    _workspace = None
-    _app_initializer: dict | None = None
-    _ui_json_data: dict | None = None
 
     def __init__(
         self,
@@ -61,28 +56,42 @@ class BaseDashApplication(ABC):
         """
         Set initial ui_json_data from input file and open workspace.
         """
-        if params is not None:
+        self._app_initializer: dict | None = None
+        self._workspace: Workspace | None = None
+
+        if isinstance(params, BaseParams):
             # Launched from notebook
             # Params for initialization are coming from params
             # ui_json_data is provided
             self.params = params
+
         elif (
             ui_json is not None
-            and getattr(ui_json, "path", None) is not None
+            and ui_json.path is not None
             and Path(ui_json.path).exists()
         ):
             # Launched from terminal
             # Params for initialization are coming from ui_json
             # ui_json_data starts as None
             self.params = self._param_class(ui_json)
-            input_file = self.params.input_file
-            if input_file is not None:
-                ui_json_data = input_file.demote(self.params.to_dict())
-        self._ui_json_data = ui_json_data
+
+        input_file = self.params.input_file
+
+        if input_file is None:
+            raise ValueError("No input file provided.")
+
+        if ui_json_data is not None:
+            with fetch_active_workspace(self.params.geoh5):
+                for key, value in ui_json_data.items():
+                    setattr(self.params, key, value)
+
+        json_data = input_file.demote(self.params.to_dict())
+
+        self._ui_json_data = json_data
 
         assert self.params is not None, "No parameters provided."
         self.workspace = self.params.geoh5
-        self.workspace.open()
+
         if self._driver_class is not None:
             self.driver = self._driver_class(self.params)
 
@@ -179,20 +188,40 @@ class BaseDashApplication(ABC):
         return output_dict
 
     @staticmethod
-    def init_vals(layout: list[Component], ui_json_data: dict):
+    def init_vals(
+        layout: list[Component], ui_json_data: dict, kwargs: dict | None = None
+    ):
         """
         Initialize dash components in layout from ui_json_data.
 
         :param layout: Dash layout.
         :param ui_json_data: Uploaded ui.json data.
+        :param kwargs: Optional properties to set for components.
         """
+
         for comp in layout:
-            BaseDashApplication._init_component(comp, ui_json_data)
+            BaseDashApplication._init_component(comp, ui_json_data, kwargs=kwargs)
 
     @staticmethod
-    def _init_component(comp: Component, ui_json_data: dict):
-        if hasattr(comp, "children") and not isinstance(comp, dcc.Markdown):
-            BaseDashApplication.init_vals(comp.children, ui_json_data)
+    def _init_component(
+        comp: Component, ui_json_data: dict, kwargs: dict | None = None
+    ):
+        """
+        Initialize dash component from ui_json_data.
+
+        :param comp: Dash component.
+        :param ui_json_data: Uploaded ui.json data.
+        :param kwargs: Optional properties to set for components.
+        """
+        if isinstance(comp, dcc.Markdown):
+            return
+        if hasattr(comp, "children"):
+            BaseDashApplication.init_vals(comp.children, ui_json_data, kwargs)
+            return
+
+        if kwargs is not None and hasattr(comp, "id") and comp.id in kwargs:
+            for prop in kwargs[comp.id]:
+                setattr(comp, prop["property"], prop["value"])
             return
 
         if hasattr(comp, "id") and comp.id in ui_json_data:
@@ -212,10 +241,10 @@ class BaseDashApplication(ABC):
                 return
 
             if isinstance(comp, dcc.Checklist):
+                comp.value = []
                 if ui_json_data[comp.id]:
                     comp.value = [True]
-                else:
-                    comp.value = []
+
             else:
                 comp.value = ui_json_data[comp.id]
 
@@ -233,7 +262,7 @@ class BaseDashApplication(ABC):
         return {"display": "none"}
 
     @property
-    def params(self) -> BaseParams | None:
+    def params(self) -> BaseParams:
         """
         Application parameters
         """
@@ -270,8 +299,6 @@ class ObjectSelection:
     opens a Qt window to run an app.
     """
 
-    _app_initializer: dict | None = None
-
     def __init__(
         self,
         app_name: str,
@@ -280,6 +307,7 @@ class ObjectSelection:
         param_class: type[BaseParams],
         **kwargs,
     ):
+        self._app_initializer: dict | None = None
         self._app_name = None
         self._app_class = BaseDashApplication
         self._param_class = BaseParams
@@ -298,7 +326,7 @@ class ObjectSelection:
         }
         self.workspace = self.params.geoh5
 
-        external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
+        external_stylesheets = None
         server = Flask(__name__)
         self.app = Dash(
             server=server,
@@ -373,7 +401,7 @@ class ObjectSelection:
                 ifile = InputFile(ui_json=ui_json)
                 self.params = self.param_class(ifile)
                 # Demote ifile data so it can be stored as a string
-                if getattr(ifile, "data", None) is not None:
+                if ifile.data is not None:
                     ui_json_data = ifile.demote(ifile.data.copy())
                     # Get new object value for dropdown from ui.json
                     object_value = ui_json_data["objects"]
@@ -417,7 +445,9 @@ class ObjectSelection:
             validate=False,
         )
         ifile.update_ui_values(self.params.to_dict())
-        ui_json_data = ifile.demote(ifile.data)
+        ui_json_data = {}
+        if ifile.data is not None:
+            ui_json_data = ifile.demote(ifile.data)
         if self._app_initializer is not None:
             ui_json_data.update(self._app_initializer)
         return ui_json_data
@@ -468,17 +498,21 @@ class ObjectSelection:
         :param app_name: App name to display as Qt window title.
         :param port: Port where the dash app has been launched.
         """
-        app = QtWidgets.QApplication(sys.argv)
+        app = QApplication(sys.argv)
+        win = MainWindow()
+
         browser = QtWebEngineWidgets.QWebEngineView()
-
-        browser.setWindowTitle(app_name)
         browser.load(QtCore.QUrl("http://127.0.0.1:" + str(port)))
-        # Brings Qt window to the front
-        browser.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        # Setting window size
-        browser.resize(1200, 800)
-        browser.show()
 
+        win.setWindowTitle(app_name)
+
+        central_widget = QWidget()
+        central_widget.setMinimumSize(600, 400)
+        win.setCentralWidget(central_widget)
+        lay = QHBoxLayout(central_widget)
+        lay.addWidget(browser)
+
+        win.showMaximized()
         app.exec_()  # running the Qt app
         os.kill(os.getpid(), signal.SIGTERM)  # shut down dash server and notebook
 
@@ -501,47 +535,11 @@ class ObjectSelection:
         ):
             return ""
 
-        # Make new workspace with only the selected object
-        obj = self.workspace.get_entity(uuid.UUID(objects))[0]
-        if not isinstance(obj, Entity):
-            return ""
-
-        temp_geoh5 = self.workspace.name + "_" + f"{time():.0f}.geoh5"
-        with tempfile.TemporaryDirectory() as tempdir_name:
-            tempdir = Path(tempdir_name)
-            temp_workspace = Workspace.create(tempdir / temp_geoh5)
-
-            # Update ui.json with temp_workspace to pass initialize scatter plot app
-            param_dict = self.params.to_dict()
-            param_dict["geoh5"] = temp_workspace
-
-            with fetch_active_workspace(temp_workspace), fetch_active_workspace(
-                self.workspace
-            ):
-                param_dict["objects"] = obj.copy(
-                    parent=temp_workspace, copy_children=True
-                )
-
-                if hasattr(obj, "property_groups"):
-                    self._copy_property_groups(obj.property_groups, param_dict)
-
-            new_params = self.param_class(**param_dict)
-
-            temp_ui_json_name = temp_geoh5.replace(".geoh5", ".ui.json")
-            new_params.write_input_file(
-                name=temp_ui_json_name,
-                path=tempdir_name,
-                validate=False,
-            )
-
-            ifile = InputFile.read_ui_json(tempdir / temp_ui_json_name)
-            ui_json_data = ifile.demote(ifile.data)
-
         # Start server
         port = ObjectSelection.get_port()
         threading.Thread(
             target=self.start_server,
-            args=(port, self.app_class, ifile, ui_json_data, new_params),
+            args=(port, self.app_class, None, None, self.params),
             daemon=True,
         ).start()
 
@@ -550,7 +548,7 @@ class ObjectSelection:
         return ""
 
     @staticmethod
-    def _copy_property_groups(source_groups: ObjectBase, param_dict: dict):
+    def _copy_property_groups(source_groups: list[ObjectBase], param_dict: dict):
         """Copy any property groups over to param_dict of temporary workspace"""
         temp_prop_groups = param_dict["objects"].property_groups
         for group in source_groups:
@@ -646,3 +644,42 @@ class ObjectSelection:
             # Close old workspace
             self._workspace.close()
         self._workspace = val
+
+
+class MainWindow(QMainWindow):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.aspect_ratio = 1.5
+
+    def resizeEvent(self, event):
+        QMainWindow.resizeEvent(self, event)
+
+        # Get window size
+        height = self.size().height()
+        width = self.size().width()
+
+        # Figure out which direction to expand in
+        width_diff = height * self.aspect_ratio
+        height_diff = width / self.aspect_ratio
+
+        new_width, new_height = width, height
+
+        if (
+            self.centralWidget().minimumSize().height() < height
+            and self.centralWidget().minimumSize().width() < width
+        ):
+            return
+
+        if width_diff < height_diff and width > width_diff:
+            new_width = width_diff
+            new_height = height * self.aspect_ratio
+        elif height > height_diff:
+            new_height = height_diff
+            new_width = width * self.aspect_ratio
+
+        width_margin = np.floor((width - new_width) / 2)
+        height_margin = np.floor((height - new_height) / 2)
+
+        self.setContentsMargins(
+            width_margin, height_margin, width_margin, height_margin
+        )
