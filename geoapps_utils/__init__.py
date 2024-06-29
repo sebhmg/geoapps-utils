@@ -7,8 +7,16 @@
 
 from __future__ import annotations
 
-from .importing import assets_path
-
 __version__ = "0.4.0-alpha.1"
+
+from pathlib import Path
+
+from .importing import assets_path as assets_path_impl
+
+
+def assets_path() -> Path:
+    """Return the path to the assets folder."""
+    return assets_path_impl(__file__)
+
 
 __all__ = ["assets_path"]
