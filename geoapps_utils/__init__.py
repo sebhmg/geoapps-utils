@@ -7,4 +7,8 @@
 
 from __future__ import annotations
 
+from .importing import assets_path
+
 __version__ = "0.4.0-alpha.1"
+
+__all__ = ["assets_path"]
