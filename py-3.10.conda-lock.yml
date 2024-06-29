@@ -3335,8 +3335,8 @@ package:
   dependencies:
     python: '>=3.8.0'
     tomli: '>=1.1.0'
-    typing_extensions: '>=3.10.0'
     platformdirs: '>=2.2.0'
+    typing_extensions: '>=3.10.0'
     tomlkit: '>=0.10.1'
     colorama: '>=0.4.5'
     mccabe: '>=0.6,<0.8'
@@ -4940,7 +4940,7 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.26.0,<2.0.0'
+    numpy: '>=1.26.0,<1.27.0'
   url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
   hash: {}
   category: main
@@ -4955,7 +4955,7 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.26.0,<2.0.0'
+    numpy: '>=1.26.0,<1.27.0'
   url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
   hash: {}
   category: main
