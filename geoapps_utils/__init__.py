@@ -7,18 +7,16 @@
 
 from __future__ import annotations
 
+__version__ = "0.4.0-alpha.1"
+
 from pathlib import Path
 
-__version__ = "0.4.0-alpha.1"
+from .importing import assets_path as assets_path_impl
 
 
 def assets_path() -> Path:
     """Return the path to the assets folder."""
+    return assets_path_impl(__file__)
 
-    parent = Path(__file__).parent
-    folder_name = f"{parent.name}-assets"
-    assets_folder = parent.parent / folder_name
-    if not assets_folder.is_dir():
-        raise RuntimeError(f"Assets folder not found: {assets_folder}")
 
-    return assets_folder
+__all__ = ["assets_path"]
