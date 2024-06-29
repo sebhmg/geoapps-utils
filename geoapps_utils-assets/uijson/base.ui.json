@@ -5,6 +5,5 @@
     "run_command": "geoapps_utils.driver.driver",
     "geoh5": "",
     "monitoring_directory": "",
-    "workspace_geoh5": "",
-    "conda_environment_boolean": false
+    "workspace_geoh5": ""
 }
