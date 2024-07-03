@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: 4234d8d1fbed8936b4087b3203baf72ea2c3f67be63a5b379aca91603a191f81
-    linux-64: fd156a3479102126183b6652197588bc42c09bfffccd2dde5a4335471800f72b
+    win-64: f67a7265bb13a6fe2de3022e5e67f0e2fe4f4d48964b0e257a5af3a6845ecbf1
+    linux-64: d288e50cffc0893e2321a6734b6677a10b8897652680a1a24b0d6e6b7cfba8f8
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -1228,14 +1228,14 @@ package:
   category: dev
   optional: true
 - name: intel-openmp
-  version: 2024.1.0
+  version: 2024.2.0
   manager: conda
   platform: win-64
   dependencies: {}
-  url: https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2024.1.0-h57928b3_966.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2024.2.0-h57928b3_978.conda
   hash:
-    md5: 35d7ea07ad6c878bd7240d2d6c1b8657
-    sha256: 77465396f2636c8b3b3a587f1636ee35c17a73e2a2c7e0ea0957b05f84704cf3
+    md5: e8931ff34113ed47febc4dfed92b12b1
+    sha256: 9b40e33d5dadf868f5a1b9356e523d6d24deea8a92dc51e49544e7c6f9afe99d
   category: main
   optional: false
 - name: isort
@@ -4940,13 +4940,15 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.26.0,<1.27.0'
-  url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
-  hash: {}
+    numpy: '>=1.23.5,<2.0.0'
+    pydantic: '>=2.5.2,<2.6.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+  hash:
+    sha256: 661d951d1ce2d5016e7f08992062d98d6d5155d5
   category: main
   source:
     type: url
-    url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
+    url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
   optional: false
 - name: geoh5py
   version: 0.10.0a1
@@ -4955,11 +4957,13 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.26.0,<1.27.0'
-  url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
-  hash: {}
+    numpy: '>=1.23.5,<2.0.0'
+    pydantic: '>=2.5.2,<2.6.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+  hash:
+    sha256: 661d951d1ce2d5016e7f08992062d98d6d5155d5
   category: main
   source:
     type: url
-    url: https://github.com/MiraGeoscience/geoh5py/archive/refs/heads/develop.tar.gz
+    url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
   optional: false
