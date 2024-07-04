@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: e66c4d7281063cde747b37186773cc338db04c6aa61529e6359586d9a432588a
-    linux-64: 0fdc681b42cd16012b4be660afe270e932e1ff25f7c011e05660c00dce7ffc79
+    win-64: 01d4f4b41361bed113f08a58a32a2e82e7175c1fda87bf63691c825fc01ab501
+    linux-64: de9f3d196c6774a1d70d72faa2419dc264e5f26b92ae15a9f925e5fef1e4ae46
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -225,25 +225,25 @@ package:
   category: main
   optional: false
 - name: ca-certificates
-  version: 2024.6.2
+  version: 2024.7.4
   manager: conda
   platform: linux-64
   dependencies: {}
-  url: https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2024.6.2-hbcca054_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/ca-certificates-2024.7.4-hbcca054_0.conda
   hash:
-    md5: 847c3c2905cc467cea52c24f9cfa8080
-    sha256: 979af0932b2a5a26112044891a2d79e402e5ae8166f50fa48b8ebae47c0a2d65
+    md5: 23ab7665c5f63cfb9f1f6195256daac6
+    sha256: c1548a3235376f464f9931850b64b02492f379b2f2bb98bc786055329b080446
   category: main
   optional: false
 - name: ca-certificates
-  version: 2024.6.2
+  version: 2024.7.4
   manager: conda
   platform: win-64
   dependencies: {}
-  url: https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2024.6.2-h56e8100_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/ca-certificates-2024.7.4-h56e8100_0.conda
   hash:
-    md5: 12a3a2b3a00a21bbb390d4de5ad8dd0f
-    sha256: d872d11558ebeaeb87bcf9086e97c075a1a2dfffed2d0e97570cf197ab29e3d8
+    md5: 9caa97c9504072cd060cf0a3142cc0ed
+    sha256: 7f37bb33c7954de1b4d19ad622859feb4f6c58f751c38b895524cad4e44af72e
   category: main
   optional: false
 - name: cached-property
@@ -1899,7 +1899,7 @@ package:
   category: dash
   optional: true
 - name: libhwloc
-  version: 2.10.0
+  version: 2.11.0
   manager: conda
   platform: win-64
   dependencies:
@@ -1908,10 +1908,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/libhwloc-2.10.0-default_h8125262_1001.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/libhwloc-2.11.0-default_h8125262_1000.conda
   hash:
-    md5: e761885eb4c181074d172220d46319a0
-    sha256: 7f1aa1b071269df72e88297c046ec153b7f9a81e6f135d2da4401c96f41b5052
+    md5: 065e86390dcd9304259ad8b627f724bd
+    sha256: f7f7733b2a839499a6d340edcce08dca5b5798293d3429f8b4a5c8a799dbabe9
   category: main
   optional: false
 - name: libiconv
@@ -3222,37 +3222,37 @@ package:
   category: dash
   optional: true
 - name: pydantic
-  version: 2.5.3
+  version: 2.8.0
   manager: conda
   platform: linux-64
   dependencies:
     annotated-types: '>=0.4.0'
-    pydantic-core: 2.14.6
-    python: '>=3.7,<3.12.4.0a0'
+    pydantic-core: 2.20.0
+    python: '>=3.7'
     typing-extensions: '>=4.6.1'
-  url: https://conda.anaconda.org/conda-forge/noarch/pydantic-2.5.3-pyhd8ed1ab_0.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/pydantic-2.8.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 3569001fd8b37e542aaefdf5de124e19
-    sha256: 07ec778cbf17737b740f0547fb5cba91a7bff52945fe637287458e4119c58ffe
+    md5: 2d9e3275aace5688f31a9a01a8fdf381
+    sha256: 07b60383c98e811d00c7918581bfcf41a6973035687859d96e88b652d2bed5b3
   category: main
   optional: false
 - name: pydantic
-  version: 2.5.3
+  version: 2.8.0
   manager: conda
   platform: win-64
   dependencies:
+    python: '>=3.7'
     typing-extensions: '>=4.6.1'
     annotated-types: '>=0.4.0'
-    python: '>=3.7,<3.12.4.0a0'
-    pydantic-core: 2.14.6
-  url: https://conda.anaconda.org/conda-forge/noarch/pydantic-2.5.3-pyhd8ed1ab_0.conda
+    pydantic-core: 2.20.0
+  url: https://conda.anaconda.org/conda-forge/noarch/pydantic-2.8.0-pyhd8ed1ab_0.conda
   hash:
-    md5: 3569001fd8b37e542aaefdf5de124e19
-    sha256: 07ec778cbf17737b740f0547fb5cba91a7bff52945fe637287458e4119c58ffe
+    md5: 2d9e3275aace5688f31a9a01a8fdf381
+    sha256: 07b60383c98e811d00c7918581bfcf41a6973035687859d96e88b652d2bed5b3
   category: main
   optional: false
 - name: pydantic-core
-  version: 2.14.6
+  version: 2.20.0
   manager: conda
   platform: linux-64
   dependencies:
@@ -3260,14 +3260,14 @@ package:
     python: '>=3.10,<3.11.0a0'
     python_abi: 3.10.*
     typing-extensions: '>=4.6.0,!=4.7.0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/pydantic-core-2.14.6-py310hcb5633a_1.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/pydantic-core-2.20.0-py310he421c4c_0.conda
   hash:
-    md5: f0f6b7e4b3d134f070288963ed4fbeee
-    sha256: 3bdc1ef89f9e431392aec8ed5695d8aefc7b65a014cc46934f75e87779f89745
+    md5: baa527f18cad39c3c11f98525baffe78
+    sha256: eae5c2640c8a528367835a65ceb9027b26b1994893d92031b74017f750237645
   category: main
   optional: false
 - name: pydantic-core
-  version: 2.14.6
+  version: 2.20.0
   manager: conda
   platform: win-64
   dependencies:
@@ -3277,10 +3277,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/pydantic-core-2.14.6-py310h87d50f1_1.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/pydantic-core-2.20.0-py310hc226416_0.conda
   hash:
-    md5: e1055e9fe6ac345e7b8d85acda87dacc
-    sha256: 88dbd555fbf8fdc1dbf54c000e82061527d8bd7905ae85e5f9c034450d8b1d3c
+    md5: 31d176c36cb892124cab34e02725eb1f
+    sha256: 219b68e6bf9f223c46e8738508b32e2810f0cb0ffe679303fadce3efc01ab102
   category: main
   optional: false
 - name: pygments
@@ -4021,14 +4021,14 @@ package:
   manager: conda
   platform: win-64
   dependencies:
-    libhwloc: '>=2.10.0,<2.10.1.0a0'
+    libhwloc: '>=2.11.0,<2.11.1.0a0'
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/tbb-2021.12.0-hc790b64_1.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/tbb-2021.12.0-hc790b64_2.conda
   hash:
-    md5: e98333643abc739ebea1bac97a479828
-    sha256: 87461c83a4f0d4f119af7368f20c47bbe0c27d963a7c22a3d08c71075077f855
+    md5: 3d6620dda0ba48d457fb722adfad5963
+    sha256: e41d0d07bbabc0144292fd28e871f54828eaa10da27e50c8b8cf5dad9a2f3a92
   category: main
   optional: false
 - name: tenacity
@@ -4940,15 +4940,15 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.23.5,<2.0.0'
-    pydantic: '>=2.5.2,<2.6.0'
-  url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+    numpy: '>=1.26.0,<1.27.0'
+    pydantic: '>=2.5.2,<3.0.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   hash:
-    sha256: 661d951d1ce2d5016e7f08992062d98d6d5155d5
+    sha256: 21ce81d279c206ce0a279377168ce50e0a35d3d2
   category: main
   source:
     type: url
-    url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+    url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   optional: false
 - name: geoh5py
   version: 0.10.0a1
@@ -4957,13 +4957,13 @@ package:
   dependencies:
     pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
-    numpy: '>=1.23.5,<2.0.0'
-    pydantic: '>=2.5.2,<2.6.0'
-  url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+    numpy: '>=1.26.0,<1.27.0'
+    pydantic: '>=2.5.2,<3.0.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   hash:
-    sha256: 661d951d1ce2d5016e7f08992062d98d6d5155d5
+    sha256: 21ce81d279c206ce0a279377168ce50e0a35d3d2
   category: main
   source:
     type: url
-    url: git+https://github.com/MiraGeoscience/geoh5py@661d951d1ce2d5016e7f08992062d98d6d5155d5
+    url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   optional: false
