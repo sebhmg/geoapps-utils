@@ -17,8 +17,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: f67a7265bb13a6fe2de3022e5e67f0e2fe4f4d48964b0e257a5af3a6845ecbf1
-    linux-64: d288e50cffc0893e2321a6734b6677a10b8897652680a1a24b0d6e6b7cfba8f8
+    win-64: e66c4d7281063cde747b37186773cc338db04c6aa61529e6359586d9a432588a
+    linux-64: 0fdc681b42cd16012b4be660afe270e932e1ff25f7c011e05660c00dce7ffc79
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -1232,10 +1232,10 @@ package:
   manager: conda
   platform: win-64
   dependencies: {}
-  url: https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2024.2.0-h57928b3_978.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/intel-openmp-2024.2.0-h57928b3_979.conda
   hash:
-    md5: e8931ff34113ed47febc4dfed92b12b1
-    sha256: 9b40e33d5dadf868f5a1b9356e523d6d24deea8a92dc51e49544e7c6f9afe99d
+    md5: 192b0028299eebbc8d88624764df61f5
+    sha256: 49ba0097aa41406eefd09903a525abbe6e98b5452a9a3dddb68989a86eb519ed
   category: main
   optional: false
 - name: isort
@@ -2812,7 +2812,7 @@ package:
   category: dash
   optional: true
 - name: nss
-  version: '3.101'
+  version: '3.102'
   manager: conda
   platform: linux-64
   dependencies:
@@ -2822,10 +2822,10 @@ package:
     libstdcxx-ng: '>=12'
     libzlib: '>=1.3.1,<2.0a0'
     nspr: '>=4.35,<5.0a0'
-  url: https://conda.anaconda.org/conda-forge/linux-64/nss-3.101-h593d115_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/nss-3.102-h593d115_0.conda
   hash:
-    md5: b24ab6abea1bdc28d646336a03d15392
-    sha256: 7b5c37070c4a1c4c0d7477c63e23a4603108380646373e64a47b2614eb5f42c5
+    md5: 40e5e48c55a45621c4399ca9236406b7
+    sha256: 5e5dbae2f5bc55646a9d70601432ea71b867ce06bccd174e479ac36abf5d0807
   category: dash
   optional: true
 - name: numpy
@@ -3894,7 +3894,7 @@ package:
   category: dash
   optional: true
 - name: scipy
-  version: 1.13.1
+  version: 1.14.0
   manager: conda
   platform: linux-64
   dependencies:
@@ -3908,14 +3908,14 @@ package:
     numpy: '>=1.19,<3'
     python: '>=3.10,<3.11.0a0'
     python_abi: 3.10.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/scipy-1.13.1-py310h93e2701_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/scipy-1.14.0-py310h93e2701_0.conda
   hash:
-    md5: 9a697144b2f3adc88ada6b6201b379c4
-    sha256: 529cc06ebaae21b603c97a8f7d10e855c30c61fb2796b2c89336dfeaaf1c9c13
+    md5: b22b24595c8ec0ef064967bd2649f643
+    sha256: cb18dc6a54198857be9d4837edd337c433d40d709826ef79abb9192915e10c2b
   category: main
   optional: false
 - name: scipy
-  version: 1.13.1
+  version: 1.14.0
   manager: conda
   platform: win-64
   dependencies:
@@ -3928,10 +3928,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/scipy-1.13.1-py310h46043a1_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/scipy-1.14.0-py310h46043a1_0.conda
   hash:
-    md5: 125925fb170bccd232a3249f171f56ae
-    sha256: 4405902e399d18923540e082b1285aa35ad859643bf4d491cef7b16a690d7700
+    md5: 4902f4c38ff2c912a2e44b636b181470
+    sha256: 6928e92a92b01eaaa51227871deb23977276f4e45d4d2d268b2ce641587f8405
   category: main
   optional: false
 - name: setuptools
