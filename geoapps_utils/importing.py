@@ -42,9 +42,11 @@ def assets_path(module_path: Path | str) -> Path:
     :param module_path: Path of the module expected to have an associated asset folder.
     """
 
-    parent = Path(module_path).parent
-    folder_name = f"{parent.name}-assets"
-    assets_folder = parent.parent / folder_name
+    source = Path(module_path).resolve()
+    if source.is_file():
+        source = source.parent
+    assets_folder_name = f"{source.name}-assets"
+    assets_folder = source.parent / assets_folder_name
     if not assets_folder.is_dir():
         raise RuntimeError(f"Assets folder not found: {assets_folder}")
 
