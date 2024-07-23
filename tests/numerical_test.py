@@ -10,7 +10,11 @@ from __future__ import annotations
 import numpy as np
 from numpy import random
 
-from geoapps_utils.numerical import running_mean, traveling_salesman, weighted_average
+from geoapps_utils.utils.numerical import (
+    running_mean,
+    traveling_salesman,
+    weighted_average,
+)
 
 
 def test_running_mean():
