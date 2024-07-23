@@ -11,7 +11,7 @@ import numpy as np
 from geoh5py import Workspace
 from geoh5py.objects import Grid2D, Points
 
-from geoapps_utils.locations import (
+from geoapps_utils.utils.locations import (
     get_locations,
     get_overlapping_limits,
     map_indices_to_coordinates,
