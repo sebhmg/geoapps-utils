@@ -15,8 +15,8 @@
 version: 1
 metadata:
   content_hash:
-    win-64: fd3d026cc29f159aff640dda387da428c51add222c2b33a8cb099d791d8431ba
-    linux-64: 3a1c1ecdedce3aa15e105a79e561803c0fefb1ce1d795e1140e829aee1b04643
+    win-64: 760f68e75532b8f5bcacc3d2fe80537d54107265bfce5db042f528dc77802a46
+    linux-64: 12f1c9a0ec875b20d7b5e91fc744cebc62d5c584f6a4d8f516af99dad2ca0460
   channels:
   - url: conda-forge
     used_env_vars: []
@@ -2325,28 +2325,36 @@ package:
   category: main
   optional: false
 - name: geoh5py
-  version: 0.9.1
+  version: 0.10.0a1
   manager: pip
   platform: linux-64
   dependencies:
+    pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
     numpy: '>=1.26.0,<1.27.0'
-    pillow: '>=10.3.0,<10.4.0'
-  url: https://files.pythonhosted.org/packages/06/1d/5a87941b3a94a1314a2c8e106a1e00898730e2340f39b13fb9ae1b55b548/geoh5py-0.9.1-py3-none-any.whl
+    pydantic: '>=2.5.2,<3.0.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   hash:
-    sha256: c3c7429ea37a82ded5f4eba0ff72f77668818f5841bfabbc7d6a6f0f9e1c0989
+    sha256: 21ce81d279c206ce0a279377168ce50e0a35d3d2
   category: main
+  source:
+    type: url
+    url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   optional: false
 - name: geoh5py
-  version: 0.9.1
+  version: 0.10.0a1
   manager: pip
   platform: win-64
   dependencies:
+    pillow: '>=10.3.0,<10.4.0'
     h5py: '>=3.2.1,<4.0.0'
     numpy: '>=1.26.0,<1.27.0'
-    pillow: '>=10.3.0,<10.4.0'
-  url: https://files.pythonhosted.org/packages/06/1d/5a87941b3a94a1314a2c8e106a1e00898730e2340f39b13fb9ae1b55b548/geoh5py-0.9.1-py3-none-any.whl
+    pydantic: '>=2.5.2,<3.0.0'
+  url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   hash:
-    sha256: c3c7429ea37a82ded5f4eba0ff72f77668818f5841bfabbc7d6a6f0f9e1c0989
+    sha256: 21ce81d279c206ce0a279377168ce50e0a35d3d2
   category: main
+  source:
+    type: url
+    url: git+https://github.com/MiraGeoscience/geoh5py@21ce81d279c206ce0a279377168ce50e0a35d3d2
   optional: false
