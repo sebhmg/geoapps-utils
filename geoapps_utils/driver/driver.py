@@ -20,22 +20,19 @@ from geoapps_utils.driver.params import BaseParams
 
 class BaseDriver(ABC):
     """
+    # todo: Get rid of BaseParams to have a more robust DriverClass
+
     Base driver class.
+
+    :param params: Application parameters.
     """
 
-    _params_class = BaseParams
+    _params_class: type[BaseData] | type[BaseParams] = BaseParams
     _validations: dict | None = None
 
     def __init__(self, params: BaseParams | BaseData):
-        self.params = params
-        self.workspace = params.geoh5
-        self.out_group = params.out_group
-        """
-        :param params: Application parameters.
-        """
         self._workspace: Workspace | None = None
         self._out_group: str | None = None
-        self._params: BaseParams
         self.params = params
 
         if hasattr(self.params, "out_group") and self.params.out_group is None:
@@ -52,7 +49,7 @@ class BaseDriver(ABC):
         return self._params
 
     @params.setter
-    def params(self, val: BaseParams):
+    def params(self, val: BaseParams | BaseData):
         if not isinstance(val, (BaseParams, BaseData)):
             raise TypeError(
                 "Parameters must be of type BaseParams or BaseData,"
