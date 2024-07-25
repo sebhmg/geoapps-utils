@@ -27,6 +27,9 @@ class BaseDriver(ABC):
     _validations: dict | None = None
 
     def __init__(self, params: BaseParams | BaseData):
+        self.params = params
+        self.workspace = params.geoh5
+        self.out_group = params.out_group
         """
         :param params: Application parameters.
         """
