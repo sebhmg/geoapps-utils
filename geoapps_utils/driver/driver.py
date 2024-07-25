@@ -14,6 +14,7 @@ from geoh5py import Workspace
 from geoh5py.objects import ObjectBase
 from geoh5py.ui_json import InputFile, monitored_directory_copy
 
+from geoapps_utils.driver.data import BaseData
 from geoapps_utils.driver.params import BaseParams
 
 
@@ -25,7 +26,7 @@ class BaseDriver(ABC):
     _params_class = BaseParams
     _validations: dict | None = None
 
-    def __init__(self, params: BaseParams):
+    def __init__(self, params: BaseParams | BaseData):
         """
         :param params: Application parameters.
         """
@@ -43,14 +44,17 @@ class BaseDriver(ABC):
         return self._out_group
 
     @property
-    def params(self) -> BaseParams:
+    def params(self):
         """Application parameters."""
         return self._params
 
     @params.setter
     def params(self, val: BaseParams):
-        if not isinstance(val, BaseParams):
-            raise TypeError("Parameters must be of type BaseParams.")
+        if not isinstance(val, (BaseParams, BaseData)):
+            raise TypeError(
+                "Parameters must be of type BaseParams or BaseData,"
+                f" get {type(val)} instead."
+            )
         self._params = val
 
     @property
