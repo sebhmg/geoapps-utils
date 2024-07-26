@@ -35,36 +35,12 @@ class BaseDriver(ABC):
         self._out_group: str | None = None
         self.params = params
 
-        if hasattr(self.params, "out_group") and self.params.out_group is None:
+        if (
+            hasattr(self.params, "out_group")
+            and self.params.out_group is None
+            and not issubclass(self._params_class, BaseData)
+        ):
             self.params.out_group = self.out_group
-
-    def create_data_from_input_file(
-        self, input_file: str | Path | InputFile
-    ) -> BaseData:
-        """
-        Create driver from input file.
-
-        this file must be a geoh5py InputFile or refer to a ui.json file.
-
-        :param input_file: Path to input file.
-
-        :return: BaseData object.
-        """
-
-        if isinstance(input_file, (str, Path)):
-            path = Path(input_file).resolve()
-            input_file = InputFile.read_ui_json(path)
-
-        if isinstance(input_file, InputFile):
-            if issubclass(self._params_class, BaseData):
-                return self._params_class.build(input_file)
-
-            raise ValueError("'params' must be of type inherited from BaseData.")
-
-        raise TypeError(
-            "Input file must be of type str, Path, or geoh5py.ui_json.InputFile."
-            f" Got {type(input_file)} instead."
-        )
 
     @property
     def out_group(self):
@@ -78,9 +54,6 @@ class BaseDriver(ABC):
 
     @params.setter
     def params(self, val: BaseParams | BaseData):
-        if isinstance(val, (str, Path, InputFile)):
-            val = self.create_data_from_input_file(val)
-
         if not isinstance(val, (BaseParams, BaseData)):
             raise TypeError(
                 "Parameters must be of type BaseParams or BaseData,"
@@ -133,7 +106,7 @@ class BaseDriver(ABC):
         filepath = Path(filepath).resolve()
         ifile = InputFile.read_ui_json(filepath, validations=cls._validations)
 
-        params = driver_class._params_class(ifile)
+        params = driver_class._params_class.build(ifile)
         print("Initializing application . . .")
         driver = driver_class(params)
 
