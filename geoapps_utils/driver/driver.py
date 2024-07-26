@@ -38,6 +38,34 @@ class BaseDriver(ABC):
         if hasattr(self.params, "out_group") and self.params.out_group is None:
             self.params.out_group = self.out_group
 
+    def create_from_input_file(self, input_file: str | Path | InputFile):
+        """
+        Create driver from input file.
+
+        this file must be a geoh5py InputFile or refer to a ui.json file.
+
+        :param input_file: Path to input file.
+        """
+
+        if isinstance(input_file, (str, Path)):
+            path = Path(input_file).resolve()
+            input_file = InputFile.read_ui_json(path)
+
+        # verify params_dict is baseData to run this line
+        if (
+            isinstance(input_file, InputFile)
+            and input_file.data is not None
+            and issubclass(self._params_class, BaseData)
+        ):
+            params_dict = input_file.data
+            params_dict["_input_file"] = input_file
+            return self._params_class(**params_dict)
+
+        raise TypeError(
+            "Input file must be of type str, Path, or geoh5py.ui_json.InputFile,"
+            "and params must be of type BaseData."
+        )
+
     @property
     def out_group(self):
         """Output group."""
@@ -50,6 +78,9 @@ class BaseDriver(ABC):
 
     @params.setter
     def params(self, val: BaseParams | BaseData):
+        if isinstance(val, (str, Path, InputFile)):
+            val = self.create_from_input_file(val)
+
         if not isinstance(val, (BaseParams, BaseData)):
             raise TypeError(
                 "Parameters must be of type BaseParams or BaseData,"
