@@ -81,18 +81,20 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         self._initialize(**kwargs)
 
     @classmethod
-    def build(cls, input_file: InputFile) -> BaseParams:
+    def build(cls, input_data: InputFile) -> BaseParams:
         """
         Build a dataclass from a dictionary or InputFile.
 
         Mockup of Basedata.build() from driver/data.py
 
-        :param input_file: InputFile to create the parameters from.
+        :param input_data: InputFile to create the parameters from.
         """
-        if isinstance(input_file, InputFile):
-            return cls(input_file=input_file)
+        if isinstance(input_data, InputFile):
+            return cls(input_file=input_data)
 
-        raise TypeError("Input data must be a dictionary or InputFile.")
+        raise TypeError(
+            "'input_data' must be an InputFile," f" get {type(input_data)} instead."
+        )
 
     def _initialize(self, **kwargs):
         """
