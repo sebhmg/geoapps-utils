@@ -243,17 +243,3 @@ def test_base_data_write_ui_json(tmp_path):
 
     with pytest.raises(FileNotFoundError, match="Default uijson file "):
         params3.create_input_file_from_attributes()
-
-
-# def test_base_data_create_uijson(tmp_path):
-#     class BidonParams(BaseData):
-#         default_ui_json: ClassVar[Path] = Path("bidon")
-#
-#
-#     params = BaseData(
-#         geoh5=Workspace(tmp_path / "test.geoh5"),
-#         default_ui_json=Path("bidon"),
-#     )
-#
-#     with pytest.raises(FileNotFoundError, match="Default uijson file "):
-#         params.create_input_file_from_attributes()
