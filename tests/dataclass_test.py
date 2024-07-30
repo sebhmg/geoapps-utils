@@ -9,6 +9,9 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+from typing import ClassVar
+
 import pytest
 from geoh5py.ui_json import InputFile
 from geoh5py.workspace import Workspace
@@ -210,14 +213,17 @@ def test_nested_model():
 
 def test_params_construction(tmp_path):
     params = BaseData(geoh5=Workspace(tmp_path / "test.geoh5"))
-    assert BaseData.default_ui_json == assets_path() / "uijson/base.ui.json"
+    assert BaseData.default_ui_json is None
     assert BaseData.title == "Base Data"
     assert BaseData.run_command == "geoapps_utils.driver.driver"
     assert str(params.geoh5.h5file) == str(tmp_path / "test.geoh5")
 
 
 def test_base_data_write_ui_json(tmp_path):
-    params = BaseData(geoh5=Workspace(tmp_path / "test.geoh5"))
+    class TestData(BaseData):
+        default_ui_json: ClassVar[Path | None] = assets_path() / "uijson/base.ui.json"
+
+    params = TestData(geoh5=Workspace(tmp_path / "test.geoh5"))
     params.write_ui_json(tmp_path / "test.ui.json")
     assert (tmp_path / "test.ui.json").exists()
 
@@ -227,8 +233,27 @@ def test_base_data_write_ui_json(tmp_path):
     ifile.ui_json["my_param"] = "test it"
     ifile.data["my_param"] = "test it"
     ifile.data["geoh5"] = params.geoh5
-    params = BaseData.build(ifile)
-    params.write_ui_json(tmp_path / "validation.ui.json")
+    params2 = BaseData.build(ifile)
+    params2.write_ui_json(tmp_path / "validation.ui.json")
 
     ifile = InputFile.read_ui_json(tmp_path / "validation.ui.json")
     assert ifile.data["my_param"] == "test it"
+
+    params3 = BaseData(geoh5=Workspace(tmp_path / "test.geoh5"))
+
+    with pytest.raises(FileNotFoundError, match="Default uijson file "):
+        params3.create_input_file_from_attributes()
+
+
+# def test_base_data_create_uijson(tmp_path):
+#     class BidonParams(BaseData):
+#         default_ui_json: ClassVar[Path] = Path("bidon")
+#
+#
+#     params = BaseData(
+#         geoh5=Workspace(tmp_path / "test.geoh5"),
+#         default_ui_json=Path("bidon"),
+#     )
+#
+#     with pytest.raises(FileNotFoundError, match="Default uijson file "):
+#         params.create_input_file_from_attributes()
