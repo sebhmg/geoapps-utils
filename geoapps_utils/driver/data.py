@@ -133,10 +133,6 @@ class BaseData(BaseModel):
             ifile = copy(self._input_file)
             ifile.validate = False
 
-        ifile.data = {
-            key: self.flatten().get(key, value) for key, value in ifile.data.items()
-        }
-
         return ifile
 
     def write_ui_json(self, path: Path) -> None:
