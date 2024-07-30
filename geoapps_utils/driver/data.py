@@ -133,9 +133,8 @@ class BaseData(BaseModel):
             ifile = copy(self._input_file)
             ifile.validate = False
 
-        self_params = {**self.flatten()}
         ifile.data = {
-            key: self_params.get(key, value) for key, value in ifile.data.items()
+            key: self.flatten().get(key, value) for key, value in ifile.data.items()
         }
 
         return ifile

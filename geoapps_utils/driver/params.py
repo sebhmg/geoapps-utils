@@ -83,7 +83,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
     @classmethod
     def build(cls, input_data: InputFile) -> BaseParams:
         """
-        Build a dataclass from a dictionary or InputFile.
+        Build a BaseParams object from an InputFile.
 
         Mockup of Basedata.build() from driver/data.py
 
