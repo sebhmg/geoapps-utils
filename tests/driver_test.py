@@ -41,7 +41,7 @@ def test_base_driver(tmp_path):
     class TestDriver(BaseDriver):
         _params: TestParams
         _params_class: type[BaseParams] = TestParams
-        _validations: type[dict | None] = {}
+        _validations = {}
 
         def __init__(self, params: TestParams):
             super().__init__(params)
