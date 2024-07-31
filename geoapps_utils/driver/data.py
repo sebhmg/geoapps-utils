@@ -126,14 +126,14 @@ class BaseData(BaseModel):
         """Create an InputFile with data matching current parameter state."""
 
         if self._input_file is None:
-            ifile = self.create_input_file_from_attributes()
+            ifile = self._create_input_file_from_attributes()
         else:
             ifile = copy(self._input_file)
             ifile.validate = False
 
         return ifile
 
-    def create_input_file_from_attributes(self) -> InputFile:
+    def _create_input_file_from_attributes(self) -> InputFile:
         """
         Create an InputFile with data matching current parameter state.
         """

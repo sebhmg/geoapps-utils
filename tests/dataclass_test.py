@@ -242,4 +242,4 @@ def test_base_data_write_ui_json(tmp_path):
     params3 = BaseData(geoh5=Workspace(tmp_path / "test.geoh5"))
 
     with pytest.raises(FileNotFoundError, match="Default uijson file "):
-        params3.create_input_file_from_attributes()
+        params3._create_input_file_from_attributes()  # pylint: disable=protected-access
