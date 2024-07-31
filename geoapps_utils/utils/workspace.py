@@ -32,7 +32,7 @@ def get_output_workspace(
     new_live_link = False
     time.sleep(1)
     # Check if GA digested the file already
-    if (isinstance(workspace.h5file, (Path, str))) and not Path(
+    if (isinstance(workspace.h5file, Path | str)) and not Path(
         workspace.h5file
     ).is_file():
         workpath = Path(workpath) / ".working"
