@@ -8,7 +8,6 @@
 from __future__ import annotations
 
 from copy import deepcopy
-
 from typing import ClassVar
 
 from geoh5py import Workspace
