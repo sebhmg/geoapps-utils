@@ -9,8 +9,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-from typing import ClassVar
-
 from geoh5py import Workspace
 from geoh5py.ui_json.constants import default_ui_json as base_ui_json
 
@@ -43,7 +41,7 @@ def test_base_driver(tmp_path):
     class TestDriver(BaseDriver):
         _params: TestParams
         _params_class: type[BaseParams] = TestParams
-        _validations: ClassVar[dict | None] = {}
+        _validations: type[dict | None] = {}
 
         def __init__(self, params: TestParams):
             super().__init__(params)
