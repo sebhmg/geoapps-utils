@@ -80,6 +80,22 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
 
         self._initialize(**kwargs)
 
+    @classmethod
+    def build(cls, input_data: InputFile) -> BaseParams:
+        """
+        Build a BaseParams object from an InputFile.
+
+        Mockup of Basedata.build() from driver/data.py
+
+        :param input_data: InputFile to create the parameters from.
+        """
+        if isinstance(input_data, InputFile):
+            return cls(input_file=input_data)
+
+        raise TypeError(
+            "'input_data' must be an InputFile," f" get {type(input_data)} instead."
+        )
+
     def _initialize(self, **kwargs):
         """
         Custom actions to initialize the class and deal with input values.
