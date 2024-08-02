@@ -201,7 +201,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
 
     @validation_options.setter
     def validation_options(self, value: dict | None):
-        if not isinstance(value, (dict, type(None))):
+        if not isinstance(value, dict | type(None)):
             raise UserWarning(
                 "Input 'validation_options' must a dictionary of options or None."
             )
@@ -296,7 +296,9 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
                     #  "allof" -> ["object", "levels", "type", "distance"]
                     free_parameter_dict[group] = {}
                     forms = utils.collect(self.ui_json, "group", group)
-                    for label, key in zip(forms, self._free_parameter_keys):
+                    for label, key in zip(
+                        forms, self._free_parameter_keys, strict=False
+                    ):
                         if key not in label.lower():
                             raise ValueError(
                                 f"Malformed input refinement group {group}. "
@@ -345,7 +347,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         self.setter_validator(
             "geoh5",
             val,
-            fun=lambda x: Workspace(x) if isinstance(val, (str, Path)) else x,
+            fun=lambda x: Workspace(x) if isinstance(val, str | Path) else x,
         )
 
     @property
@@ -423,7 +425,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
 
     @input_file.setter
     def input_file(self, ifile: InputFile | None):
-        if not isinstance(ifile, (type(None), InputFile)):
+        if not isinstance(ifile, type(None) | InputFile):
             raise TypeError(
                 f"Value for 'input_file' must be {InputFile} or None. "
                 f"Provided {ifile} of type{type(ifile)}"

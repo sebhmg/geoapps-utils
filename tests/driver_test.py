@@ -59,6 +59,5 @@ def test_base_driver(tmp_path):
 
 
 def test_params_errors():
-
     with pytest.raises(TypeError, match="'input_data' must be "):
         BaseParams.build(input_data="bidon")  # type: ignore

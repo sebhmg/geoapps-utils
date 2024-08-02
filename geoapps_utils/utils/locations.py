@@ -66,7 +66,7 @@ def get_locations(workspace: Workspace, entity: UUID | Points | GridObject | Dat
     else:
         entity_obj = entity
 
-    if not isinstance(entity_obj, (Points, GridObject, Data)):
+    if not isinstance(entity_obj, Points | GridObject | Data):
         raise TypeError(
             f"Entity must be of type Points, GridObject or Data, {type(entity_obj)} provided."
         )

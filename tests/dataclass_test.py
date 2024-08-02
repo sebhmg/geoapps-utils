@@ -20,6 +20,7 @@ from pydantic import BaseModel, ValidationError
 from geoapps_utils import assets_path
 from geoapps_utils.driver.data import BaseData
 
+
 WORKSPACE = Workspace()
 VALID_PARAMETERS = {
     "monitoring_directory": None,
