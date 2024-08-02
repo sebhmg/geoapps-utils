@@ -16,8 +16,6 @@ from geoh5py.workspace import Workspace
 from pydantic import BaseModel, ConfigDict
 from typing_extensions import Self
 
-from geoapps_utils import assets_path
-
 
 class BaseData(BaseModel):
     """
@@ -35,7 +33,7 @@ class BaseData(BaseModel):
     model_config = ConfigDict(frozen=True, arbitrary_types_allowed=True)
 
     name: ClassVar[str] = "base"
-    default_ui_json: ClassVar[Path] = assets_path() / "uijson" / "base.ui.json"
+    default_ui_json: ClassVar[Path | None] = None
     title: ClassVar[str] = "Base Data"
     run_command: ClassVar[str] = "geoapps_utils.driver.driver"
 
@@ -129,12 +127,30 @@ class BaseData(BaseModel):
         """Create an InputFile with data matching current parameter state."""
 
         if self._input_file is None:
-            ifile = InputFile.read_ui_json(self.default_ui_json, validate=False)
+            ifile = self._create_input_file_from_attributes()
         else:
             ifile = copy(self._input_file)
             ifile.validate = False
 
-        ifile.data = dict(ifile.data, **self.flatten())
+        return ifile
+
+    def _create_input_file_from_attributes(self) -> InputFile:
+        """
+        Create an InputFile with data matching current parameter state.
+        """
+        # ensure default uijson (PAth )exists or raise an error
+        if self.default_ui_json is None or not self.default_ui_json.exists():
+            raise FileNotFoundError(
+                f"Default uijson file '{self.default_ui_json}' not a valid path."
+            )
+
+        ifile = InputFile.read_ui_json(self.default_ui_json, validate=False)
+
+        attributes = self.flatten()
+
+        ifile.data = {
+            key: attributes.get(key, value) for key, value in ifile.data.items()
+        }
 
         return ifile
 
