@@ -45,7 +45,7 @@ class BaseData(BaseModel):
 
     @staticmethod
     def collect_input_from_dict(
-        base_model: BaseModel, data: dict[str, Any]
+        base_model: type[BaseModel], data: dict[str, Any]
     ) -> dict[str, dict | Any]:
         """
         Recursively replace BaseModel objects with dictionary of 'data' values.
