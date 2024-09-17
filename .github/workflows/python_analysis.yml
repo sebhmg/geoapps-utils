@@ -27,7 +27,7 @@ jobs:
     uses: MiraGeoscience/CI-tools/.github/workflows/reusable-python-static_analysis.yml@DEVOPS-466
     with:
       package-manager: 'conda'
-      app-name: 'geoapps-utils'
+      app-name: 'geoapps_utils'
       python-version: '3.10'
   call-workflow-pytest-on-windows:
     name: Pytest on Windows
