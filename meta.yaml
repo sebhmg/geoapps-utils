@@ -31,6 +31,8 @@ requirements:
     - pillow >=10.3.0,<10.4.0
 
 test:
+  source_files:
+    - tests/
   imports:
     - geoapps_utils
   commands:

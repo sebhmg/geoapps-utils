@@ -3,7 +3,7 @@ name: Deploy python package in development
 on:
   push:
     tags:
-      - '*' # Push events to every tag not containing
+      - 'v*' # Push events to every tag not containing
 
 jobs:
   call-workflow-conda-publish:
