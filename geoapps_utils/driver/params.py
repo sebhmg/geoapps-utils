@@ -69,6 +69,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
         self._validate: bool = True
         self._validations: dict[str, Any] | None = None
         self._validation_options: dict | None = None
+        self._version: str | None = None
         self._workpath: Path | None = None
         self._workspace: str | None = None
         self._workspace_geoh5: str | None = None
@@ -436,6 +437,17 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
             self.validations = ifile.validations
 
         self._input_file = ifile
+
+    @property
+    def version(self):
+        """
+        Application version.
+        """
+        return self._version
+
+    @version.setter
+    def version(self, val):
+        self.setter_validator("version", val)
 
     def _uuid_promoter(self, uid: str | UUID) -> str | UUID | Entity:
         """
