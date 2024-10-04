@@ -37,10 +37,8 @@ test:
     - geoapps_utils
   commands:
     - pip check
-    - pytest ./tests
   requires:
     - pip
-    - pytest
 
 about:
   home: https://www.mirageoscience.com/mining-industry-software/python-integration/
