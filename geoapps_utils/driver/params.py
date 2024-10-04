@@ -158,7 +158,7 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
                 params_dict = self.input_file.promote(params_dict)
 
                 for key, value in params_dict.items():
-                    if key not in self.ui_json.keys():
+                    if not hasattr(self, key):
                         continue  # ignores keys not in default_ui_json
 
                     setattr(self, key, value)
@@ -472,9 +472,10 @@ class BaseParams:  # pylint: disable=too-many-instance-attributes, too-many-publ
             self.input_file is not None
             and hasattr(self.input_file, "data")
             and self.input_file.data is not None
+            and key in self.input_file.data
+            and value != self.input_file.data[key]
         ):
-            if value != self.input_file.data[key]:
-                self.input_file.set_data_value(key, value)
+            self.input_file.set_data_value(key, value)
 
         setattr(self, f"_{key}", value)
 
