@@ -9,8 +9,12 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+import subprocess
+from packaging import version
 
 import tomli as toml
+import yaml
+from jinja2 import Template
 
 import geoapps_utils
 
@@ -24,8 +28,25 @@ def get_version():
     return pyproject["tool"]["poetry"]["version"]
 
 
+def get_conda_recipe_version():
+    path = Path(__file__).resolve().parents[1] / "meta.yaml"
+
+    with open(str(path), encoding="utf-8") as file:
+        content = file.read()
+
+    template = Template(content)
+    rendered_yaml = template.render()
+
+    recipe = yaml.safe_load(rendered_yaml)
+
+    return recipe["package"]["version"]
+
 def test_version_is_consistent():
     assert geoapps_utils.__version__ == get_version()
+
+def test_conda_version_is_pypi():
+    pep_440_re = version.VERSION_PATTERN
+    assert re.search(pep_440_re, get_conda_recipe_version()) is not None
 
 
 def test_version_is_semver():

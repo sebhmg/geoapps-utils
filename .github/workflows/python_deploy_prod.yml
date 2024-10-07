@@ -11,7 +11,7 @@ jobs:
     with:
       package-name: 'geoapps-utils'
       python-version: '3.10'
-      repo-names: '["public-conda-prod-local"]'
+      virtual-repo-name: 'public-conda-prod'
     secrets:
       JFROG_ARTIFACTORY_URL: ${{ secrets.JFROG_ARTIFACTORY_URL }}
       JFROG_ARTIFACTORY_TOKEN: ${{ secrets.JFROG_ARTIFACTORY_TOKEN }}
