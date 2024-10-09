@@ -40,6 +40,7 @@ def get_conda_recipe_version():
 
     return recipe["package"]["version"]
 
+
 def test_version_is_consistent():
     assert geoapps_utils.__version__ == get_version()
 
