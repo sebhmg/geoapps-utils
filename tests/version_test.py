@@ -9,12 +9,11 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-import subprocess
-from packaging import version
 
 import tomli as toml
 import yaml
 from jinja2 import Template
+from packaging.version import Version
 
 import geoapps_utils
 
@@ -44,9 +43,10 @@ def get_conda_recipe_version():
 def test_version_is_consistent():
     assert geoapps_utils.__version__ == get_version()
 
-def test_conda_version_is_pypi():
-    pep_440_re = version.VERSION_PATTERN
-    assert re.search(pep_440_re, get_conda_recipe_version()) is not None
+
+def test_conda_version_is_pep440():
+    version = Version(get_conda_recipe_version())
+    assert version is not None
 
 
 def test_version_is_semver():
