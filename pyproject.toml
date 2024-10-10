@@ -52,14 +52,13 @@ scipy = "~1.14.0"
 
 ## pip dependencies from Git repositories
 #----------------------------------------
-geoh5py = {version = "~0.10.0-alpha.1", allow-prereleases = true}
-#geoh5py = {git = "https://github.com/MiraGeoscience/geoh5py.git", rev = "release/0.10.0"}
+#geoh5py = {version = "0.10.0-alpha.1", source = "pypi", allow-prereleases = true}
+geoh5py = {git = "https://github.com/MiraGeoscience/geoh5py.git", rev = "release/0.10.0"}
 
 
 ## about pip dependencies
 # to be specified to work with conda-lock
 # - from PyPI: my_package = { version = "1.2.3", source = "pypi" }
-# - from Artifactory: my_package = { version = "1.2.3", source = "public" }
 # - from URL: !!! no actual lock, as tag or branch can move and installation will fetch current !!!
 #   - for a tag:    my_package = { url = "https://github.com/ORGANISATION/REPO/archive/refs/tags/TAG.tar.gz" }
 #   - for a branch: my_package = { url = "https://github.com/ORGANISATION/REPO/archive/refs/heads/BRANCH.tar.gz" }
