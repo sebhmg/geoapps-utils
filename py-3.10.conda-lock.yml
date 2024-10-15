@@ -255,7 +255,7 @@ package:
   category: dev
   optional: true
 - name: coverage
-  version: 7.6.2
+  version: 7.6.3
   manager: conda
   platform: linux-64
   dependencies:
@@ -264,14 +264,14 @@ package:
     python: '>=3.10,<3.11.0a0'
     python_abi: 3.10.*
     tomli: ''
-  url: https://conda.anaconda.org/conda-forge/linux-64/coverage-7.6.2-py310ha75aee5_0.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/coverage-7.6.3-py310ha75aee5_0.conda
   hash:
-    md5: bbfdf5507900b2e25c37b511e4a9a989
-    sha256: 5db69595db6209577c7f010c8e280dd0a5d169546f69c13332e174030f5ce1cd
+    md5: 8f776f6bb9023542bcfb3aa384006182
+    sha256: 070ba52a57b4068764eaf831a290de42e4188ae5ee35bbb4217f884b37a604ce
   category: dev
   optional: true
 - name: coverage
-  version: 7.6.2
+  version: 7.6.3
   manager: conda
   platform: win-64
   dependencies:
@@ -281,10 +281,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/coverage-7.6.2-py310ha8f682b_0.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/coverage-7.6.3-py310ha8f682b_0.conda
   hash:
-    md5: b20aa4ee10a3c3a3d628da5ff8bac0df
-    sha256: dc7e4422ddb40a3a784e6937c5bc309f136b8f2ec8e8ae261ed648169fc8f239
+    md5: f10d46d817421262643a7ab4930524db
+    sha256: 982032c74aeff96923c371b47ce57c8f43491fe13495c0f8bbafa119a79e2853
   category: dev
   optional: true
 - name: dill
@@ -370,16 +370,17 @@ package:
   manager: conda
   platform: linux-64
   dependencies:
+    __glibc: '>=2.17,<3.0.a0'
     cached-property: ''
     hdf5: '>=1.14.3,<1.14.4.0a0'
-    libgcc-ng: '>=12'
+    libgcc: '>=13'
     numpy: '>=1.19,<3'
     python: '>=3.10,<3.11.0a0'
     python_abi: 3.10.*
-  url: https://conda.anaconda.org/conda-forge/linux-64/h5py-3.11.0-nompi_py310hf054cd7_102.conda
+  url: https://conda.anaconda.org/conda-forge/linux-64/h5py-3.11.0-nompi_py310h60e0fe6_103.conda
   hash:
-    md5: f74f9a0a4d713f5eec89917883f4ae7e
-    sha256: 5f7a00f4c13adacde260a918153057f3fd0221e8528357bb83627a643f148a4c
+    md5: 5ec305756039ed978ffc1536f9742f1e
+    sha256: b40d4b20460bdc5e6c61a23bc585ee8abf8aac5d9494156ad31be5c42e813ff8
   category: main
   optional: false
 - name: h5py
@@ -395,10 +396,10 @@ package:
     ucrt: '>=10.0.20348.0'
     vc: '>=14.2,<15'
     vc14_runtime: '>=14.29.30139'
-  url: https://conda.anaconda.org/conda-forge/win-64/h5py-3.11.0-nompi_py310h2b0be38_102.conda
+  url: https://conda.anaconda.org/conda-forge/win-64/h5py-3.11.0-nompi_py310h2b0be38_103.conda
   hash:
-    md5: 6ea1515f0984ae6e916cc1f124e6b664
-    sha256: 7d1753e538fafea74e36c2da8c0e10d47b057a2623dbb96959395ce5b1dfc80c
+    md5: 2b3ff545b1dad8a83931edf8eaea2e2b
+    sha256: 77eba8a9d433b67587915ee101a77eea69cf0f858cfa335ce6e17f37e2d5d067
   category: main
   optional: false
 - name: hdf5

@@ -15,7 +15,7 @@ dependencies:
   - cached-property=1.5.2=hd8ed1ab_1
   - cached_property=1.5.2=pyha770c72_1
   - freetype=2.12.1=h267a509_2
-  - h5py=3.11.0=nompi_py311h439e445_102
+  - h5py=3.11.0=nompi_py311hb639ac4_103
   - hdf5=1.14.3=nompi_hdf9ad27_105
   - keyutils=1.6.1=h166bdaf_0
   - krb5=1.21.3=h659f571_0

@@ -14,11 +14,11 @@ dependencies:
   - cached-property=1.5.2=hd8ed1ab_1
   - cached_property=1.5.2=pyha770c72_1
   - colorama=0.4.6=pyhd8ed1ab_0
-  - coverage=7.6.2=py311he736701_0
+  - coverage=7.6.3=py311he736701_0
   - dill=0.3.9=pyhd8ed1ab_0
   - exceptiongroup=1.2.2=pyhd8ed1ab_0
   - freetype=2.12.1=hdaf720e_2
-  - h5py=3.11.0=nompi_py311h67016bb_102
+  - h5py=3.11.0=nompi_py311h67016bb_103
   - hdf5=1.14.3=nompi_h2b43c12_105
   - iniconfig=2.0.0=pyhd8ed1ab_0
   - intel-openmp=2024.2.1=h57928b3_1083
