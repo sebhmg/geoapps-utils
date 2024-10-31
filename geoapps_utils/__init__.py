@@ -9,7 +9,7 @@
 from __future__ import annotations
 
 
-__version__ = "0.4.0-alpha.1"
+__version__ = "0.4.0-alpha.2"
 
 from pathlib import Path
 
