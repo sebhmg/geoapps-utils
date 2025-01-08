@@ -43,7 +43,7 @@ class BaseData(BaseModel):
     conda_environment: str | None = None
     geoh5: Workspace
     monitoring_directory: str | Path | None = None
-    workspace_geoh5: Workspace | None = None
+    workspace_geoh5: Path | None = None
     _input_file: InputFile | None = None
 
     @staticmethod
