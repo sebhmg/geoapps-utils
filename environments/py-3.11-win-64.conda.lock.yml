@@ -54,7 +54,7 @@ dependencies:
   - python=3.11.11=h3f84c4b_1_cpython
   - python_abi=3.11=5_cp311
   - scipy=1.14.1=py311hf16d85f_2
-  - setuptools=75.6.0=pyhff2d567_1
+  - setuptools=75.7.0=pyhff2d567_0
   - tbb=2021.13.0=h62715c5_1
   - tk=8.6.13=h5226925_1
   - typing-extensions=4.12.2=hd8ed1ab_1
@@ -69,7 +69,7 @@ dependencies:
   - xorg-libxdmcp=1.1.5=h0e40799_0
   - zstd=1.5.6=h0ea2cb4_0
   - pip:
-      - geoh5py @ git+https://github.com/MiraGeoscience/geoh5py.git@25300f8b45a1141bc9011f356f58bec25f7f1af1
+      - geoh5py @ git+https://github.com/MiraGeoscience/geoh5py.git@007caa22abdfc12d5b56f10e7daf54ef5602819f
 
 variables:
   KMP_WARNINGS: 0

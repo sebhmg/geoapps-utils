@@ -2072,27 +2072,27 @@ package:
   category: main
   optional: false
 - name: setuptools
-  version: 75.6.0
+  version: 75.7.0
   manager: conda
   platform: linux-64
   dependencies:
     python: '>=3.9'
-  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.6.0-pyhff2d567_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.7.0-pyhff2d567_0.conda
   hash:
-    md5: fc80f7995e396cbaeabd23cf46c413dc
-    sha256: abb12e1dd515b13660aacb5d0fd43835bc2186cab472df25b7716cd65e095111
+    md5: 764aced8c122bc0f3f1d01d401536b82
+    sha256: c653155d975cecf78156423d85e754e21ed8ec747e0afe8301afab50fa088b4f
   category: main
   optional: false
 - name: setuptools
-  version: 75.6.0
+  version: 75.7.0
   manager: conda
   platform: win-64
   dependencies:
     python: '>=3.9'
-  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.6.0-pyhff2d567_1.conda
+  url: https://conda.anaconda.org/conda-forge/noarch/setuptools-75.7.0-pyhff2d567_0.conda
   hash:
-    md5: fc80f7995e396cbaeabd23cf46c413dc
-    sha256: abb12e1dd515b13660aacb5d0fd43835bc2186cab472df25b7716cd65e095111
+    md5: 764aced8c122bc0f3f1d01d401536b82
+    sha256: c653155d975cecf78156423d85e754e21ed8ec747e0afe8301afab50fa088b4f
   category: main
   optional: false
 - name: tbb
@@ -2467,12 +2467,12 @@ package:
     numpy: '>=1.26.0,<1.27.0'
     pillow: '>=10.3.0,<10.4.0'
     pydantic: '>=2.5.2,<3.0.0'
-  url: git+https://github.com/MiraGeoscience/geoh5py.git@25300f8b45a1141bc9011f356f58bec25f7f1af1
+  url: git+https://github.com/MiraGeoscience/geoh5py.git@007caa22abdfc12d5b56f10e7daf54ef5602819f
   hash:
-    sha256: 25300f8b45a1141bc9011f356f58bec25f7f1af1
+    sha256: 007caa22abdfc12d5b56f10e7daf54ef5602819f
   source:
     type: url
-    url: git+https://github.com/MiraGeoscience/geoh5py.git@25300f8b45a1141bc9011f356f58bec25f7f1af1
+    url: git+https://github.com/MiraGeoscience/geoh5py.git@007caa22abdfc12d5b56f10e7daf54ef5602819f
   category: main
   optional: false
 - name: geoh5py
@@ -2484,11 +2484,11 @@ package:
     numpy: '>=1.26.0,<1.27.0'
     pillow: '>=10.3.0,<10.4.0'
     pydantic: '>=2.5.2,<3.0.0'
-  url: git+https://github.com/MiraGeoscience/geoh5py.git@25300f8b45a1141bc9011f356f58bec25f7f1af1
+  url: git+https://github.com/MiraGeoscience/geoh5py.git@007caa22abdfc12d5b56f10e7daf54ef5602819f
   hash:
-    sha256: 25300f8b45a1141bc9011f356f58bec25f7f1af1
+    sha256: 007caa22abdfc12d5b56f10e7daf54ef5602819f
   source:
     type: url
-    url: git+https://github.com/MiraGeoscience/geoh5py.git@25300f8b45a1141bc9011f356f58bec25f7f1af1
+    url: git+https://github.com/MiraGeoscience/geoh5py.git@007caa22abdfc12d5b56f10e7daf54ef5602819f
   category: main
   optional: false
